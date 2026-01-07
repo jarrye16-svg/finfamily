@@ -80,270 +80,53 @@ function formatAmountInput(value) {
 }
 
 // ============================================
-// Storage Functions
+// Storage Functions (Supabase)
 // ============================================
 
-function loadData() {
+async function loadDataFromSupabase() {
   if (!currentUser) return;
-  try {
-    const prefix = `${currentUser.id}_`;
-    const storedIncomes = localStorage.getItem(prefix + STORAGE_KEYS.INCOMES);
-    const storedExpenses = localStorage.getItem(prefix + STORAGE_KEYS.EXPENSES);
-    const storedFixed = localStorage.getItem(prefix + STORAGE_KEYS.FIXED_EXPENSES);
 
-    incomes = storedIncomes ? JSON.parse(storedIncomes) : [];
-    expenses = storedExpenses ? JSON.parse(storedExpenses) : [];
-    fixedExpenses = storedFixed ? JSON.parse(storedFixed) : [];
-  } catch (error) {
-    console.error('Error loading data:', error);
-  }
-}
+  const userId = currentUser.id;
 
-function saveData(key, data) {
-  if (!currentUser) return;
-  try {
-    const prefix = `${currentUser.id}_`;
-    localStorage.setItem(prefix + key, JSON.stringify(data));
-  } catch (error) {
-    console.error('Error saving data:', error);
-  }
-}
+  const { data, error } = await window.supabaseClient
+    .from('finances')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
 
-// ============================================
-// Authentication Functions
-// ============================================
-
-function hashPassword(password) {
-  // Simple hash for demo - in production use proper hashing
-  let hash = 0;
-  for (let i = 0; i < password.length; i++) {
-    const char = password.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return hash.toString();
-}
-
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-}
-
-function validatePassword(password) {
-  return password && password.length >= 6;
-}
-
-function login(email, password) {
-  if (!email || !password) {
-    showToast('Preencha todos os campos', 'error');
-    return false;
-  }
-  
-  if (!validateEmail(email)) {
-    showToast('E-mail inválido', 'error');
-    return false;
+  if (error && error.code !== 'PGRST116') {
+    console.error(error);
+    showToast('Erro ao carregar dados', 'error');
+    return;
   }
 
-  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-  if (!user) {
-    showToast('Usuário não encontrado', 'error');
-    return false;
-  }
+  incomes = data?.incomes || [];
+  expenses = data?.expenses || [];
+  fixedExpenses = data?.fixed_expenses || [];
 
-  if (user.passwordHash !== hashPassword(password)) {
-    showToast('Senha incorreta', 'error');
-    return false;
-  }
-
-  currentUser = user;
-  saveUsers();
-  loadData();
-  showMainApp();
-  showToast(`Bem-vindo, ${user.name}!`, 'success');
-  return true;
-}
-
-function register(name, email, password, confirmPassword) {
-  // Validation
-  if (!name || !email || !password || !confirmPassword) {
-    showToast('Preencha todos os campos', 'error');
-    return false;
-  }
-
-  if (name.length < 2 || name.length > 50) {
-    showToast('Nome deve ter entre 2 e 50 caracteres', 'error');
-    return false;
-  }
-
-  if (!validateEmail(email)) {
-    showToast('E-mail inválido', 'error');
-    return false;
-  }
-
-  if (!validatePassword(password)) {
-    showToast('Senha deve ter no mínimo 6 caracteres', 'error');
-    return false;
-  }
-
-  if (password !== confirmPassword) {
-    showToast('As senhas não coincidem', 'error');
-    return false;
-  }
-
-  if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-    showToast('E-mail já cadastrado', 'error');
-    return false;
-  }
-
-  const newUser = {
-    id: generateId(),
-    name: name.trim(),
-    email: email.trim().toLowerCase(),
-    passwordHash: hashPassword(password),
-    createdAt: new Date().toISOString()
-  };
-
-  users.push(newUser);
-  currentUser = newUser;
-  saveUsers();
-  
-  // Initialize empty data for new user
-  incomes = [];
-  expenses = [];
-  fixedExpenses = [];
-
-  showMainApp();
-  showToast('Conta criada com sucesso!', 'success');
-  return true;
-}
-
-function logout() {
-  currentUser = null;
-  incomes = [];
-  expenses = [];
-  fixedExpenses = [];
-  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-  activeTab = 'home';
-  showLoginScreen();
-  showToast('Você saiu da conta', 'info');
-}
-
-function updateProfile(name, email) {
-  if (!currentUser) return false;
-
-  if (!name || !email) {
-    showToast('Preencha todos os campos', 'error');
-    return false;
-  }
-
-  if (name.length < 2 || name.length > 50) {
-    showToast('Nome deve ter entre 2 e 50 caracteres', 'error');
-    return false;
-  }
-
-  if (!validateEmail(email)) {
-    showToast('E-mail inválido', 'error');
-    return false;
-  }
-
-  // Check if email is taken by another user
-  const existingUser = users.find(u => 
-    u.email.toLowerCase() === email.toLowerCase() && u.id !== currentUser.id
-  );
-  if (existingUser) {
-    showToast('E-mail já está em uso', 'error');
-    return false;
-  }
-
-  // Update user
-  const userIndex = users.findIndex(u => u.id === currentUser.id);
-  if (userIndex !== -1) {
-    users[userIndex].name = name.trim();
-    users[userIndex].email = email.trim().toLowerCase();
-    currentUser = users[userIndex];
-    saveUsers();
-    showToast('Perfil atualizado!', 'success');
-    render();
-    return true;
-  }
-  return false;
-}
-
-function changePassword(currentPassword, newPassword, confirmPassword) {
-  if (!currentUser) return false;
-
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    showToast('Preencha todos os campos', 'error');
-    return false;
-  }
-
-  const user = users.find(u => u.id === currentUser.id);
-  if (!user) return false;
-
-  if (user.passwordHash !== hashPassword(currentPassword)) {
-    showToast('Senha atual incorreta', 'error');
-    return false;
-  }
-
-  if (!validatePassword(newPassword)) {
-    showToast('Nova senha deve ter no mínimo 6 caracteres', 'error');
-    return false;
-  }
-
-  if (newPassword !== confirmPassword) {
-    showToast('As senhas não coincidem', 'error');
-    return false;
-  }
-
-  user.passwordHash = hashPassword(newPassword);
-  currentUser = user;
-  saveUsers();
-  showToast('Senha alterada com sucesso!', 'success');
-  return true;
-}
-
-function clearAllData() {
-  if (!currentUser) return;
-  
-  const prefix = `${currentUser.id}_`;
-  localStorage.removeItem(prefix + STORAGE_KEYS.INCOMES);
-  localStorage.removeItem(prefix + STORAGE_KEYS.EXPENSES);
-  localStorage.removeItem(prefix + STORAGE_KEYS.FIXED_EXPENSES);
-  
-  incomes = [];
-  expenses = [];
-  fixedExpenses = [];
-  
   render();
-  showToast('Todos os dados foram apagados', 'success');
 }
 
-function exportData() {
+async function saveDataToSupabase() {
   if (!currentUser) return;
 
-  const data = {
-    user: {
-      name: currentUser.name,
-      email: currentUser.email
-    },
+  const payload = {
+    user_id: currentUser.id,
     incomes,
     expenses,
-    fixedExpenses,
-    exportedAt: new Date().toISOString()
+    fixed_expenses: fixedExpenses
   };
 
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `financas_${currentUser.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const { error } = await window.supabaseClient
+    .from('finances')
+    .upsert(payload, { onConflict: 'user_id' });
 
-  showToast('Dados exportados!', 'success');
+  if (error) {
+    console.error(error);
+    showToast('Erro ao salvar dados', 'error');
+  }
 }
+
 
 // ============================================
 // Screen Management
@@ -474,7 +257,7 @@ function addIncome(income) {
 
 function deleteIncome(id) {
   incomes = incomes.filter(i => i.id !== id);
-  saveData(STORAGE_KEYS.INCOMES, incomes);
+  saveDataToSupabase();
   showToast('Entrada removida', 'success');
   render();
 }
