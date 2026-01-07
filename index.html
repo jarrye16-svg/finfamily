@@ -311,6 +311,19 @@
   <!-- Toast Container -->
   <div id="toast-container"></div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://gelhizmssqlexlxkvufc.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb";
+
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+  </script>
+
+  <!-- Seu appScript -->
   <script src="app.js"></script>
 </body>
 </html>
