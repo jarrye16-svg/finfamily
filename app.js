@@ -83,28 +83,6 @@ function formatAmountInput(value) {
 // Storage Functions
 // ============================================
 
-function loadUsers() {
-  try {
-    const storedUsers = localStorage.getItem(STORAGE_KEYS.USERS);
-    const storedCurrentUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    if (storedUsers) users = JSON.parse(storedUsers);
-    if (storedCurrentUser) currentUser = JSON.parse(storedCurrentUser);
-  } catch (error) {
-    console.error('Error loading users:', error);
-  }
-}
-
-function saveUsers() {
-  try {
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-    if (currentUser) {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currentUser));
-    }
-  } catch (error) {
-    console.error('Error saving users:', error);
-  }
-}
-
 function loadData() {
   if (!currentUser) return;
   try {
