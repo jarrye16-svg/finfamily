@@ -128,6 +128,46 @@ async function changePassword(newPassword, confirmPassword) {
 }
 
 /* ============================================
+   Form Event Listeners (Login / Register)
+============================================ */
+
+// Evento de registro
+document.getElementById("register-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("register-name").value.trim();
+  const email = document.getElementById("register-email").value.trim();
+  const password = document.getElementById("register-password").value;
+  const confirmPassword = document.getElementById("register-confirm").value;
+
+  await register(name, email, password, confirmPassword);
+});
+
+// Evento de login
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+
+  await login(email, password);
+});
+
+// Alternar entre Login e Registro
+document.getElementById("show-register").addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("login-form").classList.add("hidden");
+  document.getElementById("register-form").classList.remove("hidden");
+});
+
+document.getElementById("show-login").addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("register-form").classList.add("hidden");
+  document.getElementById("login-form").classList.remove("hidden");
+});
+
+
+/* ============================================
    Initialization
    ============================================ */
 
