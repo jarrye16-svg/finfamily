@@ -2,14 +2,14 @@
    FinFamily - JavaScript Puro com Supabase
    ============================================ */
 
-// Supabase Configuration
-const SUPABASE_URL = 'https://hdsnmhvhjyldpeztcamz.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhkc25taHZoanlsZHBlenRjYW16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NzI3NjksImV4cCI6MjA4MzQ0ODc2OX0.cHieOovT5Wjw4WY2woe6nF6HWTu19A7dSqeFKBBaki0';
+// ✅ Supabase Configuration (use sempre o mesmo projeto)
+const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
 
-// Initialize Supabase client
+// ✅ Initialize Supabase client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// State
+// ✅ Global State
 let currentUser = null;
 let userProfile = null;
 let currentMonth = new Date();
@@ -21,18 +21,20 @@ let confirmCallback = null;
 let currentFamily = null;
 let familyMembers = [];
 
-// Month names in Portuguese
+// ✅ Month names in Portuguese
 const MONTH_NAMES = [
   'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
   'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
 ];
 
+// ✅ Income types
 const INCOME_LABELS = {
   salary: 'Salário',
   commission: 'Comissão',
   extra: 'Extra'
 };
 
+// ✅ Payment types
 const PAYMENT_LABELS = {
   pix: 'Pix',
   debit: 'Débito',
