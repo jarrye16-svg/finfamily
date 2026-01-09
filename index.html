@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FinFamily - Controle financeiro familiar">
+  <title>FinFamily - Controle Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<!-- Login Screen -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-container">
+      <div class="login-header">
+        <div class="login-logo gradient-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        </div>
+        <h1 class="text-gradient">FinFamily</h1>
+        <p>Controle financeiro familiar</p>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" placeholder="seu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+        <p class="auth-switch">
+          <a href="#" id="show-forgot" class="forgot-link">Esqueci minha senha</a>
+        </p>
+        <p class="auth-switch">Não tem conta? <a href="#" id="show-register">Criar conta</a></p>
+      </form>
+      
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form hidden">
+        <div class="form-group">
+          <label for="register-name">Nome</label>
+          <input type="text" id="register-name" placeholder="Seu nome" required>
+        </div>
+        <div class="form-group">
+          <label for="register-email">E-mail</label>
+          <input type="email" id="register-email" placeholder="seu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="register-password">Senha</label>
+          <input type="password" id="register-password" placeholder="••••••••" minlength="6" required>
+        </div>
+        <div class="form-group">
+          <label for="register-confirm">Confirmar Senha</label>
+          <input type="password" id="register-confirm" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Criar Conta</button>
+        <p class="auth-switch">Já tem conta? <a href="#" id="show-login">Fazer login</a></p>
+      </form>
+
+      <!-- Forgot Password Form -->
+      <form id="forgot-form" class="auth-form hidden">
+        <div class="form-group">
+          <label for="forgot-email">E-mail</label>
+          <input type="email" id="forgot-email" placeholder="seu@email.com" required>
+        </div>
+        <p class="form-hint">Enviaremos um link para redefinir sua senha.</p>
+        <button type="submit" class="btn btn-primary btn-full">Enviar Link</button>
+        <p class="auth-switch"><a href="#" id="back-to-login">Voltar para login</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading" class="loading-screen hidden">
+    <div class="loading-icon pulse-glow">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div id="app" class="app-container hidden">
+    <!-- Header -->
+    <header class="header glass">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon gradient-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+          </div>
+          <h1 class="text-gradient">FinFamily</h1>
+        </div>
+        <span id="user-greeting" class="user-greeting"></span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div id="tab-home" class="tab-content"></div>
+      <div id="tab-income" class="tab-content hidden"></div>
+      <div id="tab-expenses" class="tab-content hidden"></div>
+      <div id="tab-fixed" class="tab-content hidden"></div>
+      <div id="tab-profile" class="tab-content hidden"></div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+      <div class="nav-items">
+        <button class="nav-item active" data-tab="home"><div class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span>Início</span></button>
+        <button class="nav-item" data-tab="income"><div class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><span>Entradas</span></button>
+        <button class="nav-item" data-tab="expenses"><div class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></div><span>Gastos</span></button>
+        <button class="nav-item" data-tab="fixed"><div class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg></div><span>Fixas</span></button>
+        <button class="nav-item" data-tab="profile"><div class="nav-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span>Perfil</span></button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Modals -->
+  <!-- Add Income Modal -->
+  <div id="modal-income" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nova Entrada</h2>
+        <p>Registre uma entrada de dinheiro</p>
+      </div>
+      <form id="form-income" class="modal-body">
+        <div class="form-group">
+          <label>Tipo de entrada</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="income-type" value="salary" checked>
+              <span class="radio-label">Salário</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="income-type" value="commission">
+              <span class="radio-label">Comissão</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="income-type" value="extra">
+              <span class="radio-label">Extra</span>
+            </label>
+          </div>
+        </div>
+        <div id="income-description-group" class="form-group hidden">
+          <label for="income-description">Descrição</label>
+          <input type="text" id="income-description" placeholder="Ex: Freelance, Bônus...">
+        </div>
+        <div class="form-group">
+          <label for="income-amount">Valor</label>
+          <div class="input-currency">
+            <span class="currency-prefix">R$</span>
+            <input type="text" id="income-amount" placeholder="0,00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="income-date">Data</label>
+          <input type="date" id="income-date" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('income')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Expense Modal -->
+  <div id="modal-expense" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Novo Gasto</h2>
+        <p>Registre um gasto</p>
+      </div>
+      <form id="form-expense" class="modal-body">
+        <div class="form-group">
+          <label for="expense-description">Descrição</label>
+          <input type="text" id="expense-description" placeholder="Ex: Mercado, Farmácia..." required>
+        </div>
+        <div class="form-group">
+          <label for="expense-amount">Valor</label>
+          <div class="input-currency">
+            <span class="currency-prefix">R$</span>
+            <input type="text" id="expense-amount" placeholder="0,00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="expense-method">Forma de pagamento</label>
+          <select id="expense-method" required>
+            <option value="pix">Pix</option>
+            <option value="debit">Débito</option>
+            <option value="cash">Dinheiro</option>
+            <option value="boleto">Boleto</option>
+            <option value="other">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expense-date">Data</label>
+          <input type="date" id="expense-date" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('expense')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Fixed Expense Modal -->
+  <div id="modal-fixed" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Nova Despesa Fixa</h2>
+        <p>Adicione uma despesa fixa mensal</p>
+      </div>
+      <form id="form-fixed" class="modal-body">
+        <div class="form-group">
+          <label for="fixed-name">Nome da despesa</label>
+          <input type="text" id="fixed-name" placeholder="Ex: Aluguel, Internet..." required>
+        </div>
+        <div class="form-group">
+          <label>Sugestões</label>
+          <div class="quick-add-chips">
+            <button type="button" class="chip" onclick="setFixedName('Condomínio')">Condomínio</button>
+            <button type="button" class="chip" onclick="setFixedName('Luz')">Luz</button>
+            <button type="button" class="chip" onclick="setFixedName('Internet')">Internet</button>
+            <button type="button" class="chip" onclick="setFixedName('Aluguel')">Aluguel</button>
+            <button type="button" class="chip" onclick="setFixedName('Água')">Água</button>
+            <button type="button" class="chip" onclick="setFixedName('Faculdade')">Faculdade</button>
+            <button type="button" class="chip" onclick="setFixedName('Inglês')">Inglês</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="fixed-amount">Valor</label>
+          <div class="input-currency">
+            <span class="currency-prefix">R$</span>
+            <input type="text" id="fixed-amount" placeholder="0,00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="fixed-due-day">Dia do vencimento (opcional)</label>
+          <input type="number" id="fixed-due-day" min="1" max="31" placeholder="Ex: 10">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('fixed')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="modal-password" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Alterar Senha</h2>
+        <p>Digite sua nova senha</p>
+      </div>
+      <form id="form-password" class="modal-body modal-edit-form">
+        <div class="form-group">
+          <label for="new-password">Nova Senha</label>
+          <input type="password" id="new-password" placeholder="••••••••" minlength="6" required>
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">Confirmar Nova Senha</label>
+          <input type="password" id="confirm-password" placeholder="••••••••" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('password')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Alterar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Name Modal -->
+  <div id="modal-edit-name" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Editar Nome</h2>
+        <p>Altere seu nome de exibição</p>
+      </div>
+      <form id="form-edit-name" class="modal-body modal-edit-form">
+        <div class="form-group">
+          <label for="edit-display-name">Nome de Exibição</label>
+          <input type="text" id="edit-display-name" placeholder="Seu nome" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('edit-name')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create Family Modal -->
+  <div id="modal-create-family" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Criar Família</h2>
+        <p>Crie uma família e convide seus membros</p>
+      </div>
+      <form id="form-create-family" class="modal-body modal-edit-form">
+        <div class="form-group">
+          <label for="family-name">Nome da Família</label>
+          <input type="text" id="family-name" placeholder="Ex: Família Silva" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('create-family')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Criar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Join Family Modal -->
+  <div id="modal-join-family" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Entrar na Família</h2>
+        <p>Digite o código de convite</p>
+      </div>
+      <form id="form-join-family" class="modal-body modal-edit-form">
+        <div class="form-group">
+          <label for="invite-code">Código de Convite</label>
+          <input type="text" id="invite-code" placeholder="Ex: abc123def456" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('join-family')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reset Password Email Modal -->
+  <div id="modal-reset-password-email" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Redefinir Senha</h2>
+        <p>Enviaremos um link para seu e-mail</p>
+      </div>
+      <form id="form-reset-email" class="modal-body modal-edit-form">
+        <p class="form-hint" style="margin-bottom: 1rem;">Um e-mail será enviado para o endereço cadastrado com um link para redefinir sua senha.</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeModal('reset-password-email')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Enviar E-mail</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div id="modal-confirm" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="confirm-title">Confirmar</h2>
+        <p id="confirm-message">Tem certeza?</p>
+      </div>
+      <div class="modal-footer" style="padding: 1.25rem;">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('confirm')">Cancelar</button>
+        <button type="button" id="confirm-btn" class="btn btn-danger">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
