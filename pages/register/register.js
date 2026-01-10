@@ -1,28 +1,45 @@
-document.querySelector('.login-form').addEventListener('submit', e => {
+// pages/register/register.js
+
+const form = document.querySelector(".register-form");
+const errorBox = document.getElementById("error");
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  errorBox.textContent = "";
 
-  const inputs = e.target.querySelectorAll('input');
-  const password = inputs[1].value;
-  const confirm = inputs[2].value;
-  const button = e.target.querySelector('button');
+  const name = form.querySelector("#name").value.trim();
+  const email = form.querySelector("#email").value.trim();
+  const password = form.querySelector("#password").value;
 
-  if (password !== confirm) {
-    button.innerText = 'Senhas não conferem';
-    button.style.background = '#dc2626';
-
-    setTimeout(() => {
-      button.innerText = 'Criar conta';
-      button.style.background = '';
-    }, 2000);
-
+  if (!name || !email || !password) {
+    errorBox.textContent = "Preencha todos os campos.";
     return;
   }
 
-  button.innerText = 'Criando conta...';
-  button.disabled = true;
+  const { data, error } = await window.supabaseClient.auth.signUp({
+    email,
+    password,
+  });
 
-  setTimeout(() => {
-    // aqui entra Supabase/Auth depois
-    window.location.href = '/auth/login.html';
-  }, 1500);
+  if (error) {
+    errorBox.textContent = error.message;
+    return;
+  }
+
+  const userId = data.user.id;
+
+  const { error: profileError } = await window.supabaseClient
+    .from("profiles")
+    .insert({
+      id: userId,
+      name: name,
+    });
+
+  if (profileError) {
+    errorBox.textContent = "Erro ao criar perfil.";
+    return;
+  }
+
+  // Cadastro OK → volta para login
+  window.location.href = "../login/login.html";
 });
