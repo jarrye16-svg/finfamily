@@ -10,49 +10,77 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="register.css">
 </head>
 <body>
 
+  <!-- Background -->
   <div class="background"></div>
 
-  <main class="login-wrapper">
-    <div class="login-card">
-      <header class="login-header">
+  <!-- Conteúdo -->
+  <main class="register-wrapper">
+    <div class="register-card">
+      <header class="register-header">
         <h1>Criar conta</h1>
-        <p>Comece a organizar suas finanças agora</p>
+        <p>Comece a organizar suas finanças em família</p>
       </header>
 
-      <form class="login-form">
+      <form class="register-form">
         <div class="field">
-          <input type="email" required placeholder=" " />
-          <label>Email</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder=" "
+            required
+          />
+          <label for="name">Nome</label>
         </div>
 
         <div class="field">
-          <input type="password" required placeholder=" " />
-          <label>Senha</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder=" "
+            required
+          />
+          <label for="email">Email</label>
         </div>
 
         <div class="field">
-          <input type="password" required placeholder=" " />
-          <label>Confirmar senha</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder=" "
+            required
+          />
+          <label for="password">Senha</label>
         </div>
 
         <button type="submit">
           Criar conta
         </button>
+
+        <p id="error" style="margin-top:12px; color:#f87171; text-align:center;"></p>
       </form>
 
-      <footer class="login-footer">
+      <footer class="register-footer">
         <span>Já tem conta?</span>
-        <a href="/auth/login.html">Fazer login</a>
+        <a href="../login/login.html">Entrar</a>
       </footer>
 
       <small class="version">FinFamily v1.0.0</small>
     </div>
   </main>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../core/supabase.js"></script>
+
+  <!-- JS da tela -->
   <script src="register.js"></script>
 </body>
 </html>
