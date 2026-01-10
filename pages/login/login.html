@@ -10,12 +10,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
+  <!-- Background -->
   <div class="background"></div>
 
+  <!-- Conteúdo -->
   <main class="login-wrapper">
     <div class="login-card">
       <header class="login-header">
@@ -25,29 +28,48 @@
 
       <form class="login-form">
         <div class="field">
-          <input type="email" required />
-          <label>Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder=" "
+            required
+          />
+          <label for="email">Email</label>
         </div>
 
         <div class="field">
-          <input type="password" required />
-          <label>Senha</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder=" "
+            required
+          />
+          <label for="password">Senha</label>
         </div>
 
         <button type="submit">
           Entrar
         </button>
+
+        <p id="error" style="margin-top:12px; color:#f87171; text-align:center;"></p>
       </form>
 
       <footer class="login-footer">
         <span>Não tem conta?</span>
-        <a href="/auth/register.html">Criar conta</a>
+        <a href="../register/register.html">Criar conta</a>
       </footer>
 
       <small class="version">FinFamily v1.0.0</small>
     </div>
   </main>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../core/supabase.js"></script>
+
+  <!-- JS da tela -->
   <script src="login.js"></script>
 </body>
 </html>
