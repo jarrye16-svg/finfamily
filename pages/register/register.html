@@ -5,7 +5,6 @@
   <title>FinFamily | Criar conta</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -53,16 +52,12 @@
     </div>
   </main>
 
-  <!-- SUPABASE SEM EVAL (ESM) -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
-    const SUPABASE_ANON_KEY = "SUA-ANON-KEY";
-
     const supabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+      "https://gelhizmssqlexlxkvufc.supabase.co",
+      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
     );
 
     const form = document.getElementById("registerForm");
@@ -91,11 +86,23 @@
         return;
       }
 
-      const userId = data.user.id;
+      // 🔥 TRATAMENTO CORRETO
+      const user =
+        data.user ??
+        data.session?.user;
+
+      if (!user) {
+        errorBox.textContent =
+          "Usuário criado. Confirme o email para continuar.";
+        return;
+      }
 
       const { error: profileError } = await supabase
         .from("profiles")
-        .insert({ id: userId, name });
+        .insert({
+          id: user.id,
+          name: name,
+        });
 
       if (profileError) {
         errorBox.textContent = "Erro ao criar perfil.";
