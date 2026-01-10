@@ -23,7 +23,7 @@
         <p>Comece a organizar suas finanças em família</p>
       </header>
 
-      <form class="register-form" id="registerForm">
+      <form id="registerForm">
         <div class="field">
           <input id="name" type="text" placeholder=" " required />
           <label for="name">Nome</label>
@@ -53,11 +53,58 @@
     </div>
   </main>
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../core/supabase.js"></script>
+  <!-- SUPABASE SEM EVAL (ESM) -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  <!-- JS SEM DEFER (IMPORTANTE) -->
-  <script src="register.js"></script>
+    const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
+    const SUPABASE_ANON_KEY = "SUA-ANON-KEY";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const form = document.getElementById("registerForm");
+    const errorBox = document.getElementById("error");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorBox.textContent = "";
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!name || !email || !password) {
+        errorBox.textContent = "Preencha todos os campos.";
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        errorBox.textContent = error.message;
+        return;
+      }
+
+      const userId = data.user.id;
+
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert({ id: userId, name });
+
+      if (profileError) {
+        errorBox.textContent = "Erro ao criar perfil.";
+        return;
+      }
+
+      window.location.href = "../login/login.html";
+    });
+  </script>
+
 </body>
 </html>
