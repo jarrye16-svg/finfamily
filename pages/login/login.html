@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>FinFamily | Entrar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <main class="login-wrapper">
+    <div class="login-card">
+      <header class="login-header">
+        <h1>FinFamily</h1>
+        <p>Organize sua vida financeira em família</p>
+      </header>
+
+      <form class="login-form">
+        <div class="field">
+          <input type="email" required />
+          <label>Email</label>
+        </div>
+
+        <div class="field">
+          <input type="password" required />
+          <label>Senha</label>
+        </div>
+
+        <button type="submit">
+          Entrar
+        </button>
+      </form>
+
+      <footer class="login-footer">
+        <span>Não tem conta?</span>
+        <a href="/auth/register.html">Criar conta</a>
+      </footer>
+
+      <small class="version">FinFamily v1.0.0</small>
+    </div>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>
