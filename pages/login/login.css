@@ -1,16 +1,18 @@
+/* Reset básico */
 * {
   box-sizing: border-box;
   font-family: 'Outfit', sans-serif;
 }
 
+/* Body corrigido para GitHub Pages */
 body {
   margin: 0;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   background: #05080f;
+  overflow-x: hidden;
 }
 
-/* Background animado */
+/* Background animado (fica atrás de tudo) */
 .background {
   position: fixed;
   inset: 0;
@@ -31,24 +33,26 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Wrapper */
+/* Wrapper (conteúdo sempre acima do background) */
 .login-wrapper {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 /* Card */
 .login-card {
   width: 100%;
   max-width: 380px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(16px);
   border-radius: 24px;
   padding: 36px;
-  color: #fff;
-  box-shadow: 0 40px 80px rgba(0,0,0,.4);
+  color: #ffffff;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
 
   animation: cardIn 0.9s ease forwards;
   opacity: 0;
@@ -75,7 +79,7 @@ body {
 .login-header p {
   margin: 6px 0 28px;
   font-size: 14px;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 /* Form */
@@ -93,9 +97,9 @@ body {
   width: 100%;
   padding: 14px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   background: transparent;
-  color: #fff;
+  color: #ffffff;
   font-size: 15px;
   outline: none;
 }
@@ -106,9 +110,9 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 13px;
-  color: rgba(255,255,255,.6);
+  color: rgba(255, 255, 255, 0.6);
   pointer-events: none;
-  transition: .2s;
+  transition: 0.2s;
   background: transparent;
 }
 
@@ -130,13 +134,13 @@ button {
   font-weight: 600;
   cursor: pointer;
   background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: #fff;
-  transition: transform .2s, box-shadow .2s;
+  color: #ffffff;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 30px rgba(37,99,235,.5);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5);
 }
 
 /* Footer */
@@ -156,5 +160,5 @@ button:hover {
   margin-top: 18px;
   text-align: center;
   font-size: 11px;
-  opacity: .5;
+  opacity: 0.5;
 }
