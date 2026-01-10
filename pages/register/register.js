@@ -1,15 +1,15 @@
 // pages/register/register.js
 
-const form = document.querySelector(".register-form");
+const form = document.getElementById("registerForm");
 const errorBox = document.getElementById("error");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorBox.textContent = "";
 
-  const name = form.querySelector("#name").value.trim();
-  const email = form.querySelector("#email").value.trim();
-  const password = form.querySelector("#password").value;
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
 
   if (!name || !email || !password) {
     errorBox.textContent = "Preencha todos os campos.";
@@ -40,6 +40,5 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Cadastro OK → volta para login
   window.location.href = "../login/login.html";
 });
