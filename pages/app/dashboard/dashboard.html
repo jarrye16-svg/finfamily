@@ -13,8 +13,8 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: 'Outfit', sans-serif;
       background: #05080f;
+      font-family: 'Outfit', sans-serif;
       color: #fff;
       display: flex;
       align-items: center;
@@ -48,11 +48,10 @@
 
   <div class="card">
     <h1>Dashboard</h1>
-    <p>Você está autenticado ✅</p>
-    <button id="logout">Sair</button>
+    <p id="status">Verificando sessão...</p>
+    <button id="logout" style="display:none">Sair</button>
   </div>
 
-  <!-- AUTH + GUARD -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
@@ -61,18 +60,34 @@
       "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
     );
 
-    // 🔐 Auth Guard
-    const { data: { session } } = await supabase.auth.getSession();
+    async function initDashboard() {
+      const status = document.getElementById("status");
+      const logoutBtn = document.getElementById("logout");
 
-    if (!session) {
-      window.location.href = "../../login/login.html";
+      try {
+        const { data } = await supabase.auth.getSession();
+        const session = data.session;
+
+        if (!session) {
+          window.location.href = "../../login/login.html";
+          return;
+        }
+
+        status.textContent = "Você está logado ✅";
+        logoutBtn.style.display = "inline-block";
+
+        logoutBtn.addEventListener("click", async () => {
+          await supabase.auth.signOut();
+          window.location.href = "../../login/login.html";
+        });
+
+      } catch (err) {
+        status.textContent = "Erro ao carregar sessão.";
+        console.error(err);
+      }
     }
 
-    // 🚪 Logout
-    document.getElementById("logout").addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      window.location.href = "../../login/login.html";
-    });
+    initDashboard();
   </script>
 
 </body>
