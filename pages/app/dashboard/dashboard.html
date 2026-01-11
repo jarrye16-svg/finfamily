@@ -48,7 +48,7 @@
 
   <div class="card">
     <h1>Dashboard</h1>
-    <p id="status">Verificando sessão...</p>
+    <p id="status">Carregando sessão...</p>
     <button id="logout" style="display:none">Sair</button>
   </div>
 
@@ -57,37 +57,37 @@
 
     const supabase = createClient(
       "https://gelhizmssqlexlxkvufc.supabase.co",
-      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
+      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb",
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: false   // 🔥 ISSO RESOLVE A TELA BRANCA
+        }
+      }
     );
 
-    async function initDashboard() {
+    async function init() {
       const status = document.getElementById("status");
       const logoutBtn = document.getElementById("logout");
 
-      try {
-        const { data } = await supabase.auth.getSession();
-        const session = data.session;
+      const { data } = await supabase.auth.getSession();
+      const session = data.session;
 
-        if (!session) {
-          window.location.href = "../../login/login.html";
-          return;
-        }
-
-        status.textContent = "Você está logado ✅";
-        logoutBtn.style.display = "inline-block";
-
-        logoutBtn.addEventListener("click", async () => {
-          await supabase.auth.signOut();
-          window.location.href = "../../login/login.html";
-        });
-
-      } catch (err) {
-        status.textContent = "Erro ao carregar sessão.";
-        console.error(err);
+      if (!session) {
+        window.location.href = "../../login/login.html";
+        return;
       }
+
+      status.textContent = "Você está logado ✅";
+      logoutBtn.style.display = "inline-block";
+
+      logoutBtn.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "../../login/login.html";
+      });
     }
 
-    initDashboard();
+    init();
   </script>
 
 </body>
