@@ -13,41 +13,45 @@
 </head>
 <body>
 
-<header class="app-header">
+<header class="header">
   <div class="logo">FinFamily</div>
 </header>
 
-<main class="app">
+<main class="content">
 
-  <section class="month">
-    <button>‹</button>
+  <section class="month-card">
+    <button class="nav">‹</button>
     <span>Janeiro 2026</span>
-    <button>›</button>
+    <button class="nav">›</button>
   </section>
 
-  <section class="card saldo">
-    <p>Saldo do mês</p>
-    <h2 id="saldo">R$ 0,00</h2>
+  <section class="balance-card">
+    <div class="balance-info">
+      <span>Saldo do mês</span>
+      <strong id="saldo">R$ 0,00</strong>
+    </div>
+    <div class="wallet-icon">💳</div>
   </section>
 
-  <section class="resume">
-    <div class="card mini entrada">
-      <p>Entradas</p>
+  <section class="summary">
+    <div class="summary-card entradas">
+      <span>Entradas</span>
       <strong id="entradas">R$ 0,00</strong>
     </div>
 
-    <div class="card mini saida">
-      <p>Saídas</p>
+    <div class="summary-card saidas">
+      <span>Saídas</span>
       <strong id="saidas">R$ 0,00</strong>
     </div>
   </section>
 
   <section class="actions">
-    <a href="../entradas/entradas.html" class="btn entrada">Entrada</a>
-    <a href="../gastos/gastos.html" class="btn saida">Gasto</a>
+    <a href="../entradas/entradas.html" class="action-btn green">Entrada</a>
+    <a href="../gastos/gastos.html" class="action-btn red">Gasto</a>
   </section>
 
-  <section class="empty">
+  <section class="empty-state">
+    <div class="icon">💲</div>
     <p>Nenhuma movimentação este mês</p>
   </section>
 
