@@ -5,101 +5,83 @@
   <title>FinFamily | Início</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="home.css" />
 </head>
 <body>
 
-<header class="header">
-  <div class="logo">FinFamily</div>
+<header class="topbar">
+  <h1>FinFamily</h1>
 </header>
 
-<main class="content">
+<main class="container">
 
-  <section class="month-card">
-    <button class="nav">‹</button>
+  <!-- Mês -->
+  <div class="month-selector">
+    <button>&lt;</button>
     <span>Janeiro 2026</span>
-    <button class="nav">›</button>
-  </section>
+    <button>&gt;</button>
+  </div>
 
-  <section class="balance-card">
-    <div class="balance-info">
-      <span>Saldo do mês</span>
-      <strong id="saldo">R$ 0,00</strong>
-    </div>
-    <div class="wallet-icon">💳</div>
-  </section>
+  <!-- Saldo -->
+  <div class="card saldo">
+    <span>Saldo do mês</span>
+    <strong>R$ 0,00</strong>
+  </div>
 
-  <section class="summary">
-    <div class="summary-card entradas">
+  <!-- Resumo -->
+  <div class="cards-row">
+    <div class="card small green">
       <span>Entradas</span>
-      <strong id="entradas">R$ 0,00</strong>
+      <strong>R$ 0,00</strong>
     </div>
 
-    <div class="summary-card saidas">
+    <div class="card small red">
       <span>Saídas</span>
-      <strong id="saidas">R$ 0,00</strong>
+      <strong>R$ 0,00</strong>
     </div>
-  </section>
+  </div>
 
-  <section class="actions">
-    <a href="../entradas/entradas.html" class="action-btn green">Entrada</a>
-    <a href="../gastos/gastos.html" class="action-btn red">Gasto</a>
-  </section>
+  <!-- Ações -->
+  <div class="actions">
+    <button class="btn green" onclick="openModal()">Entrada</button>
+    <button class="btn red">Gasto</button>
+  </div>
 
-  <section class="empty-state">
-    <div class="icon">💲</div>
+  <!-- Vazio -->
+  <div class="empty">
+    <span>$</span>
     <p>Nenhuma movimentação este mês</p>
-  </section>
+  </div>
 
 </main>
 
-<nav class="bottom-nav">
-  <a class="active">Início</a>
-  <a href="../entradas/entradas.html">Entradas</a>
-  <a href="../gastos/gastos.html">Gastos</a>
-  <a href="../fixas/fixas.html">Fixas</a>
-  <a href="../perfil/perfil.html">Perfil</a>
-</nav>
-
-<!-- MODAL NOVA ENTRADA -->
-<div class="modal-overlay" id="entradaModal">
-  <div class="modal">
-
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
     <div class="modal-header">
-      <h3>💲 Nova Entrada</h3>
-      <button class="close-modal" id="closeEntrada">✕</button>
+      <h2>$ Nova Entrada</h2>
+      <button onclick="closeModal()">×</button>
     </div>
 
-    <div class="modal-body">
-
-      <label>Tipo de Entrada</label>
-      <div class="type-selector">
-        <button class="type active">Salário</button>
-        <button class="type">Comissão</button>
-        <button class="type">Extra</button>
-      </div>
-
-      <label>Valor</label>
-      <input type="number" placeholder="R$ 0,00">
-
-      <label>Data</label>
-      <input type="date">
-
+    <div class="type-group">
+      <div class="type active">Salário</div>
+      <div class="type">Comissão</div>
+      <div class="type">Extra</div>
     </div>
+
+    <label>Valor</label>
+    <input type="number" placeholder="R$ 0,00" />
+
+    <label>Data</label>
+    <input type="date" />
 
     <div class="modal-actions">
-      <button class="btn-outline" id="cancelEntrada">Cancelar</button>
-      <button class="btn-primary">Adicionar</button>
+      <button class="cancel" onclick="closeModal()">Cancelar</button>
+      <button class="confirm">Adicionar</button>
     </div>
-
   </div>
 </div>
 
-<script src="home.js" type="module"></script>
+<script src="home.js"></script>
 </body>
 </html>
-
