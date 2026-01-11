@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>FinFamily | Criar conta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS LOCAL -->
+  <link rel="stylesheet" href="/finfamily/pages/register/register.css">
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <main class="register-wrapper">
+    <div class="register-card">
+      <header class="register-header">
+        <h1>Criar conta</h1>
+        <p>Comece a organizar suas finanças em família</p>
+      </header>
+
+      <form id="registerForm" class="register-form">
+        <div class="field">
+          <input id="name" type="text" placeholder=" " required />
+          <label for="name">Nome</label>
+        </div>
+
+        <div class="field">
+          <input id="email" type="email" placeholder=" " required />
+          <label for="email">Email</label>
+        </div>
+
+        <div class="field">
+          <input id="password" type="password" placeholder=" " required />
+          <label for="password">Senha</label>
+        </div>
+
+        <button type="submit">Criar conta</button>
+
+        <p id="error" class="error"></p>
+      </form>
+
+      <footer class="register-footer">
+        <span>Já tem conta?</span>
+        <a href="/finfamily/pages/login/login.html">Entrar</a>
+      </footer>
+
+      <small class="version">FinFamily v1.0.0</small>
+    </div>
+  </main>
+
+  <!-- JS LOCAL -->
+  <script src="/finfamily/pages/register/register.js"></script>
+</body>
+</html>
