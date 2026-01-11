@@ -5,47 +5,21 @@
   <title>FinFamily | Entrar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="background"></div>
+  <h1>FinFamily</h1>
 
-  <main class="login-wrapper">
-    <div class="login-card">
-      <header class="login-header">
-        <h1>FinFamily</h1>
-        <p>Organize sua vida financeira em família</p>
-      </header>
+  <form id="loginForm">
+    <input id="email" type="email" placeholder="Email" required />
+    <br><br>
+    <input id="password" type="password" placeholder="Senha" required />
+    <br><br>
+    <button type="submit">Entrar</button>
+  </form>
 
-      <form id="loginForm">
-        <div class="field">
-          <input id="email" type="email" placeholder=" " required />
-          <label>Email</label>
-        </div>
-
-        <div class="field">
-          <input id="password" type="password" placeholder=" " required />
-          <label>Senha</label>
-        </div>
-
-        <button type="submit">Entrar</button>
-
-        <p id="error" style="margin-top:12px;color:#f87171;text-align:center;"></p>
-      </form>
-
-      <footer class="login-footer">
-        <span>Não tem conta?</span>
-        <a href="../register/register.html">Criar conta</a>
-      </footer>
-
-      <small class="version">FinFamily v1.0.0</small>
-    </div>
-  </main>
+  <p id="error" style="color:red"></p>
 
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
@@ -55,31 +29,21 @@
       "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
     );
 
-    const form = document.getElementById("loginForm");
-    const errorBox = document.getElementById("error");
-
-    form.addEventListener("submit", async (e) => {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      errorBox.textContent = "";
 
-      try {
-        const email = email.value = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-        if (error) throw error;
-
-        // 🔐 FLAG LOCAL (ESTÁVEL)
-        localStorage.setItem("finfamily_logged", "true");
-
-        window.location.href = "../app/dashboard/dashboard.html";
-      } catch (err) {
-        errorBox.textContent = err.message || "Erro ao entrar.";
+      if (error) {
+        document.getElementById("error").textContent = error.message;
+        return;
       }
+
+      // 🚪 SÓ REDIRECIONA
+      window.location.href = "../app/dashboard/dashboard.html";
     });
   </script>
 
