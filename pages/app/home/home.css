@@ -1,19 +1,123 @@
-/* =========================
-   MODAL - NOVA ENTRADA
-========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+body {
+  background: radial-gradient(circle at top, #0b1324, #020617);
+  color: #e5e7eb;
+  min-height: 100vh;
+}
+
+.topbar {
+  padding: 16px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.container {
+  padding: 16px;
+  max-width: 420px;
+  margin: auto;
+}
+
+.month-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: linear-gradient(135deg, #0f172a, #020617);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.card span {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.card strong {
+  font-size: 26px;
+}
+
+.saldo strong {
+  color: #22c55e;
+}
+
+.cards-row {
+  display: flex;
+  gap: 12px;
+}
+
+.card.small {
+  flex: 1;
+}
+
+.green strong {
+  color: #22c55e;
+}
+
+.red strong {
+  color: #ef4444;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 18px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn.green {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #022c22;
+}
+
+.btn.red {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #fff;
+}
+
+.empty {
+  text-align: center;
+  opacity: 0.6;
+  margin-top: 30px;
+}
+
+.empty span {
+  font-size: 40px;
+}
+
+/* MODAL */
 
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.65);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 999;
+  transition: .2s;
 }
 
 .modal.active {
@@ -22,133 +126,60 @@
 }
 
 .modal-content {
-  width: 92%;
-  max-width: 420px;
-  background: linear-gradient(180deg, #0b1324, #060b16);
-  border-radius: 18px;
+  width: 90%;
+  max-width: 380px;
+  background: #020617;
   padding: 20px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
-  animation: modalUp 0.3s ease;
+  border-radius: 18px;
 }
-
-@keyframes modalUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* =========================
-   HEADER
-========================= */
 
 .modal-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
-
-.modal-header h2 {
-  color: #22c55e;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.modal-header button {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* =========================
-   TIPOS DE ENTRADA
-========================= */
 
 .type-group {
   display: flex;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .type {
   flex: 1;
+  text-align: center;
   padding: 10px;
   border-radius: 12px;
   background: #0f172a;
-  color: #cbd5f5;
-  text-align: center;
-  font-size: 14px;
   cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
 }
 
 .type.active {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: #22c55e;
+  border: 1px solid #22c55e;
   color: #22c55e;
 }
 
-/* =========================
-   CAMPOS
-========================= */
-
-.modal-content label {
-  display: block;
-  color: #94a3b8;
-  font-size: 13px;
-  margin-bottom: 6px;
-}
-
-.modal-content input {
+input {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #1e293b;
   background: #020617;
-  color: #e5e7eb;
-  font-size: 15px;
-  outline: none;
-  margin-bottom: 14px;
+  color: #fff;
+  margin-bottom: 12px;
 }
-
-.modal-content input:focus {
-  border-color: #22c55e;
-}
-
-/* =========================
-   AÇÕES
-========================= */
 
 .modal-actions {
   display: flex;
   gap: 10px;
-  margin-top: 8px;
 }
 
-.modal-actions button {
-  flex: 1;
-  padding: 12px;
-  border-radius: 14px;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.modal-actions .cancel {
+.cancel {
   background: #0f172a;
   color: #cbd5f5;
 }
 
-.modal-actions .confirm {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+.confirm {
+  background: #22c55e;
   color: #022c22;
-  font-weight: 600;
 }
