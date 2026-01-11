@@ -25,24 +25,44 @@ async function loadData() {
   const year = current.getFullYear();
   const month = current.getMonth() + 1;
 
-  const { data } = await supabase
+  const { data: resumo } = await supabase
     .rpc("get_monthly_summary", { target_year: year, target_month: month });
 
-  const resumo = data?.[0];
+  const r = resumo?.[0];
 
   document.getElementById("entradas").textContent =
-    resumo ? `R$ ${resumo.total_entradas}` : "R$ 0,00";
+    r ? `R$ ${r.total_entradas}` : "R$ 0,00";
 
   document.getElementById("gastos").textContent =
-    resumo ? `R$ ${resumo.total_gastos}` : "R$ 0,00";
+    r ? `R$ ${r.total_gastos}` : "R$ 0,00";
 
   document.getElementById("saldo").textContent =
-    resumo ? `R$ ${resumo.saldo}` : "R$ 0,00";
+    r ? `R$ ${r.saldo}` : "R$ 0,00";
 
-  document.getElementById("empty").style.display =
-    resumo && (resumo.total_entradas || resumo.total_gastos)
-      ? "none"
-      : "block";
+  const historyBox = document.getElementById("history");
+  historyBox.innerHTML = "";
+
+  const { data: history } = await supabase
+    .rpc("get_recent_transactions", { target_year: year, target_month: month });
+
+  if (history && history.length > 0) {
+    document.getElementById("empty").style.display = "none";
+
+    history.forEach(tx => {
+      const div = document.createElement("div");
+      div.className = `item ${tx.type}`;
+      div.innerHTML = `
+        <div>
+          <strong>${tx.title}</strong><br/>
+          <small>${new Date(tx.date).toLocaleDateString()}</small>
+        </div>
+        <div>R$ ${tx.amount}</div>
+      `;
+      historyBox.appendChild(div);
+    });
+  } else {
+    document.getElementById("empty").style.display = "block";
+  }
 }
 
 document.getElementById("prevMonth").onclick = () => {
