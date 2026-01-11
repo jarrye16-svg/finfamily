@@ -1,123 +1,154 @@
-/* ===== MODAL (FORÇADO) ===== */
-.modal-overlay {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.modal-overlay.active {
-  display: flex !important;
-}
+/* =========================
+   MODAL - NOVA ENTRADA
+========================= */
 
 .modal {
-  width: 90%;
-  max-width: 420px;
-  background: linear-gradient(145deg, #0c1f33, #061524);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 50px 120px rgba(0,0,0,.7);
-  animation: modalIn .25s ease;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
 }
 
-@keyframes modalIn {
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  width: 92%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #0b1324, #060b16);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+  animation: modalUp 0.3s ease;
+}
+
+@keyframes modalUp {
   from {
-    transform: translateY(20px) scale(.97);
+    transform: translateY(30px);
     opacity: 0;
   }
   to {
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
     opacity: 1;
   }
 }
 
-/* Header */
+/* =========================
+   HEADER
+========================= */
+
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 16px;
 }
 
-.modal-header h3 {
-  margin: 0;
+.modal-header h2 {
+  color: #22c55e;
   font-size: 18px;
+  font-weight: 600;
 }
 
-.close-modal {
-  background: none;
+.modal-header button {
+  background: transparent;
   border: none;
   color: #94a3b8;
   font-size: 20px;
   cursor: pointer;
 }
 
-/* Body */
-.modal-body label {
-  display: block;
-  font-size: 13px;
-  opacity: .7;
-  margin: 14px 0 6px;
-}
+/* =========================
+   TIPOS DE ENTRADA
+========================= */
 
-.modal-body input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  background: rgba(255,255,255,.07);
-  color: #fff;
-}
-
-/* Tipo */
-.type-selector {
+.type-group {
   display: flex;
   gap: 8px;
+  margin-bottom: 14px;
 }
 
 .type {
   flex: 1;
-  padding: 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.1);
-  color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #cbd5f5;
+  text-align: center;
+  font-size: 14px;
   cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .type.active {
-  background: rgba(34,197,94,.2);
+  background: rgba(34, 197, 94, 0.15);
   border-color: #22c55e;
   color: #22c55e;
 }
 
-/* Actions */
+/* =========================
+   CAMPOS
+========================= */
+
+.modal-content label {
+  display: block;
+  color: #94a3b8;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 15px;
+  outline: none;
+  margin-bottom: 14px;
+}
+
+.modal-content input:focus {
+  border-color: #22c55e;
+}
+
+/* =========================
+   AÇÕES
+========================= */
+
 .modal-actions {
   display: flex;
-  gap: 12px;
-  margin-top: 22px;
+  gap: 10px;
+  margin-top: 8px;
 }
 
-.btn-outline {
+.modal-actions button {
   flex: 1;
-  padding: 14px;
+  padding: 12px;
   border-radius: 14px;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,.2);
-  color: #fff;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
 }
 
-.btn-primary {
-  flex: 1;
-  padding: 14px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  color: #fff;
+.modal-actions .cancel {
+  background: #0f172a;
+  color: #cbd5f5;
+}
+
+.modal-actions .confirm {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #022c22;
   font-weight: 600;
 }
