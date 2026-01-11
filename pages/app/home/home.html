@@ -5,52 +5,62 @@
   <title>FinFamily | Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    const supabase = createClient(
-      "https://gelhizmssqlexlxkvufc.supabase.co",
-      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
-    );
-
-    const { data } = await supabase.auth.getSession();
-
-    if (!data.session) {
-      // 🚫 NÃO LOGADO → LOGIN
-      window.location.href = "/finfamily/pages/login/login.html";
-    }
-  </script>
+  <link rel="stylesheet" href="home.css">
 </head>
-
 <body>
 
-  <h1>FinFamily</h1>
-  <p>Você está logado ✔️</p>
+  <header class="top-bar">
+    <h1>FinFamily</h1>
+  </header>
 
-  <nav>
-    <a href="../entradas/entradas.html">Entradas</a><br>
-    <a href="../gastos/gastos.html">Gastos</a><br>
-    <a href="../fixas/fixas.html">Fixas</a><br>
+  <main class="container">
+
+    <section class="month-selector">
+      <button id="prevMonth">‹</button>
+      <span id="currentMonth">Janeiro 2026</span>
+      <button id="nextMonth">›</button>
+    </section>
+
+    <section class="card balance">
+      <span>Saldo do mês</span>
+      <strong id="saldo">R$ 0,00</strong>
+    </section>
+
+    <section class="cards">
+      <div class="card income">
+        <span>Entradas</span>
+        <strong id="entradas">R$ 0,00</strong>
+      </div>
+
+      <div class="card expense">
+        <span>Saídas</span>
+        <strong id="saidas">R$ 0,00</strong>
+      </div>
+    </section>
+
+    <section class="actions">
+      <a href="../entradas/entradas.html" class="btn green">Entrada</a>
+      <a href="../gastos/gastos.html" class="btn red">Gasto</a>
+    </section>
+
+    <section class="history">
+      <p>Nenhuma movimentação este mês</p>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a class="active">Início</a>
+    <a href="../entradas/entradas.html">Entradas</a>
+    <a href="../gastos/gastos.html">Gastos</a>
+    <a href="../fixas/fixas.html">Fixas</a>
     <a href="../perfil/perfil.html">Perfil</a>
   </nav>
 
-  <br><br>
-
-  <button id="logout">Sair</button>
-
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-    const supabase = createClient(
-      "https://gelhizmssqlexlxkvufc.supabase.co",
-      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
-    );
-
-    document.getElementById("logout").onclick = async () => {
-      await supabase.auth.signOut();
-      window.location.href = "/finfamily/pages/login/login.html";
-    };
-  </script>
-
+  <script src="home.js" type="module"></script>
 </body>
 </html>
