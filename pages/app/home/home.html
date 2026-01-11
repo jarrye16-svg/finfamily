@@ -65,6 +65,41 @@
   <a href="../perfil/perfil.html">Perfil</a>
 </nav>
 
+<!-- MODAL NOVA ENTRADA -->
+<div class="modal-overlay" id="entradaModal">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h3>💲 Nova Entrada</h3>
+      <button class="close-modal" id="closeEntrada">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <label>Tipo de Entrada</label>
+      <div class="type-selector">
+        <button class="type active">Salário</button>
+        <button class="type">Comissão</button>
+        <button class="type">Extra</button>
+      </div>
+
+      <label>Valor</label>
+      <input type="number" placeholder="R$ 0,00">
+
+      <label>Data</label>
+      <input type="date">
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-outline" id="cancelEntrada">Cancelar</button>
+      <button class="btn-primary">Adicionar</button>
+    </div>
+
+  </div>
+</div>
+
 <script src="home.js" type="module"></script>
 </body>
 </html>
+
