@@ -3,16 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <title>FinFamily | Entrar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS ABSOLUTO -->
+  <link rel="stylesheet" href="/finfamily/assets/css/login.css">
 </head>
 <body>
 
-  <h1>LOGIN OK</h1>
-  <p>Se você está vendo isso, o GitHub Pages está servindo corretamente.</p>
+  <div class="background"></div>
 
-  <!-- LINK ABSOLUTO (CORRETO PARA GITHUB PAGES) -->
-  <a href="/finfamily/pages/app/dashboard/dashboard.html">
-    Ir para o dashboard
-  </a>
+  <main class="login-wrapper">
+    <div class="login-card">
+      <header class="login-header">
+        <h1>FinFamily</h1>
+        <p>Organize sua vida financeira em família</p>
+      </header>
+
+      <form id="loginForm">
+        <div class="field">
+          <input type="email" placeholder=" " required />
+          <label>Email</label>
+        </div>
+
+        <div class="field">
+          <input type="password" placeholder=" " required />
+          <label>Senha</label>
+        </div>
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <footer class="login-footer">
+        <span>Não tem conta?</span>
+        <a href="/finfamily/pages/register/register.html">Criar conta</a>
+      </footer>
+
+      <small class="version">FinFamily v1.0.0</small>
+    </div>
+  </main>
+
+  <!-- JS MINIMO E SEGURO -->
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      window.location.href = "/finfamily/pages/app/dashboard/dashboard.html";
+    });
+  </script>
 
 </body>
 </html>
