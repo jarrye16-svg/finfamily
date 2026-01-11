@@ -5,83 +5,70 @@
   <title>FinFamily | Início</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
 
-<header class="topbar">
-  <h1>FinFamily</h1>
-</header>
+  <!-- APP WRAPPER -->
+  <div class="app">
 
-<main class="container">
+    <!-- HEADER -->
+    <header class="top-header">
+      <h1>FinFamily</h1>
+    </header>
 
-  <!-- Mês -->
-  <div class="month-selector">
-    <button>&lt;</button>
-    <span>Janeiro 2026</span>
-    <button>&gt;</button>
+    <!-- CONTENT -->
+    <main class="content">
+
+      <div class="month-selector">
+        <button class="arrow">‹</button>
+        <span>Janeiro 2026</span>
+        <button class="arrow">›</button>
+      </div>
+
+      <div class="card balance">
+        <span>Saldo do mês</span>
+        <strong>R$ 0,00</strong>
+      </div>
+
+      <div class="cards-row">
+        <div class="card income">
+          <span>Entradas</span>
+          <strong>R$ 0,00</strong>
+        </div>
+        <div class="card expense">
+          <span>Saídas</span>
+          <strong>R$ 0,00</strong>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn income-btn">Entrada</button>
+        <button class="btn expense-btn">Gasto</button>
+      </div>
+
+      <div class="empty">
+        <span>$</span>
+        <p>Nenhuma movimentação este mês</p>
+      </div>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+      <a class="active">Início</a>
+      <a href="../entradas/entradas.html">Entradas</a>
+      <a href="../gastos/gastos.html">Gastos</a>
+      <a href="../fixas/fixas.html">Fixas</a>
+      <a href="../perfil/perfil.html">Perfil</a>
+    </nav>
+
   </div>
 
-  <!-- Saldo -->
-  <div class="card saldo">
-    <span>Saldo do mês</span>
-    <strong>R$ 0,00</strong>
-  </div>
-
-  <!-- Resumo -->
-  <div class="cards-row">
-    <div class="card small green">
-      <span>Entradas</span>
-      <strong>R$ 0,00</strong>
-    </div>
-
-    <div class="card small red">
-      <span>Saídas</span>
-      <strong>R$ 0,00</strong>
-    </div>
-  </div>
-
-  <!-- Ações -->
-  <div class="actions">
-    <button class="btn green" onclick="openModal()">Entrada</button>
-    <button class="btn red">Gasto</button>
-  </div>
-
-  <!-- Vazio -->
-  <div class="empty">
-    <span>$</span>
-    <p>Nenhuma movimentação este mês</p>
-  </div>
-
-</main>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>$ Nova Entrada</h2>
-      <button onclick="closeModal()">×</button>
-    </div>
-
-    <div class="type-group">
-      <div class="type active">Salário</div>
-      <div class="type">Comissão</div>
-      <div class="type">Extra</div>
-    </div>
-
-    <label>Valor</label>
-    <input type="number" placeholder="R$ 0,00" />
-
-    <label>Data</label>
-    <input type="date" />
-
-    <div class="modal-actions">
-      <button class="cancel" onclick="closeModal()">Cancelar</button>
-      <button class="confirm">Adicionar</button>
-    </div>
-  </div>
-</div>
-
-<script src="home.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
