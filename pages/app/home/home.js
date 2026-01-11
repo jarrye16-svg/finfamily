@@ -32,3 +32,29 @@ async function loadSummary() {
 }
 
 loadSummary();
+
+// MODAL ENTRADA
+const entradaBtn = document.querySelector('.action-btn.green');
+const modal = document.getElementById('entradaModal');
+const closeBtn = document.getElementById('closeEntrada');
+const cancelBtn = document.getElementById('cancelEntrada');
+
+entradaBtn.addEventListener('click', () => {
+  modal.classList.add('active');
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+cancelBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+// Seleção de tipo
+document.querySelectorAll('.type').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.type').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
