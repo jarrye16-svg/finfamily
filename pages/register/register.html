@@ -5,72 +5,198 @@
   <title>FinFamily | Criar conta</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+
     body {
       margin: 0;
       min-height: 100vh;
       background: #05080f;
-      color: #ffffff;
-      font-family: system-ui, Arial, sans-serif;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
+    }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(120deg, #042f2e, #021526, #020617);
+      background-size: 200% 200%;
+      animation: bgMove 12s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .card {
       width: 100%;
-      max-width: 380px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 30px 60px rgba(0,0,0,.5);
+      max-width: 400px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 40px 80px rgba(0,0,0,.4);
     }
 
-    h1 {
-      margin-top: 0;
-    }
+    h1 { margin: 0 0 6px; font-size: 26px; }
+    p  { margin: 0 0 22px; font-size: 14px; opacity: .8; }
 
-    input, button {
+    .field { position: relative; margin-bottom: 18px; }
+
+    .field input {
       width: 100%;
-      padding: 12px;
-      margin-top: 12px;
-      border-radius: 10px;
-      border: none;
+      padding: 14px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .field label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: rgba(255,255,255,.6);
+      pointer-events: none;
+      transition: .2s;
+      background: transparent;
+    }
+
+    .field input:focus + label,
+    .field input:not(:placeholder-shown) + label {
+      top: -6px;
+      font-size: 11px;
+      background: #05080f;
+      padding: 0 6px;
     }
 
     button {
-      margin-top: 20px;
-      background: #22c55e;
-      color: #fff;
+      width: 100%;
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
     }
 
-    a {
-      display: block;
-      margin-top: 16px;
+    .error {
+      margin-top: 14px;
+      color: #f87171;
       text-align: center;
-      color: #60a5fa;
-      text-decoration: none;
-      font-size: 14px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    .footer {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .footer a { color: #4ade80; text-decoration: none; }
+
+    .version {
+      display: block;
+      margin-top: 18px;
+      text-align: center;
+      font-size: 11px;
+      opacity: .5;
     }
   </style>
 </head>
 <body>
 
+  <div class="background"></div>
+
   <div class="card">
     <h1>Criar conta</h1>
+    <p>Comece a organizar suas finanças em família</p>
 
-    <input placeholder="Nome">
-    <input placeholder="Email">
-    <input type="password" placeholder="Senha">
+    <form id="registerForm">
+      <div class="field">
+        <input id="name" type="text" placeholder=" " required />
+        <label>Nome</label>
+      </div>
 
-    <button>Criar conta</button>
+      <div class="field">
+        <input id="email" type="email" placeholder=" " required />
+        <label>Email</label>
+      </div>
 
-    <a href="/finfamily/pages/login/login.html">
-      Já tem conta? Entrar
-    </a>
+      <div class="field">
+        <input id="password" type="password" placeholder=" " required />
+        <label>Senha</label>
+      </div>
+
+      <button type="submit">Criar conta</button>
+      <div id="error" class="error"></div>
+    </form>
+
+    <div class="footer">
+      Já tem conta?
+      <a href="/finfamily/pages/login/login.html">Entrar</a>
+    </div>
+
+    <small class="version">FinFamily v1.0.0</small>
   </div>
+
+  <!-- SUPABASE (ESM ÚNICO) -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabase = createClient(
+      "https://gelhizmssqlexlxkvufc.supabase.co",
+      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
+    );
+
+    const form = document.getElementById("registerForm");
+    const errorBox = document.getElementById("error");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorBox.textContent = "";
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { name }
+          }
+        });
+
+        if (error) throw error;
+
+        alert("Conta criada com sucesso! Verifique seu email.");
+        window.location.href = "/finfamily/pages/login/login.html";
+      } catch (err) {
+        errorBox.textContent = err.message || "Erro ao criar conta.";
+      }
+    });
+  </script>
 
 </body>
 </html>
