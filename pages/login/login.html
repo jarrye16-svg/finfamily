@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS ABSOLUTO -->
-  <link rel="stylesheet" href="/finfamily/assets/css/login.css">
+  <!-- CSS LOCAL (CENTRALIZADO NA PASTA LOGIN) -->
+  <link rel="stylesheet" href="/finfamily/pages/login/login.css">
 </head>
 <body>
 
@@ -24,18 +24,20 @@
         <p>Organize sua vida financeira em família</p>
       </header>
 
-      <form id="loginForm">
+      <form id="loginForm" class="login-form">
         <div class="field">
-          <input type="email" placeholder=" " required />
-          <label>Email</label>
+          <input id="email" type="email" placeholder=" " required />
+          <label for="email">Email</label>
         </div>
 
         <div class="field">
-          <input type="password" placeholder=" " required />
-          <label>Senha</label>
+          <input id="password" type="password" placeholder=" " required />
+          <label for="password">Senha</label>
         </div>
 
         <button type="submit">Entrar</button>
+
+        <p id="error" class="error"></p>
       </form>
 
       <footer class="login-footer">
@@ -47,13 +49,7 @@
     </div>
   </main>
 
-  <!-- JS MINIMO E SEGURO -->
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      window.location.href = "/finfamily/pages/app/dashboard/dashboard.html";
-    });
-  </script>
-
+  <!-- JS LOCAL (CENTRALIZADO NA PASTA LOGIN) -->
+  <script src="/finfamily/pages/login/login.js"></script>
 </body>
 </html>
