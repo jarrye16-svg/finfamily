@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>FinFamily | Home</title>
+  <title>FinFamily | Início</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,54 +13,54 @@
 </head>
 <body>
 
-  <header class="top-bar">
-    <h1>FinFamily</h1>
-  </header>
+<header class="app-header">
+  <div class="logo">FinFamily</div>
+</header>
 
-  <main class="container">
+<main class="app">
 
-    <section class="month-selector">
-      <button id="prevMonth">‹</button>
-      <span id="currentMonth">Janeiro 2026</span>
-      <button id="nextMonth">›</button>
-    </section>
+  <section class="month">
+    <button>‹</button>
+    <span>Janeiro 2026</span>
+    <button>›</button>
+  </section>
 
-    <section class="card balance">
-      <span>Saldo do mês</span>
-      <strong id="saldo">R$ 0,00</strong>
-    </section>
+  <section class="card saldo">
+    <p>Saldo do mês</p>
+    <h2 id="saldo">R$ 0,00</h2>
+  </section>
 
-    <section class="cards">
-      <div class="card income">
-        <span>Entradas</span>
-        <strong id="entradas">R$ 0,00</strong>
-      </div>
+  <section class="resume">
+    <div class="card mini entrada">
+      <p>Entradas</p>
+      <strong id="entradas">R$ 0,00</strong>
+    </div>
 
-      <div class="card expense">
-        <span>Saídas</span>
-        <strong id="saidas">R$ 0,00</strong>
-      </div>
-    </section>
+    <div class="card mini saida">
+      <p>Saídas</p>
+      <strong id="saidas">R$ 0,00</strong>
+    </div>
+  </section>
 
-    <section class="actions">
-      <a href="../entradas/entradas.html" class="btn green">Entrada</a>
-      <a href="../gastos/gastos.html" class="btn red">Gasto</a>
-    </section>
+  <section class="actions">
+    <a href="../entradas/entradas.html" class="btn entrada">Entrada</a>
+    <a href="../gastos/gastos.html" class="btn saida">Gasto</a>
+  </section>
 
-    <section class="history">
-      <p>Nenhuma movimentação este mês</p>
-    </section>
+  <section class="empty">
+    <p>Nenhuma movimentação este mês</p>
+  </section>
 
-  </main>
+</main>
 
-  <nav class="bottom-nav">
-    <a class="active">Início</a>
-    <a href="../entradas/entradas.html">Entradas</a>
-    <a href="../gastos/gastos.html">Gastos</a>
-    <a href="../fixas/fixas.html">Fixas</a>
-    <a href="../perfil/perfil.html">Perfil</a>
-  </nav>
+<nav class="bottom-nav">
+  <a class="active">Início</a>
+  <a href="../entradas/entradas.html">Entradas</a>
+  <a href="../gastos/gastos.html">Gastos</a>
+  <a href="../fixas/fixas.html">Fixas</a>
+  <a href="../perfil/perfil.html">Perfil</a>
+</nav>
 
-  <script src="home.js" type="module"></script>
+<script src="home.js" type="module"></script>
 </body>
 </html>
