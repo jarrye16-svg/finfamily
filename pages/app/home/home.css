@@ -1,0 +1,120 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #05080f;
+  color: #fff;
+}
+
+.top {
+  padding: 16px;
+}
+
+.top h1 {
+  margin: 0;
+}
+
+.month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.month button {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.content {
+  padding: 16px;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.card.main {
+  margin-bottom: 16px;
+}
+
+.card strong {
+  display: block;
+  font-size: 24px;
+  margin-top: 8px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.card.entrada strong {
+  color: #22c55e;
+}
+
+.card.gasto strong {
+  color: #ef4444;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.btn {
+  flex: 1;
+  text-align: center;
+  padding: 14px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn.entrada {
+  background: #16a34a;
+  color: #fff;
+}
+
+.btn.gasto {
+  background: #dc2626;
+  color: #fff;
+}
+
+.empty {
+  text-align: center;
+  opacity: 0.6;
+  margin-top: 32px;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #020617;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+}
+
+.bottom a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.bottom a.active {
+  color: #38bdf8;
+}
