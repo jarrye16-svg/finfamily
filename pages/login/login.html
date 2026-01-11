@@ -5,20 +5,16 @@
   <title>FinFamily | Entrar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte premium -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
-  <!-- Background -->
   <div class="background"></div>
 
-  <!-- Conteúdo -->
   <main class="login-wrapper">
     <div class="login-card">
       <header class="login-header">
@@ -26,34 +22,20 @@
         <p>Organize sua vida financeira em família</p>
       </header>
 
-      <form class="login-form">
+      <form id="loginForm">
         <div class="field">
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder=" "
-            required
-          />
-          <label for="email">Email</label>
+          <input id="email" type="email" placeholder=" " required />
+          <label>Email</label>
         </div>
 
         <div class="field">
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder=" "
-            required
-          />
-          <label for="password">Senha</label>
+          <input id="password" type="password" placeholder=" " required />
+          <label>Senha</label>
         </div>
 
-        <button type="submit">
-          Entrar
-        </button>
+        <button type="submit">Entrar</button>
 
-        <p id="error" style="margin-top:12px; color:#f87171; text-align:center;"></p>
+        <p id="error" style="margin-top:12px;color:#f87171;text-align:center;"></p>
       </form>
 
       <footer class="login-footer">
@@ -65,11 +47,39 @@
     </div>
   </main>
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../core/supabase.js"></script>
+  <!-- SUPABASE ESM ÚNICO -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  <!-- JS da tela -->
-  <script src="login.js"></script>
+    const supabase = createClient(
+      "https://gelhizmssqlexlxkvufc.supabase.co",
+      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
+    );
+
+    const form = document.getElementById("loginForm");
+    const errorBox = document.getElementById("error");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorBox.textContent = "";
+
+      try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+
+        alert("Login realizado com sucesso!");
+      } catch (err) {
+        errorBox.textContent = err.message || "Erro ao entrar.";
+      }
+    });
+  </script>
+
 </body>
 </html>
