@@ -5,12 +5,10 @@
   <title>FinFamily | Entrar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS LOCAL (CENTRALIZADO NA PASTA LOGIN) -->
   <link rel="stylesheet" href="/finfamily/pages/login/login.css">
 </head>
 <body>
@@ -27,12 +25,12 @@
       <form id="loginForm" class="login-form">
         <div class="field">
           <input id="email" type="email" placeholder=" " required />
-          <label for="email">Email</label>
+          <label>Email</label>
         </div>
 
         <div class="field">
           <input id="password" type="password" placeholder=" " required />
-          <label for="password">Senha</label>
+          <label>Senha</label>
         </div>
 
         <button type="submit">Entrar</button>
@@ -49,7 +47,43 @@
     </div>
   </main>
 
-  <!-- JS LOCAL (CENTRALIZADO NA PASTA LOGIN) -->
-  <script src="/finfamily/pages/login/login.js"></script>
+  <!-- SUPABASE LOGIN REAL -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabase = createClient(
+      "https://gelhizmssqlexlxkvufc.supabase.co",
+      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
+    );
+
+    const form = document.getElementById("loginForm");
+    const errorBox = document.getElementById("error");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorBox.textContent = "";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        if (error.message.includes("Email not confirmed")) {
+          errorBox.textContent = "Confirme seu email antes de entrar.";
+        } else {
+          errorBox.textContent = error.message;
+        }
+        return;
+      }
+
+      // LOGIN OK
+      window.location.href = "/finfamily/pages/app/dashboard/dashboard.html";
+    });
+  </script>
+
 </body>
 </html>
