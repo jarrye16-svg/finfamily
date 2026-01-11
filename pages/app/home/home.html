@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>FinFamily | Início</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <header class="top">
+    <h1>FinFamily</h1>
+    <div class="month">
+      <button id="prevMonth">‹</button>
+      <span id="monthLabel">—</span>
+      <button id="nextMonth">›</button>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="card main">
+      <span>Saldo do mês</span>
+      <strong id="saldo">R$ 0,00</strong>
+    </section>
+
+    <section class="cards">
+      <div class="card entrada">
+        <span>Entradas</span>
+        <strong id="entradas">R$ 0,00</strong>
+      </div>
+      <div class="card gasto">
+        <span>Saídas</span>
+        <strong id="gastos">R$ 0,00</strong>
+      </div>
+    </section>
+
+    <section class="actions">
+      <a href="/finfamily/pages/app/entradas/entradas.html" class="btn entrada">Entrada</a>
+      <a href="/finfamily/pages/app/entradas/entradas.html?type=gasto" class="btn gasto">Gasto</a>
+    </section>
+
+    <section class="empty" id="empty">
+      Nenhuma movimentação este mês
+    </section>
+
+  </main>
+
+  <nav class="bottom">
+    <a class="active">Início</a>
+    <a href="/finfamily/pages/app/entradas/entradas.html">Entradas</a>
+    <a href="/finfamily/pages/app/entradas/entradas.html?type=gasto">Gastos</a>
+    <a>Fixas</a>
+    <a>Perfil</a>
+  </nav>
+
+  <script type="module" src="home.js"></script>
+</body>
+</html>
