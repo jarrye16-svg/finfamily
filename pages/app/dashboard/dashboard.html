@@ -1,46 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>FinFamily | Dashboard</title>
 </head>
 <body>
 
   <h1>Dashboard</h1>
-  <p id="status">Verificando sessão...</p>
-  <button id="logout" style="display:none">Sair</button>
+  <p>Área técnica / testes</p>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-    const supabase = createClient(
-      "https://gelhizmssqlexlxkvufc.supabase.co",
-      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
-    );
-
-    async function init() {
-      const status = document.getElementById("status");
-      const logoutBtn = document.getElementById("logout");
-
-      const { data } = await supabase.auth.getSession();
-      const session = data.session;
-
-      if (!session) {
-        window.location.href = "/finfamily/pages/login/login.html";
-        return;
-      }
-
-      status.textContent = "Logado com sucesso ✅";
-      logoutBtn.style.display = "inline-block";
-
-      logoutBtn.onclick = async () => {
-        await supabase.auth.signOut();
-        window.location.href = "/finfamily/pages/login/login.html";
-      };
-    }
-
-    init();
-  </script>
+  <a href="../home/home.html">Ir para Home</a>
 
 </body>
 </html>
