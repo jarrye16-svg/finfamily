@@ -6,25 +6,11 @@
 </head>
 <body>
 
-  <h1>Dashboard</h1>
-  <p id="status">Carregando...</p>
+  <h1>DASHBOARD OK</h1>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <p>Se você chegou aqui, o roteamento está funcionando.</p>
 
-    const supabase = createClient(
-      "https://gelhizmssqlexlxkvufc.supabase.co",
-      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb"
-    );
-
-    const { data } = await supabase.auth.getSession();
-
-    if (!data.session) {
-      window.location.href = "../../login/login.html";
-    } else {
-      document.getElementById("status").textContent = "Logado com sucesso ✅";
-    }
-  </script>
+  <a href="../../login/login.html">Voltar</a>
 
 </body>
 </html>
