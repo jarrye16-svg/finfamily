@@ -48,46 +48,22 @@
 
   <div class="card">
     <h1>Dashboard</h1>
-    <p id="status">Carregando sessão...</p>
-    <button id="logout" style="display:none">Sair</button>
+    <p>Você está logado ✅</p>
+    <button id="logout">Sair</button>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <script>
+    // 🔐 AUTH GUARD ESTÁVEL
+    const logged = localStorage.getItem("finfamily_logged");
 
-    const supabase = createClient(
-      "https://gelhizmssqlexlxkvufc.supabase.co",
-      "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb",
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: false   // 🔥 ISSO RESOLVE A TELA BRANCA
-        }
-      }
-    );
-
-    async function init() {
-      const status = document.getElementById("status");
-      const logoutBtn = document.getElementById("logout");
-
-      const { data } = await supabase.auth.getSession();
-      const session = data.session;
-
-      if (!session) {
-        window.location.href = "../../login/login.html";
-        return;
-      }
-
-      status.textContent = "Você está logado ✅";
-      logoutBtn.style.display = "inline-block";
-
-      logoutBtn.addEventListener("click", async () => {
-        await supabase.auth.signOut();
-        window.location.href = "../../login/login.html";
-      });
+    if (!logged) {
+      window.location.href = "../../login/login.html";
     }
 
-    init();
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("finfamily_logged");
+      window.location.href = "../../login/login.html";
+    });
   </script>
 
 </body>
