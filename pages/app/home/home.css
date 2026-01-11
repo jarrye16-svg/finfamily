@@ -5,146 +5,122 @@
 
 body {
   margin: 0;
-  background: #05080f;
+  background: radial-gradient(circle at top, #0b1f2e, #020617);
   color: #fff;
 }
 
-.top {
-  padding: 16px;
+.app-header {
+  padding: 20px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
-.top h1 {
-  margin: 0;
+.app {
+  padding: 16px;
+  padding-bottom: 100px;
 }
 
 .month {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-top: 12px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  opacity: .9;
 }
 
 .month button {
   background: none;
   border: none;
-  color: #60a5fa;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.content {
-  padding: 16px;
-  padding-bottom: 90px;
+  color: #fff;
+  font-size: 22px;
 }
 
 .card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 16px;
-  padding: 16px;
-}
-
-.card.main {
+  background: linear-gradient(145deg, #0c2a3a, #061722);
+  border-radius: 22px;
+  padding: 20px;
   margin-bottom: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.35);
 }
 
-.card strong {
-  display: block;
-  font-size: 24px;
+.card p {
+  margin: 0;
+  font-size: 14px;
+  opacity: .8;
+}
+
+.card h2 {
   margin-top: 8px;
+  font-size: 30px;
 }
 
-.cards {
+.resume {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.card.entrada strong {
+.mini strong {
+  font-size: 22px;
+}
+
+.entrada strong {
   color: #22c55e;
 }
 
-.card.gasto strong {
+.saida strong {
   color: #ef4444;
 }
 
 .actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin: 20px 0;
 }
 
 .btn {
-  flex: 1;
   text-align: center;
-  padding: 14px;
-  border-radius: 14px;
-  text-decoration: none;
+  padding: 16px;
+  border-radius: 18px;
   font-weight: 600;
+  color: #fff;
+  text-decoration: none;
 }
 
 .btn.entrada {
-  background: #16a34a;
-  color: #fff;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
 }
 
-.btn.gasto {
-  background: #dc2626;
-  color: #fff;
-}
-
-.history {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.item {
-  display: flex;
-  justify-content: space-between;
-  background: rgba(255,255,255,0.04);
-  padding: 12px;
-  border-radius: 12px;
-  font-size: 14px;
-}
-
-.item.entrada {
-  border-left: 4px solid #22c55e;
-}
-
-.item.gasto {
-  border-left: 4px solid #ef4444;
-}
-
-.item small {
-  opacity: 0.6;
-  font-size: 12px;
+.btn.saida {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
 }
 
 .empty {
   text-align: center;
-  opacity: 0.6;
-  margin-top: 24px;
+  opacity: .6;
+  margin-top: 20px;
 }
 
-.bottom {
+.bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
   background: #020617;
-  display: flex;
-  justify-content: space-around;
-  padding: 12px 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 10px 0;
+  border-top: 1px solid rgba(255,255,255,.05);
 }
 
-.bottom a {
+.bottom-nav a {
   color: #94a3b8;
-  text-decoration: none;
+  text-align: center;
   font-size: 12px;
+  text-decoration: none;
 }
 
-.bottom a.active {
-  color: #38bdf8;
+.bottom-nav a.active {
+  color: #22c55e;
 }
