@@ -1,55 +1,57 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  font-family: 'Outfit', sans-serif;
 }
 
 body {
-  background: radial-gradient(circle at top, #0b1324, #020617);
-  color: #e5e7eb;
-  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(circle at top, #0b1f36, #020617);
+  color: #fff;
 }
 
-.topbar {
-  padding: 16px;
-  font-size: 22px;
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  padding: 20px;
+  font-size: 20px;
   font-weight: 600;
 }
 
-.container {
+.content {
+  flex: 1;
   padding: 16px;
-  max-width: 420px;
-  margin: auto;
+  padding-bottom: 90px; /* espaço da barra */
 }
 
 .month-selector {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background: #0f172a;
-  padding: 12px;
-  border-radius: 14px;
+  gap: 16px;
   margin-bottom: 16px;
 }
 
+.arrow {
+  background: rgba(255,255,255,.08);
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
 .card {
-  background: linear-gradient(135deg, #0f172a, #020617);
+  background: rgba(255,255,255,.06);
   border-radius: 18px;
   padding: 18px;
   margin-bottom: 14px;
 }
 
-.card span {
-  color: #94a3b8;
-  font-size: 14px;
-}
-
-.card strong {
+.balance strong {
   font-size: 26px;
-}
-
-.saldo strong {
   color: #22c55e;
 }
 
@@ -58,128 +60,71 @@ body {
   gap: 12px;
 }
 
-.card.small {
-  flex: 1;
-}
-
-.green strong {
+.income strong {
   color: #22c55e;
 }
 
-.red strong {
+.expense strong {
   color: #ef4444;
 }
 
 .actions {
   display: flex;
   gap: 12px;
-  margin: 18px 0;
+  margin: 20px 0;
 }
 
 .btn {
   flex: 1;
-  padding: 14px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 999px;
   border: none;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.btn.green {
+.income-btn {
   background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #022c22;
+  color: #fff;
 }
 
-.btn.red {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
+.expense-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: #fff;
 }
 
 .empty {
   text-align: center;
-  opacity: 0.6;
-  margin-top: 30px;
+  opacity: .6;
+  margin-top: 24px;
 }
 
 .empty span {
-  font-size: 40px;
+  font-size: 32px;
 }
 
-/* MODAL */
-
-.modal {
+/* BOTTOM NAV */
+.bottom-nav {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(10,20,40,.9);
+  backdrop-filter: blur(12px);
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: .2s;
+  border-top: 1px solid rgba(255,255,255,.08);
 }
 
-.modal.active {
-  opacity: 1;
-  pointer-events: all;
+.bottom-nav a {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 13px;
 }
 
-.modal-content {
-  width: 90%;
-  max-width: 380px;
-  background: #020617;
-  padding: 20px;
-  border-radius: 18px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.type-group {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.type {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  border-radius: 12px;
-  background: #0f172a;
-  cursor: pointer;
-}
-
-.type.active {
-  border: 1px solid #22c55e;
+.bottom-nav a.active {
   color: #22c55e;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-  background: #020617;
-  color: #fff;
-  margin-bottom: 12px;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.cancel {
-  background: #0f172a;
-  color: #cbd5f5;
-}
-
-.confirm {
-  background: #22c55e;
-  color: #022c22;
 }
