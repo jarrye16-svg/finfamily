@@ -32,7 +32,7 @@ body {
 }
 
 .splash-logo {
-  width: 160px;
+  width: 180px;
   animation: splashIntro 1.2s ease forwards;
 }
 
@@ -68,7 +68,9 @@ body {
 }
 
 .login-logo {
-  width: 96px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .login-card {
@@ -131,7 +133,7 @@ body {
   font-weight: 600;
 }
 
-/* ================= ANIMATION FINAL ================= */
+/* ================= FINAL ================= */
 
 .login-visible {
   animation: fadeIn 0.6s ease forwards;
