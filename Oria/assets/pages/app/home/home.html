@@ -5,6 +5,7 @@
   <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -153,6 +154,11 @@
       box-shadow: 0 14px 34px rgba(0,0,0,0.08);
       cursor: pointer;
       transition: transform .15s ease, box-shadow .15s ease;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .action.primary {
@@ -190,6 +196,7 @@
 <body>
   <div class="container">
 
+    <!-- TOPO -->
     <div class="top">
       <div class="logo">
         <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
@@ -200,12 +207,14 @@
       </div>
     </div>
 
+    <!-- MÊS -->
     <div class="month">
       <button>&lsaquo;</button>
       <strong>Janeiro de 2026</strong>
       <button>&rsaquo;</button>
     </div>
 
+    <!-- RESUMO -->
     <div class="stats">
       <div class="card">
         <span>Total do mês</span>
@@ -225,13 +234,25 @@
       </div>
     </div>
 
+    <!-- AÇÕES -->
     <div class="actions-title">Ações rápidas</div>
 
     <div class="actions">
-      <div class="action primary">Contas da casa</div>
-      <div class="action">Rendas</div>
-      <div class="action">Cartões</div>
-      <div class="action">Porquinho</div>
+      <a href="/finfamily/Oria/assets/pages/expenses/expenses.html" class="action primary">
+        Contas da casa
+      </a>
+
+      <a href="/finfamily/Oria/assets/pages/income/income.html" class="action">
+        Rendas
+      </a>
+
+      <a href="/finfamily/Oria/assets/pages/cards/cards.html" class="action">
+        Cartões
+      </a>
+
+      <a href="/finfamily/Oria/assets/pages/piggy/piggy.html" class="action">
+        Porquinho
+      </a>
     </div>
 
   </div>
