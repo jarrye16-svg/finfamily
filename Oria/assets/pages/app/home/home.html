@@ -5,7 +5,6 @@
   <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -27,48 +26,45 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
       background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
       color: var(--text);
+      display: flex;
+      justify-content: center;
     }
 
     .container {
+      width: 100%;
       max-width: 420px;
-      margin: 0 auto;
-      padding: 20px 16px 32px;
+      padding: 24px 16px 40px;
     }
 
-    /* Top */
+    /* ===== TOP ===== */
     .top {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
       background: var(--card);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.08);
     }
 
     .logo img {
-      width: 26px;
-      height: 26px;
-    }
-
-    .top-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+      width: 28px;
+      height: 28px;
     }
 
     .top-text strong {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
     }
 
@@ -77,21 +73,21 @@
       color: var(--muted);
     }
 
-    /* Month selector */
+    /* ===== MONTH ===== */
     .month {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 14px 16px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
-      margin-bottom: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
     }
 
     .month button {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       border: none;
       background: #eef2ff;
@@ -101,23 +97,23 @@
     }
 
     .month strong {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
     }
 
-    /* Cards */
+    /* ===== STATS ===== */
     .stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 22px;
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
     .card {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
     }
 
     .card span {
@@ -127,35 +123,35 @@
 
     .card strong {
       display: block;
-      margin-top: 6px;
-      font-size: 18px;
+      margin-top: 8px;
+      font-size: 20px;
       font-weight: 700;
     }
 
     .green { color: var(--green); }
     .red { color: var(--red); }
 
-    /* Actions */
+    /* ===== ACTIONS ===== */
     .actions-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 16px;
     }
 
     .action {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 18px 14px;
+      padding: 20px 16px;
       text-align: center;
       font-weight: 600;
-      font-size: 14px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+      font-size: 15px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
       cursor: pointer;
       transition: transform .15s ease, box-shadow .15s ease;
     }
@@ -167,27 +163,34 @@
 
     .action:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.1);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.1);
     }
 
-    /* Desktop */
+    /* ===== DESKTOP SCALE ===== */
     @media (min-width: 900px) {
-      body {
-        display: flex;
-        justify-content: center;
+      .container {
+        max-width: 900px;
+        padding: 40px 24px 60px;
       }
 
-      .container {
-        max-width: 620px;
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .actions {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .card strong {
+        font-size: 22px;
       }
     }
   </style>
 </head>
-<body>
 
+<body>
   <div class="container">
 
-    <!-- Top -->
     <div class="top">
       <div class="logo">
         <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
@@ -198,14 +201,12 @@
       </div>
     </div>
 
-    <!-- Month -->
     <div class="month">
       <button>&lsaquo;</button>
       <strong>Janeiro de 2026</strong>
       <button>&rsaquo;</button>
     </div>
 
-    <!-- Stats -->
     <div class="stats">
       <div class="card">
         <span>Total do mês</span>
@@ -228,7 +229,6 @@
       </div>
     </div>
 
-    <!-- Actions -->
     <div class="actions-title">Ações rápidas</div>
 
     <div class="actions">
@@ -239,6 +239,5 @@
     </div>
 
   </div>
-
 </body>
 </html>
