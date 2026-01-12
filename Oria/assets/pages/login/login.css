@@ -29,19 +29,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 20;
 }
 
 .splash-logo {
-  width: 280px;
-  max-width: 80vw;
+  width: 360px;
+  max-width: 90vw;
   opacity: 0;
-  animation: splashIn 1.2s ease forwards;
+  transform: scale(0.92);
+  animation: splashIntro 1.4s ease forwards;
 }
 
-@keyframes splashIn {
+@keyframes splashIntro {
   to {
     opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -61,10 +63,9 @@ body {
   margin-top: 32px;
 }
 
-/* 🔒 Container anti-quebra */
 .logo-circle {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: #ffffff;
   display: flex;
@@ -73,15 +74,15 @@ body {
 }
 
 .logo-circle img {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
 }
 
 .login-card {
   width: 100%;
   max-width: 420px;
-  margin-top: 56px;
+  margin-top: 64px;
   padding: 32px;
   border-radius: var(--radius);
 }
@@ -141,7 +142,7 @@ body {
 /* ================= FINAL ================= */
 
 .login-visible {
-  animation: fadeIn 0.8s ease forwards;
+  animation: fadeIn 0.9s ease forwards;
 }
 
 @keyframes fadeIn {
