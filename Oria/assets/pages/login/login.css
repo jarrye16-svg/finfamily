@@ -1,8 +1,9 @@
 :root {
-  --bg-main: #ffffff;
+  --primary: #2563eb;
+  --primary-light: #60a5fa;
+  --bg-main: #f8fafc;
   --text-main: #0f172a;
   --text-muted: #64748b;
-  --primary: #2563eb;
   --radius: 18px;
 }
 
@@ -18,6 +19,29 @@ body {
   color: var(--text-main);
   min-height: 100vh;
   overflow: hidden;
+}
+
+/* ================= FUNDO ANIMADO ================= */
+
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    #ffffff,
+    #eef4ff,
+    #f8fbff,
+    #ffffff
+  );
+  background-size: 400% 400%;
+  animation: bgMove 14s ease infinite;
+  z-index: 0;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* ================= SPLASH ================= */
@@ -36,7 +60,7 @@ body {
   width: 360px;
   max-width: 90vw;
   opacity: 0;
-  transform: scale(0.92);
+  transform: scale(0.94);
   animation: splashIntro 1.4s ease forwards;
 }
 
@@ -50,6 +74,8 @@ body {
 /* ================= LOGIN ================= */
 
 .login-container {
+  position: relative;
+  z-index: 1;
   opacity: 0;
   pointer-events: none;
   min-height: 100vh;
@@ -60,31 +86,37 @@ body {
 }
 
 .login-header {
-  margin-top: 32px;
+  margin-top: 48px;
 }
 
+/* 🔒 ÍCONE GRANDE, PREMIUM */
 .logo-circle {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
+  width: 96px;
+  height: 96px;
+  border-radius: 28px;
   background: #ffffff;
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .logo-circle img {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
 }
+
+/* ================= CARD ================= */
 
 .login-card {
   width: 100%;
   max-width: 420px;
   margin-top: 64px;
   padding: 32px;
-  border-radius: var(--radius);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
 }
 
 .login-card h1 {
@@ -117,7 +149,7 @@ body {
 .btn-primary {
   width: 100%;
   padding: 16px;
-  border-radius: 16px;
+  border-radius: 18px;
   border: none;
   background: var(--primary);
   color: #ffffff;
@@ -142,7 +174,7 @@ body {
 /* ================= FINAL ================= */
 
 .login-visible {
-  animation: fadeIn 0.9s ease forwards;
+  animation: fadeIn 1s ease forwards;
 }
 
 @keyframes fadeIn {
