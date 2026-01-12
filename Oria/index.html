@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oria — Visão Geral</title>
+  <title>Oria — Visão geral</title>
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,11 +11,13 @@
   <style>
     :root {
       --primary: #2563eb;
-      --primary-soft: #dbeafe;
-      --bg: #f8fafc;
+      --primary-soft: #e0edff;
+      --bg: #f5f8ff;
       --card: #ffffff;
       --text: #0f172a;
       --muted: #64748b;
+      --green: #16a34a;
+      --red: #dc2626;
       --radius: 22px;
     }
 
@@ -26,140 +28,146 @@
     body {
       margin: 0;
       font-family: 'Outfit', sans-serif;
-      background: linear-gradient(
-        135deg,
-        #ffffff,
-        #eef4ff,
-        #dbeafe,
-        #ffffff
-      );
-      min-height: 100vh;
+      background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
       color: var(--text);
+      min-height: 100vh;
     }
 
-    /* ================= HEADER / HERO ================= */
+    /* ================= HEADER ================= */
     .header {
-      padding: 20px;
-    }
-
-    .header-card {
-      background: linear-gradient(135deg, #ffffff, #eef4ff);
-      border-radius: 26px;
-      padding: 18px 20px 22px;
-      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.12);
+      padding: 20px 20px 12px;
     }
 
     .header-top {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
+      gap: 12px;
     }
 
     .logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background: #fff;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
     }
 
-    .logo img {
-      width: 22px;
+    .header-text {
+      display: flex;
+      flex-direction: column;
     }
 
-    .avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #60a5fa, #2563eb);
+    .header-text strong {
+      font-size: 18px;
+    }
+
+    .header-text span {
+      font-size: 14px;
+      color: var(--muted);
     }
 
     /* ================= MÊS ================= */
-    .month-selector {
+    .month-card {
+      margin-top: 18px;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px 18px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 20px;
-      font-weight: 600;
-      font-size: 16px;
+      justify-content: space-between;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.06);
     }
 
     .month-btn {
       font-size: 20px;
+      font-weight: 600;
       cursor: pointer;
-      user-select: none;
       color: var(--primary);
+      user-select: none;
+    }
+
+    .month-label {
+      font-weight: 600;
+      font-size: 16px;
     }
 
     /* ================= CONTAINER ================= */
     .container {
-      padding: 0 20px 32px;
+      padding: 20px;
     }
 
     /* ================= RESUMO ================= */
     .summary {
       display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 16px;
-      margin-top: 18px;
     }
 
     .summary-card {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+      padding: 18px;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .summary-card span {
-      color: var(--muted);
       font-size: 14px;
+      color: var(--muted);
     }
 
     .summary-card strong {
-      display: block;
-      margin-top: 6px;
       font-size: 22px;
     }
 
-    .positive {
-      color: #16a34a;
+    .green {
+      color: var(--green);
     }
 
-    .negative {
-      color: #dc2626;
+    .red {
+      color: var(--red);
     }
 
     /* ================= AÇÕES ================= */
     .actions {
       margin-top: 28px;
+    }
+
+    .actions h2 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .actions-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
 
-    .action {
+    .action-card {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 16px 32px rgba(0,0,0,0.05);
-      font-weight: 600;
-      text-align: center;
-      cursor: pointer;
+      padding: 20px;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.06);
       text-decoration: none;
       color: var(--text);
-      transition: transform 0.2s ease;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 72px;
     }
 
-    .action:hover {
-      transform: translateY(-2px);
-    }
-
-    .action.primary {
-      background: var(--primary);
+    .action-card.primary {
+      background: linear-gradient(135deg, #2563eb, #4f8cff);
       color: #fff;
     }
   </style>
@@ -169,35 +177,34 @@
 
   <!-- ================= HEADER ================= -->
   <header class="header">
-    <div class="header-card">
-      <div class="header-top">
-        <div class="logo">
-          <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
-        </div>
-        <div class="avatar"></div>
+    <div class="header-top">
+      <div class="logo">O</div>
+      <div class="header-text">
+        <strong>Oria</strong>
+        <span>Visão geral</span>
       </div>
+    </div>
 
-      <div class="month-selector">
-        <div class="month-btn" id="prevMonth">‹</div>
-        <div id="currentMonth"></div>
-        <div class="month-btn" id="nextMonth">›</div>
-      </div>
+    <div class="month-card">
+      <div class="month-btn" id="prevMonth">‹</div>
+      <div class="month-label" id="currentMonth"></div>
+      <div class="month-btn" id="nextMonth">›</div>
     </div>
   </header>
 
   <!-- ================= CONTEÚDO ================= -->
   <main class="container">
 
-    <!-- RESUMO DO MÊS -->
+    <!-- RESUMO -->
     <section class="summary">
       <div class="summary-card">
         <span>Total do mês</span>
-        <strong class="positive">R$ 0,00</strong>
+        <strong class="green">R$ 0,00</strong>
       </div>
 
       <div class="summary-card">
         <span>Em aberto</span>
-        <strong class="negative">R$ 0,00</strong>
+        <strong class="red">R$ 0,00</strong>
       </div>
 
       <div class="summary-card">
@@ -213,26 +220,30 @@
 
     <!-- AÇÕES -->
     <section class="actions">
-      <a class="action primary" href="/finfamily/Oria/assets/pages/expenses/expenses.html">
-        Contas da casa
-      </a>
+      <h2>Ações rápidas</h2>
 
-      <a class="action" href="/finfamily/Oria/assets/pages/income/income.html">
-        Rendas
-      </a>
+      <div class="actions-grid">
+        <a class="action-card primary" href="/finfamily/Oria/assets/pages/expenses/expenses.html">
+          Contas da casa
+        </a>
 
-      <a class="action" href="/finfamily/Oria/assets/pages/cards/cards.html">
-        Cartões
-      </a>
+        <a class="action-card" href="/finfamily/Oria/assets/pages/income/income.html">
+          Rendas
+        </a>
 
-      <a class="action" href="/finfamily/Oria/assets/pages/piggy/piggy.html">
-        Porquinho
-      </a>
+        <a class="action-card" href="/finfamily/Oria/assets/pages/cards/cards.html">
+          Cartões
+        </a>
+
+        <a class="action-card" href="/finfamily/Oria/assets/pages/piggy/piggy.html">
+          Porquinho 🐷
+        </a>
+      </div>
     </section>
 
   </main>
 
-  <!-- ================= SCRIPT DO MÊS ================= -->
+  <!-- ================= SCRIPT MÊS ================= -->
   <script>
     const monthLabel = document.getElementById('currentMonth');
     const prevBtn = document.getElementById('prevMonth');
@@ -251,19 +262,18 @@
       monthLabel.textContent = formatMonth(currentDate);
     }
 
-    prevBtn.addEventListener('click', () => {
+    prevBtn.onclick = () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       renderMonth();
-    });
+    };
 
-    nextBtn.addEventListener('click', () => {
+    nextBtn.onclick = () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
       renderMonth();
-    });
+    };
 
     renderMonth();
   </script>
 
 </body>
 </html>
-
