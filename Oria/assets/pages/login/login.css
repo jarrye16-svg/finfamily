@@ -1,6 +1,7 @@
 :root {
   --primary: #2563eb;
   --primary-light: #60a5fa;
+  --primary-soft: #93c5fd;
   --bg-main: #f8fafc;
   --text-main: #0f172a;
   --text-muted: #64748b;
@@ -21,26 +22,27 @@ body {
   overflow: hidden;
 }
 
-/* ================= FUNDO ANIMADO ================= */
+/* ================= FUNDO ANIMADO (MAIS COR) ================= */
 
 .animated-bg {
   position: fixed;
   inset: 0;
   background: linear-gradient(
-    120deg,
-    #ffffff,
-    #eef4ff,
-    #f8fbff,
-    #ffffff
+    135deg,
+    #ffffff 0%,
+    #eef4ff 25%,
+    #dbeafe 45%,   /* azul claro */
+    #eef4ff 65%,
+    #ffffff 100%
   );
-  background-size: 400% 400%;
-  animation: bgMove 14s ease infinite;
+  background-size: 500% 500%;
+  animation: bgMove 16s ease-in-out infinite;
   z-index: 0;
 }
 
 @keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
@@ -89,20 +91,20 @@ body {
   margin-top: 56px;
 }
 
-/* 🔥 LOGO DE LOGIN MAIOR */
+/* LOGO GRANDE */
 .logo-circle {
-  width: 120px;          /* antes: 96px */
-  height: 120px;         /* antes: 96px */
-  border-radius: 36px;   /* acompanha o tamanho */
+  width: 120px;
+  height: 120px;
+  border-radius: 36px;
   background: #ffffff;
-  box-shadow: 0 24px 48px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 24px 48px rgba(37, 99, 235, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .logo-circle img {
-  width: 64px;           /* antes: 52px */
+  width: 64px;
   height: 64px;
   object-fit: contain;
 }
@@ -115,8 +117,8 @@ body {
   margin-top: 64px;
   padding: 32px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
 }
 
 .login-card h1 {
