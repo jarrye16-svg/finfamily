@@ -2,264 +2,243 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Oria • Visão geral</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ===============================
-       RESET / BASE
-    =============================== */
+    :root {
+      --primary: #3b6df6;
+      --bg: #f4f7fd;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --green: #16a34a;
+      --red: #dc2626;
+      --radius: 18px;
+    }
+
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
-      min-height: 100vh;
-      background: linear-gradient(180deg, #f5f8ff 0%, #eef4ff 100%);
-      color: #0f172a;
+      margin: 0;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      color: var(--text);
     }
 
-    /* ===============================
-       APP FRAME
-    =============================== */
-    .app-frame {
-      max-width: 820px;
+    .container {
+      max-width: 420px;
       margin: 0 auto;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      padding: 20px 16px 32px;
     }
 
-    /* ===============================
-       HEADER (REFINADO)
-    =============================== */
-    .app-header {
-      background: #ffffff;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
-    }
-
-    .app-header-left {
+    /* Top */
+    .top {
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 20px;
     }
 
-    .logo-wrapper {
-      width: 42px;
-      height: 42px;
+    .logo {
+      width: 44px;
+      height: 44px;
       border-radius: 14px;
-      background: linear-gradient(135deg, #4f8cff, #2563eb);
+      background: var(--card);
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
 
-    .app-logo {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
+    .logo img {
+      width: 26px;
+      height: 26px;
     }
 
-    .app-title strong {
-      display: block;
-      font-size: 16px;
+    .top-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .top-text strong {
+      font-size: 15px;
       font-weight: 600;
     }
 
-    .app-title span {
+    .top-text span {
       font-size: 13px;
-      color: #64748b;
+      color: var(--muted);
     }
 
-    /* ===============================
-       CONTENT
-    =============================== */
-    .container {
-      flex: 1;
-      padding: 24px;
-    }
-
-    /* ===============================
-       MONTH SELECTOR
-    =============================== */
-    .month-card {
-      width: 100%;
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 14px 20px;
+    /* Month selector */
+    .month {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px 16px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 28px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
+      justify-content: space-between;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
     }
 
-    .month-card button {
-      background: #f1f5ff;
-      border: none;
+    .month button {
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      border: none;
+      background: #eef2ff;
+      color: var(--primary);
       font-size: 18px;
       cursor: pointer;
     }
 
-    .month-card span {
+    .month strong {
+      font-size: 14px;
       font-weight: 600;
-      font-size: 15px;
     }
 
-    /* ===============================
-       SUMMARY GRID
-    =============================== */
-    .summary-grid {
+    /* Cards */
+    .stats {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-bottom: 32px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
-    .summary-card {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
     }
 
-    .summary-card span {
+    .card span {
       font-size: 13px;
-      color: #64748b;
+      color: var(--muted);
+    }
+
+    .card strong {
       display: block;
-      margin-bottom: 10px;
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 700;
     }
 
-    .summary-card strong {
-      font-size: 22px;
-    }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
 
-    .positive { color: #16a34a; }
-    .negative { color: #dc2626; }
-
-    /* ===============================
-       QUICK ACTIONS
-    =============================== */
-    .section-title {
-      font-size: 15px;
+    /* Actions */
+    .actions-title {
+      font-size: 14px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
-    .actions-grid {
+    .actions {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
 
-    .action-card {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 24px;
+    .action {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px 14px;
       text-align: center;
       font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
       cursor: pointer;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
-      transition: transform 0.2s ease;
+      transition: transform .15s ease, box-shadow .15s ease;
     }
 
-    .action-card:hover {
+    .action.primary {
+      background: linear-gradient(135deg, #4f83ff, #3b6df6);
+      color: #fff;
+    }
+
+    .action:hover {
       transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.1);
     }
 
-    .action-primary {
-      background: linear-gradient(135deg, #4f8cff, #2563eb);
-      color: #ffffff;
-    }
+    /* Desktop */
+    @media (min-width: 900px) {
+      body {
+        display: flex;
+        justify-content: center;
+      }
 
-    /* ===============================
-       MOBILE
-    =============================== */
-    @media (max-width: 480px) {
       .container {
-        padding: 20px;
+        max-width: 620px;
       }
     }
   </style>
 </head>
-
 <body>
 
-<div class="app-frame">
+  <div class="container">
 
-  <!-- HEADER -->
-  <header class="app-header">
-    <div class="app-header-left">
-      <div class="logo-wrapper">
-        <img
-          src="/finfamily/Oria/assets/branding/logo/oria-icon.png"
-          alt="Oria"
-          class="app-logo"
-        />
+    <!-- Top -->
+    <div class="top">
+      <div class="logo">
+        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
       </div>
-      <div class="app-title">
+      <div class="top-text">
         <strong>Oria</strong>
         <span>Visão geral</span>
       </div>
     </div>
-  </header>
 
-  <!-- CONTENT -->
-  <main class="container">
-
-    <!-- MONTH SELECTOR -->
-    <div class="month-card">
+    <!-- Month -->
+    <div class="month">
       <button>&lsaquo;</button>
-      <span>Janeiro de 2026</span>
+      <strong>Janeiro de 2026</strong>
       <button>&rsaquo;</button>
     </div>
 
-    <!-- SUMMARY -->
-    <div class="summary-grid">
-      <div class="summary-card">
+    <!-- Stats -->
+    <div class="stats">
+      <div class="card">
         <span>Total do mês</span>
-        <strong class="positive">R$ 0,00</strong>
+        <strong class="green">R$ 0,00</strong>
       </div>
 
-      <div class="summary-card">
+      <div class="card">
         <span>Em aberto</span>
-        <strong class="negative">R$ 0,00</strong>
+        <strong class="red">R$ 0,00</strong>
       </div>
 
-      <div class="summary-card">
+      <div class="card">
         <span>Cartões</span>
         <strong>R$ 0,00</strong>
       </div>
 
-      <div class="summary-card">
+      <div class="card">
         <span>Saldo final</span>
         <strong>R$ 0,00</strong>
       </div>
     </div>
 
-    <!-- ACTIONS -->
-    <div class="section-title">Ações rápidas</div>
+    <!-- Actions -->
+    <div class="actions-title">Ações rápidas</div>
 
-    <div class="actions-grid">
-      <div class="action-card action-primary">Contas da casa</div>
-      <div class="action-card">Rendas</div>
-      <div class="action-card">Cartões</div>
-      <div class="action-card">Porquinho 🐷</div>
+    <div class="actions">
+      <div class="action primary">Contas da casa</div>
+      <div class="action">Rendas</div>
+      <div class="action">Cartões</div>
+      <div class="action">Porquinho</div>
     </div>
 
-  </main>
-
-</div>
+  </div>
 
 </body>
 </html>
