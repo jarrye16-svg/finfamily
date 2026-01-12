@@ -23,7 +23,7 @@
     }
 
     /* ===============================
-       APP FRAME (DESKTOP FRIENDLY)
+       APP FRAME
     =============================== */
     .app-frame {
       max-width: 820px;
@@ -34,14 +34,14 @@
     }
 
     /* ===============================
-       HEADER
+       HEADER (REFINADO)
     =============================== */
     .app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 24px;
       background: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
     }
 
     .app-header-left {
@@ -50,11 +50,21 @@
       gap: 12px;
     }
 
+    .logo-wrapper {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #4f8cff, #2563eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .app-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 24px;
+      height: 24px;
       object-fit: contain;
+      filter: brightness(0) invert(1);
     }
 
     .app-title strong {
@@ -66,13 +76,6 @@
     .app-title span {
       font-size: 13px;
       color: #64748b;
-    }
-
-    .app-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #4f8cff, #2563eb);
     }
 
     /* ===============================
@@ -89,13 +92,13 @@
     .month-card {
       width: 100%;
       background: #ffffff;
-      border-radius: 18px;
-      padding: 14px 18px;
+      border-radius: 20px;
+      padding: 14px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      margin-bottom: 28px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
     }
 
     .month-card button {
@@ -119,22 +122,22 @@
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-bottom: 28px;
+      gap: 18px;
+      margin-bottom: 32px;
     }
 
     .summary-card {
       background: #ffffff;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
     }
 
     .summary-card span {
       font-size: 13px;
       color: #64748b;
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .summary-card strong {
@@ -150,23 +153,23 @@
     .section-title {
       font-size: 15px;
       font-weight: 600;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .actions-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 18px;
     }
 
     .action-card {
       background: #ffffff;
-      border-radius: 18px;
-      padding: 22px;
+      border-radius: 20px;
+      padding: 24px;
       text-align: center;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.05);
       transition: transform 0.2s ease;
     }
 
@@ -180,13 +183,9 @@
     }
 
     /* ===============================
-       MOBILE ADJUST
+       MOBILE
     =============================== */
     @media (max-width: 480px) {
-      .app-frame {
-        max-width: 100%;
-      }
-
       .container {
         padding: 20px;
       }
@@ -201,17 +200,18 @@
   <!-- HEADER -->
   <header class="app-header">
     <div class="app-header-left">
-      <img
-        src="/finfamily/Oria/assets/branding/logo/oria-icon.png"
-        alt="Oria"
-        class="app-logo"
-      />
+      <div class="logo-wrapper">
+        <img
+          src="/finfamily/Oria/assets/branding/logo/oria-icon.png"
+          alt="Oria"
+          class="app-logo"
+        />
+      </div>
       <div class="app-title">
         <strong>Oria</strong>
         <span>Visão geral</span>
       </div>
     </div>
-    <div class="app-avatar"></div>
   </header>
 
   <!-- CONTENT -->
