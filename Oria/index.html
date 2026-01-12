@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oria — Home</title>
+  <title>Oria — Visão Geral</title>
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
   <style>
     :root {
       --primary: #2563eb;
-      --primary-light: #60a5fa;
+      --primary-soft: #dbeafe;
       --bg: #f8fafc;
       --card: #ffffff;
       --text: #0f172a;
@@ -34,6 +34,7 @@
         #ffffff
       );
       min-height: 100vh;
+      color: var(--text);
     }
 
     /* HEADER */
@@ -41,7 +42,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 20px 12px;
+      padding: 20px;
     }
 
     .header-left {
@@ -65,7 +66,7 @@
       width: 24px;
     }
 
-    .header-title {
+    .title {
       font-size: 18px;
       font-weight: 600;
     }
@@ -82,12 +83,11 @@
       padding: 0 20px 32px;
     }
 
-    /* CARDS DE RESUMO */
+    /* RESUMO */
     .summary {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 16px;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     .summary-card {
@@ -104,7 +104,7 @@
 
     .summary-card strong {
       display: block;
-      margin-top: 8px;
+      margin-top: 6px;
       font-size: 22px;
     }
 
@@ -124,27 +124,29 @@
       gap: 16px;
     }
 
-    .action-btn {
+    .action {
       background: var(--card);
       border-radius: var(--radius);
       padding: 18px;
-      text-align: center;
       box-shadow: 0 16px 32px rgba(0,0,0,0.05);
       font-weight: 600;
+      text-align: center;
       cursor: pointer;
       transition: transform 0.2s ease;
+      text-decoration: none;
+      color: var(--text);
     }
 
-    .action-btn:hover {
+    .action:hover {
       transform: translateY(-2px);
     }
 
-    .action-primary {
+    .action.primary {
       background: var(--primary);
       color: #fff;
     }
 
-    /* PLACEHOLDER SEÇÃO */
+    /* SEÇÃO FUTURA */
     .section {
       margin-top: 36px;
     }
@@ -173,7 +175,7 @@
       <div class="logo">
         <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
       </div>
-      <div class="header-title">Visão geral</div>
+      <div class="title">Visão geral</div>
     </div>
     <div class="avatar"></div>
   </header>
@@ -184,42 +186,45 @@
     <!-- RESUMO -->
     <section class="summary">
       <div class="summary-card">
-        <span>Saldo do mês</span>
+        <span>Total disponível</span>
         <strong class="positive">R$ 0,00</strong>
       </div>
 
       <div class="summary-card">
-        <span>Entradas</span>
-        <strong>R$ 0,00</strong>
+        <span>Em aberto</span>
+        <strong class="negative">R$ 0,00</strong>
       </div>
 
       <div class="summary-card">
-        <span>Saídas</span>
-        <strong class="negative">R$ 0,00</strong>
+        <span>Já pago</span>
+        <strong>R$ 0,00</strong>
       </div>
     </section>
 
     <!-- AÇÕES -->
     <section class="actions">
-      <div class="action-btn action-primary">
-        + Nova entrada
-      </div>
-      <div class="action-btn">
-        + Novo gasto
-      </div>
-      <div class="action-btn">
-        Histórico
-      </div>
-      <div class="action-btn">
-        Configurações
-      </div>
+      <a class="action primary" href="/finfamily/Oria/assets/pages/expenses/expenses.html">
+        Contas da casa
+      </a>
+
+      <a class="action" href="/finfamily/Oria/assets/pages/income/income.html">
+        Rendas
+      </a>
+
+      <a class="action" href="/finfamily/Oria/assets/pages/cards/cards.html">
+        Cartões
+      </a>
+
+      <a class="action" href="/finfamily/Oria/assets/pages/piggy/piggy.html">
+        Porquinho 🐷
+      </a>
     </section>
 
     <!-- FUTURO -->
     <section class="section">
       <h2>Em breve</h2>
       <div class="placeholder">
-        Gráficos, famílias compartilhadas e metas financeiras
+        Gráficos, histórico mensal e famílias compartilhadas
       </div>
     </section>
 
