@@ -5,28 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Oria — Login</title>
 
-  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="/finfamily/Oria/assets/pages/login/login.css" />
 </head>
 
 <body>
 
-  <!-- Fundo animado -->
   <div class="animated-bg"></div>
 
-  <!-- Splash -->
+  <!-- SPLASH (NUNCA BLOQUEIA A TELA) -->
   <div class="splash" id="splash">
     <img
       src="/finfamily/Oria/assets/branding/logo/oria-logo.png"
-      alt="Oria"
       class="splash-logo"
+      alt="Oria"
     />
   </div>
 
-  <!-- Login -->
+  <!-- LOGIN -->
   <div class="login-container" id="loginContainer">
     <header class="login-header">
       <div class="logo-circle">
@@ -41,22 +37,21 @@
       <h1>Entrar</h1>
       <p>Bem-vindo ao Oria</p>
 
-      <form>
+      <form id="loginForm">
         <div class="field">
-          <input type="email" placeholder="E-mail" required />
+          <input type="email" id="email" placeholder="E-mail" required />
         </div>
 
         <div class="field">
-          <input type="password" placeholder="Senha" required />
+          <input type="password" id="password" placeholder="Senha" required />
         </div>
 
-        <button type="button" class="btn-primary">
+        <button type="submit" class="btn-primary">
           Entrar
         </button>
       </form>
 
       <div class="login-footer">
-        <span>Não tem conta?</span>
         <a href="/finfamily/Oria/assets/pages/register/register.html">
           Criar conta
         </a>
@@ -64,7 +59,9 @@
     </main>
   </div>
 
-  <!-- JS -->
+  <!-- SCRIPTS (ORDEM CORRETA) -->
+  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
   <script src="/finfamily/Oria/assets/pages/login/login.js"></script>
+
 </body>
 </html>
