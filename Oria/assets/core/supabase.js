@@ -1,16 +1,30 @@
-// =====================================
-// Oria - Supabase Client (Base Oficial)
-// =====================================
+// ===============================
+// Oria - Supabase Client
+// ===============================
 
-// ⚠️ Public anon key (pode ficar no frontend)
-const SUPABASE_URL = "https://gelhizmssqlexlxkvufc.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb";
+// ⚠️ COLOQUE AQUI SEUS DADOS REAIS
+const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
+const SUPABASE_ANON_KEY = 'SUA-ANON-KEY';
 
-// Criação do client Supabase
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+// Carrega SDK se ainda não existir
+(function loadSupabaseSDK() {
+  if (window.supabase) return;
 
-// Export global (simples e direto)
-window.oriaSupabase = supabase;
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  script.defer = true;
+
+  script.onload = () => {
+    window.supabase = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+    console.log('[Supabase] Client carregado com sucesso');
+  };
+
+  script.onerror = () => {
+    console.error('[Supabase] Falha ao carregar SDK');
+  };
+
+  document.head.appendChild(script);
+})();
