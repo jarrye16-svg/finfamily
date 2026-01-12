@@ -3,208 +3,217 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oria — Visão geral</title>
-
-  <!-- Fonte -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Oria • Visão geral</title>
 
   <style>
-    :root {
-      --primary: #2563eb;
-      --primary-soft: #e0edff;
-      --bg: #f5f8ff;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --green: #16a34a;
-      --red: #dc2626;
-      --radius: 22px;
-    }
-
+    /* ===============================
+       RESET / BASE
+    =============================== */
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
     }
 
     body {
-      margin: 0;
-      font-family: 'Outfit', sans-serif;
-      background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
-      color: var(--text);
+      background: linear-gradient(180deg, #f5f8ff 0%, #eaf1ff 100%);
+      color: #0f172a;
       min-height: 100vh;
     }
 
-    /* ================= HEADER ================= */
-    .header {
-      padding: 20px 20px 12px;
+    /* ===============================
+       HEADER
+    =============================== */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #ffffff;
     }
 
-    .header-top {
+    .app-header-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #60a5fa, #2563eb);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 700;
-      font-size: 18px;
+    .app-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: contain;
     }
 
-    .header-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header-text strong {
-      font-size: 18px;
-    }
-
-    .header-text span {
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    /* ================= MÊS ================= */
-    .month-card {
-      margin-top: 18px;
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 14px 32px rgba(0,0,0,0.06);
-    }
-
-    .month-btn {
-      font-size: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--primary);
-      user-select: none;
-    }
-
-    .month-label {
-      font-weight: 600;
+    .app-title strong {
+      display: block;
       font-size: 16px;
+      font-weight: 600;
     }
 
-    /* ================= CONTAINER ================= */
+    .app-title span {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .app-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f8cff, #2563eb);
+    }
+
+    /* ===============================
+       CONTAINER
+    =============================== */
     .container {
       padding: 20px;
+      max-width: 480px;
+      margin: 0 auto;
     }
 
-    /* ================= RESUMO ================= */
-    .summary {
+    /* ===============================
+       MONTH SELECTOR
+    =============================== */
+    .month-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    }
+
+    .month-card button {
+      background: #f1f5ff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .month-card span {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    /* ===============================
+       SUMMARY GRID
+    =============================== */
+    .summary-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
     }
 
     .summary-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 16px 32px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
 
     .summary-card span {
-      font-size: 14px;
-      color: var(--muted);
+      font-size: 13px;
+      color: #64748b;
+      display: block;
+      margin-bottom: 8px;
     }
 
     .summary-card strong {
-      font-size: 22px;
+      font-size: 20px;
     }
 
-    .green {
-      color: var(--green);
+    .positive {
+      color: #16a34a;
     }
 
-    .red {
-      color: var(--red);
+    .negative {
+      color: #dc2626;
     }
 
-    /* ================= AÇÕES ================= */
-    .actions {
-      margin-top: 28px;
-    }
-
-    .actions h2 {
-      font-size: 16px;
+    /* ===============================
+       QUICK ACTIONS
+    =============================== */
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
       margin-bottom: 12px;
     }
 
     .actions-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
     .action-card {
-      background: var(--card);
-      border-radius: var(--radius);
+      background: #ffffff;
+      border-radius: 18px;
       padding: 20px;
-      box-shadow: 0 16px 32px rgba(0,0,0,0.06);
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-align: center;
-      min-height: 72px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease;
     }
 
-    .action-card.primary {
-      background: linear-gradient(135deg, #2563eb, #4f8cff);
-      color: #fff;
+    .action-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .action-primary {
+      background: linear-gradient(135deg, #4f8cff, #2563eb);
+      color: #ffffff;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ================= HEADER ================= -->
-  <header class="header">
-    <div class="header-top">
-      <div class="logo">O</div>
-      <div class="header-text">
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="app-header-left">
+      <img
+        src="/finfamily/Oria/assets/branding/logo/oria-icon.png"
+        alt="Oria"
+        class="app-logo"
+      />
+      <div class="app-title">
         <strong>Oria</strong>
         <span>Visão geral</span>
       </div>
     </div>
 
-    <div class="month-card">
-      <div class="month-btn" id="prevMonth">‹</div>
-      <div class="month-label" id="currentMonth"></div>
-      <div class="month-btn" id="nextMonth">›</div>
-    </div>
+    <div class="app-avatar"></div>
   </header>
 
-  <!-- ================= CONTEÚDO ================= -->
+  <!-- CONTENT -->
   <main class="container">
 
-    <!-- RESUMO -->
-    <section class="summary">
+    <!-- MONTH SELECTOR -->
+    <div class="month-card">
+      <button>&lsaquo;</button>
+      <span>Janeiro de 2026</span>
+      <button>&rsaquo;</button>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-grid">
       <div class="summary-card">
         <span>Total do mês</span>
-        <strong class="green">R$ 0,00</strong>
+        <strong class="positive">R$ 0,00</strong>
       </div>
 
       <div class="summary-card">
         <span>Em aberto</span>
-        <strong class="red">R$ 0,00</strong>
+        <strong class="negative">R$ 0,00</strong>
       </div>
 
       <div class="summary-card">
@@ -216,64 +225,19 @@
         <span>Saldo final</span>
         <strong>R$ 0,00</strong>
       </div>
-    </section>
+    </div>
 
-    <!-- AÇÕES -->
-    <section class="actions">
-      <h2>Ações rápidas</h2>
+    <!-- ACTIONS -->
+    <div class="section-title">Ações rápidas</div>
 
-      <div class="actions-grid">
-        <a class="action-card primary" href="/finfamily/Oria/assets/pages/expenses/expenses.html">
-          Contas da casa
-        </a>
-
-        <a class="action-card" href="/finfamily/Oria/assets/pages/income/income.html">
-          Rendas
-        </a>
-
-        <a class="action-card" href="/finfamily/Oria/assets/pages/cards/cards.html">
-          Cartões
-        </a>
-
-        <a class="action-card" href="/finfamily/Oria/assets/pages/piggy/piggy.html">
-          Porquinho 🐷
-        </a>
-      </div>
-    </section>
+    <div class="actions-grid">
+      <div class="action-card action-primary">Contas da casa</div>
+      <div class="action-card">Rendas</div>
+      <div class="action-card">Cartões</div>
+      <div class="action-card">Porquinho 🐷</div>
+    </div>
 
   </main>
-
-  <!-- ================= SCRIPT MÊS ================= -->
-  <script>
-    const monthLabel = document.getElementById('currentMonth');
-    const prevBtn = document.getElementById('prevMonth');
-    const nextBtn = document.getElementById('nextMonth');
-
-    let currentDate = new Date();
-
-    function formatMonth(date) {
-      return date.toLocaleDateString('pt-BR', {
-        month: 'long',
-        year: 'numeric'
-      });
-    }
-
-    function renderMonth() {
-      monthLabel.textContent = formatMonth(currentDate);
-    }
-
-    prevBtn.onclick = () => {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      renderMonth();
-    };
-
-    nextBtn.onclick = () => {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      renderMonth();
-    };
-
-    renderMonth();
-  </script>
 
 </body>
 </html>
