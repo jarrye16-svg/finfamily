@@ -34,15 +34,30 @@
 
       <form id="registerForm">
         <div class="field">
-          <input type="text" id="name" placeholder="Nome completo" required />
+          <input
+            type="text"
+            id="name"
+            placeholder="Nome completo"
+            required
+          />
         </div>
 
         <div class="field">
-          <input type="email" id="email" placeholder="E-mail" required />
+          <input
+            type="email"
+            id="email"
+            placeholder="E-mail"
+            required
+          />
         </div>
 
         <div class="field">
-          <input type="password" id="password" placeholder="Senha (mín. 6 caracteres)" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Senha (mín. 6 caracteres)"
+            required
+          />
         </div>
 
         <button type="submit" class="btn-primary">
@@ -52,19 +67,18 @@
 
       <div class="register-footer">
         <span>Já tem conta?</span>
-        <a href="/finfamily/Oria/assets/pages/login/login.html">Entrar</a>
+        <a href="/finfamily/Oria/assets/pages/login/login.html">
+          Entrar
+        </a>
       </div>
     </main>
   </div>
 
-  <!-- Supabase (SE EXISTIR, OK / SE NÃO, NÃO QUEBRA A TELA) -->
-  <script>
-    if (!window.supabase) {
-      console.warn('Supabase ainda não carregado.');
-    }
-  </script>
-
+  <!-- Supabase (OBRIGATÓRIO PRIMEIRO) -->
   <script src="/finfamily/Oria/assets/core/supabase.js"></script>
+
+  <!-- Register JS -->
   <script src="/finfamily/Oria/assets/pages/register/register.js"></script>
+
 </body>
 </html>
