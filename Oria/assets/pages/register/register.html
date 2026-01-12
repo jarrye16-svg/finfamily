@@ -57,10 +57,14 @@
     </main>
   </div>
 
-  <!-- Supabase -->
-  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
+  <!-- Supabase (SE EXISTIR, OK / SE NÃO, NÃO QUEBRA A TELA) -->
+  <script>
+    if (!window.supabase) {
+      console.warn('Supabase ainda não carregado.');
+    }
+  </script>
 
-  <!-- JS -->
+  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
   <script src="/finfamily/Oria/assets/pages/register/register.js"></script>
 </body>
 </html>
