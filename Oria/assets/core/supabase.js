@@ -1,15 +1,13 @@
-// ===============================
-// Oria - Supabase Client
-// ===============================
+// ======================================
+// Oria - Supabase Client (OFICIAL)
+// ======================================
 
-// ⚠️ COLOQUE AQUI SEUS DADOS REAIS
-const SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
-const SUPABASE_ANON_KEY = 'SUA-ANON-KEY';
+// 🔑 Credenciais reais do projeto Oria
+const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
 
-// Carrega SDK se ainda não existir
-(function loadSupabaseSDK() {
-  if (window.supabase) return;
-
+// NÃO ALTERAR DAQUI PRA BAIXO
+(function () {
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
   script.defer = true;
@@ -23,7 +21,7 @@ const SUPABASE_ANON_KEY = 'SUA-ANON-KEY';
   };
 
   script.onerror = () => {
-    console.error('[Supabase] Falha ao carregar SDK');
+    console.error('[Supabase] Erro ao carregar SDK');
   };
 
   document.head.appendChild(script);
