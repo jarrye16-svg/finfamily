@@ -1,16 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const splash = document.getElementById('splash');
-  const loginContainer = document.getElementById('loginContainer');
+const loginForm = document.getElementById('loginForm');
 
-  setTimeout(() => {
-    splash.style.transition =
-      'transform 1.1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.1s ease';
-    splash.style.transform = 'translateY(-110%)';
-    splash.style.opacity = '0';
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    setTimeout(() => {
-      splash.remove();
-      loginContainer.classList.add('login-visible');
-    }, 1100);
-  }, 3200);
+  if (!window.supabase) {
+    alert('Erro interno: Supabase não carregado.');
+    return;
+  }
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // login imediato
+  window.location.href = '/finfamily/Oria/index.html';
 });
