@@ -17,9 +17,20 @@
     }
 
     body {
-      background: linear-gradient(180deg, #f5f8ff 0%, #eaf1ff 100%);
-      color: #0f172a;
       min-height: 100vh;
+      background: linear-gradient(180deg, #f5f8ff 0%, #eef4ff 100%);
+      color: #0f172a;
+    }
+
+    /* ===============================
+       APP FRAME (DESKTOP FRIENDLY)
+    =============================== */
+    .app-frame {
+      max-width: 820px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ===============================
@@ -29,7 +40,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 16px 24px;
       background: #ffffff;
     }
 
@@ -65,25 +76,25 @@
     }
 
     /* ===============================
-       CONTAINER
+       CONTENT
     =============================== */
     .container {
-      padding: 20px;
-      max-width: 480px;
-      margin: 0 auto;
+      flex: 1;
+      padding: 24px;
     }
 
     /* ===============================
        MONTH SELECTOR
     =============================== */
     .month-card {
+      width: 100%;
       background: #ffffff;
       border-radius: 18px;
-      padding: 14px 16px;
+      padding: 14px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
 
@@ -108,14 +119,14 @@
     .summary-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-bottom: 24px;
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
     .summary-card {
       background: #ffffff;
       border-radius: 18px;
-      padding: 16px;
+      padding: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
 
@@ -127,16 +138,11 @@
     }
 
     .summary-card strong {
-      font-size: 20px;
+      font-size: 22px;
     }
 
-    .positive {
-      color: #16a34a;
-    }
-
-    .negative {
-      color: #dc2626;
-    }
+    .positive { color: #16a34a; }
+    .negative { color: #dc2626; }
 
     /* ===============================
        QUICK ACTIONS
@@ -144,33 +150,53 @@
     .section-title {
       font-size: 15px;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .actions-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      gap: 16px;
     }
 
     .action-card {
       background: #ffffff;
       border-radius: 18px;
-      padding: 20px;
+      padding: 22px;
       text-align: center;
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-2px);
     }
 
     .action-primary {
       background: linear-gradient(135deg, #4f8cff, #2563eb);
       color: #ffffff;
     }
+
+    /* ===============================
+       MOBILE ADJUST
+    =============================== */
+    @media (max-width: 480px) {
+      .app-frame {
+        max-width: 100%;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 
 <body>
+
+<div class="app-frame">
 
   <!-- HEADER -->
   <header class="app-header">
@@ -185,7 +211,6 @@
         <span>Visão geral</span>
       </div>
     </div>
-
     <div class="app-avatar"></div>
   </header>
 
@@ -233,6 +258,8 @@
     </div>
 
   </main>
+
+</div>
 
 </body>
 </html>
