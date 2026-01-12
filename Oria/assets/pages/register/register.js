@@ -4,7 +4,7 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (!window.supabase) {
-    alert('Supabase ainda não carregou. Tente novamente em alguns segundos.');
+    alert('Supabase ainda não carregou. Recarregue a página.');
     return;
   }
 
