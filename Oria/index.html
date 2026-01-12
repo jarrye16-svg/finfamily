@@ -37,67 +37,74 @@
       color: var(--text);
     }
 
-    /* HEADER */
+    /* ================= HEADER / HERO ================= */
     .header {
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
     }
 
-    .top-row {
+    .header-card {
+      background: linear-gradient(135deg, #ffffff, #eef4ff);
+      border-radius: 26px;
+      padding: 18px 20px 22px;
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.12);
+    }
+
+    .header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 14px;
     }
 
     .logo {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 14px;
       background: #fff;
-      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
     }
 
     .logo img {
-      width: 24px;
+      width: 22px;
     }
 
     .avatar {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: linear-gradient(135deg, #60a5fa, #2563eb);
     }
 
-    /* SELETOR DE MÊS */
+    /* ================= MÊS ================= */
     .month-selector {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 20px;
       font-weight: 600;
+      font-size: 16px;
     }
 
     .month-btn {
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       user-select: none;
+      color: var(--primary);
     }
 
-    /* CONTAINER */
+    /* ================= CONTAINER ================= */
     .container {
       padding: 0 20px 32px;
     }
 
-    /* RESUMO */
+    /* ================= RESUMO ================= */
     .summary {
       display: grid;
       gap: 16px;
-      margin-top: 8px;
+      margin-top: 18px;
     }
 
     .summary-card {
@@ -126,7 +133,7 @@
       color: #dc2626;
     }
 
-    /* AÇÕES */
+    /* ================= AÇÕES ================= */
     .actions {
       margin-top: 28px;
       display: grid;
@@ -144,6 +151,11 @@
       cursor: pointer;
       text-decoration: none;
       color: var(--text);
+      transition: transform 0.2s ease;
+    }
+
+    .action:hover {
+      transform: translateY(-2px);
     }
 
     .action.primary {
@@ -155,27 +167,28 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- ================= HEADER ================= -->
   <header class="header">
-    <div class="top-row">
-      <div class="logo">
-        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
+    <div class="header-card">
+      <div class="header-top">
+        <div class="logo">
+          <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
+        </div>
+        <div class="avatar"></div>
       </div>
-      <div class="avatar"></div>
-    </div>
 
-    <!-- SELETOR DE MÊS -->
-    <div class="month-selector">
-      <div class="month-btn" id="prevMonth">‹</div>
-      <div id="currentMonth"></div>
-      <div class="month-btn" id="nextMonth">›</div>
+      <div class="month-selector">
+        <div class="month-btn" id="prevMonth">‹</div>
+        <div id="currentMonth"></div>
+        <div class="month-btn" id="nextMonth">›</div>
+      </div>
     </div>
   </header>
 
-  <!-- CONTEÚDO -->
+  <!-- ================= CONTEÚDO ================= -->
   <main class="container">
 
-    <!-- RESUMO -->
+    <!-- RESUMO DO MÊS -->
     <section class="summary">
       <div class="summary-card">
         <span>Total do mês</span>
@@ -219,7 +232,7 @@
 
   </main>
 
-  <!-- SCRIPT DO MÊS -->
+  <!-- ================= SCRIPT DO MÊS ================= -->
   <script>
     const monthLabel = document.getElementById('currentMonth');
     const prevBtn = document.getElementById('prevMonth');
@@ -227,25 +240,26 @@
 
     let currentDate = new Date();
 
-    const formatMonth = (date) =>
-      date.toLocaleDateString('pt-BR', {
+    function formatMonth(date) {
+      return date.toLocaleDateString('pt-BR', {
         month: 'long',
         year: 'numeric'
       });
+    }
 
-    const renderMonth = () => {
+    function renderMonth() {
       monthLabel.textContent = formatMonth(currentDate);
-    };
+    }
 
-    prevBtn.onclick = () => {
+    prevBtn.addEventListener('click', () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       renderMonth();
-    };
+    });
 
-    nextBtn.onclick = () => {
+    nextBtn.addEventListener('click', () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
       renderMonth();
-    };
+    });
 
     renderMonth();
   </script>
