@@ -1,0 +1,145 @@
+:root {
+  --bg-main: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --primary: #2563eb;
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ================= SPLASH ================= */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.splash-logo {
+  width: 160px;
+  animation: splashIntro 1.2s ease forwards;
+}
+
+@keyframes splashIntro {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.75);
+  }
+}
+
+/* ================= LOGIN ================= */
+
+.login-container {
+  opacity: 0;
+  pointer-events: none;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+}
+
+.login-header {
+  margin-top: 24px;
+}
+
+.login-logo {
+  width: 96px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 48px;
+  padding: 32px;
+  border-radius: var(--radius);
+}
+
+.login-card h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.login-card p {
+  margin: 8px 0 32px;
+  color: var(--text-muted);
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  font-size: 16px;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: var(--primary);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  border: none;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.login-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.login-footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ================= ANIMATION FINAL ================= */
+
+.login-visible {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
