@@ -1,4 +1,6 @@
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
+const form = document.getElementById('registerForm');
+
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (!window.supabase) {
@@ -28,6 +30,8 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     return;
   }
 
-  alert('Conta criada com sucesso! Verifique seu e-mail.');
-  window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+  // sem confirmação de e-mail → pode logar direto
+  alert('Conta criada com sucesso!');
+  window.location.href =
+    '/finfamily/Oria/assets/pages/login/login.html';
 });
