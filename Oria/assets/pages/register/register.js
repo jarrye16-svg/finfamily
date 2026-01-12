@@ -1,17 +1,25 @@
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
+  if (!window.supabase) {
+    alert('Erro interno: Supabase não carregado.');
+    return;
+  }
+
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
 
-  const { data, error } = await supabase.auth.signUp({
+  if (password.length < 6) {
+    alert('A senha deve ter no mínimo 6 caracteres.');
+    return;
+  }
+
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: {
-        name: name
-      }
+      data: { name }
     }
   });
 
@@ -21,7 +29,5 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   }
 
   alert('Conta criada com sucesso! Verifique seu e-mail.');
-
-  window.location.href =
-    '/finfamily/Oria/assets/pages/login/login.html';
+  window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
 });
