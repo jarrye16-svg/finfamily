@@ -4,36 +4,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('loginForm');
 
   /* =========================
-     SPLASH CONTROLADO POR TEMPO
+     SPLASH – NUNCA TRAVA
      ========================= */
 
-  // garante que o login SEMPRE apareça
   setTimeout(() => {
-    splash.style.transition =
-      'opacity 0.6s ease, transform 0.6s ease';
-    splash.style.opacity = '0';
-    splash.style.transform = 'translateY(-40px)';
-    splash.style.pointerEvents = 'none';
+    if (splash) {
+      splash.style.transition =
+        'opacity 0.6s ease, transform 0.6s ease';
+      splash.style.opacity = '0';
+      splash.style.transform = 'translateY(-40px)';
+      splash.style.pointerEvents = 'none';
 
-    loginContainer.classList.add('login-visible');
+      setTimeout(() => splash.remove(), 700);
+    }
 
-    setTimeout(() => splash.remove(), 700);
-  }, 1800); // tempo do splash (1.8s)
+    if (loginContainer) {
+      loginContainer.classList.add('login-visible');
+    }
+  }, 1800);
 
   /* =========================
-     LOGIN (NÃO BLOQUEIA SPLASH)
+     LOGIN (BLINDADO)
      ========================= */
+
+  if (!form) {
+    console.warn('[Login] Formulário não encontrado (#loginForm)');
+    return; // não quebra a página
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!window.supabase) {
-      alert('Serviço indisponível. Tente novamente.');
+      alert('Serviço indisponível no momento.');
       return;
     }
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    if (!emailInput || !passwordInput) {
+      alert('Campos de login não encontrados.');
+      return;
+    }
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
     const { error } = await window.supabase.auth.signInWithPassword({
       email,
@@ -45,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // login OK
+    // Login OK
     window.location.href = '/finfamily/Oria/index.html';
   });
 });
