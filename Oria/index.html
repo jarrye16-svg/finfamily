@@ -39,16 +39,16 @@
 
     /* HEADER */
     .header {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
     }
 
     .logo {
@@ -66,16 +66,26 @@
       width: 24px;
     }
 
-    .title {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       background: linear-gradient(135deg, #60a5fa, #2563eb);
+    }
+
+    /* SELETOR DE MÊS */
+    .month-selector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      font-weight: 600;
+    }
+
+    .month-btn {
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
     }
 
     /* CONTAINER */
@@ -132,37 +142,13 @@
       font-weight: 600;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.2s ease;
       text-decoration: none;
       color: var(--text);
-    }
-
-    .action:hover {
-      transform: translateY(-2px);
     }
 
     .action.primary {
       background: var(--primary);
       color: #fff;
-    }
-
-    /* SEÇÃO FUTURA */
-    .section {
-      margin-top: 36px;
-    }
-
-    .section h2 {
-      font-size: 16px;
-      margin-bottom: 12px;
-    }
-
-    .placeholder {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 24px;
-      color: var(--muted);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.05);
-      text-align: center;
     }
   </style>
 </head>
@@ -171,13 +157,19 @@
 
   <!-- HEADER -->
   <header class="header">
-    <div class="header-left">
+    <div class="top-row">
       <div class="logo">
         <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
       </div>
-      <div class="title">Visão geral</div>
+      <div class="avatar"></div>
     </div>
-    <div class="avatar"></div>
+
+    <!-- SELETOR DE MÊS -->
+    <div class="month-selector">
+      <div class="month-btn" id="prevMonth">‹</div>
+      <div id="currentMonth"></div>
+      <div class="month-btn" id="nextMonth">›</div>
+    </div>
   </header>
 
   <!-- CONTEÚDO -->
@@ -186,7 +178,7 @@
     <!-- RESUMO -->
     <section class="summary">
       <div class="summary-card">
-        <span>Total disponível</span>
+        <span>Total do mês</span>
         <strong class="positive">R$ 0,00</strong>
       </div>
 
@@ -196,7 +188,12 @@
       </div>
 
       <div class="summary-card">
-        <span>Já pago</span>
+        <span>Cartões</span>
+        <strong>R$ 0,00</strong>
+      </div>
+
+      <div class="summary-card">
+        <span>Saldo final</span>
         <strong>R$ 0,00</strong>
       </div>
     </section>
@@ -220,15 +217,38 @@
       </a>
     </section>
 
-    <!-- FUTURO -->
-    <section class="section">
-      <h2>Em breve</h2>
-      <div class="placeholder">
-        Gráficos, histórico mensal e famílias compartilhadas
-      </div>
-    </section>
-
   </main>
+
+  <!-- SCRIPT DO MÊS -->
+  <script>
+    const monthLabel = document.getElementById('currentMonth');
+    const prevBtn = document.getElementById('prevMonth');
+    const nextBtn = document.getElementById('nextMonth');
+
+    let currentDate = new Date();
+
+    const formatMonth = (date) =>
+      date.toLocaleDateString('pt-BR', {
+        month: 'long',
+        year: 'numeric'
+      });
+
+    const renderMonth = () => {
+      monthLabel.textContent = formatMonth(currentDate);
+    };
+
+    prevBtn.onclick = () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderMonth();
+    };
+
+    nextBtn.onclick = () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderMonth();
+    };
+
+    renderMonth();
+  </script>
 
 </body>
 </html>
