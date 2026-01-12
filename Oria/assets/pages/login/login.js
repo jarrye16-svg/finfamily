@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginContainer = document.getElementById('loginContainer');
 
   setTimeout(() => {
-    splash.style.transition = 'all 0.6s ease';
+    splash.style.transition = 'transform 0.6s ease, opacity 0.6s ease';
     splash.style.transform = 'translateY(-100%)';
     splash.style.opacity = '0';
 
