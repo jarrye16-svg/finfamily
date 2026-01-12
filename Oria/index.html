@@ -1,17 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste Oria</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oria — Home</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+    }
+
+    p {
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/oria/assets/core/supabase.js"></script>
+  <div class="card">
+    <h1>Home Oria</h1>
+    <p>Tela inicial (sem guard de sessão)</p>
 
-<script>
-  console.log("Supabase Oria:", window.oriaSupabase);
-</script>
+    <button id="logoutBtn">Logout (teste)</button>
+  </div>
+
+  <!-- Supabase -->
+  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
+
+  <!-- Logout simples (opcional) -->
+  <script>
+    const btn = document.getElementById('logoutBtn');
+
+    if (btn) {
+      btn.addEventListener('click', async () => {
+        if (window.supabase) {
+          await window.supabase.auth.signOut();
+        }
+        alert('Sessão encerrada');
+      });
+    }
+  </script>
 
 </body>
 </html>
