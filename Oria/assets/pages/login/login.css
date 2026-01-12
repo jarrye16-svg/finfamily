@@ -8,6 +8,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -32,12 +33,13 @@ body {
 }
 
 .splash-logo {
-  width: 220px;
+  width: 280px;
+  max-width: 80vw;
   opacity: 0;
-  animation: splashFadeIn 0.8s ease forwards;
+  animation: splashIn 1.2s ease forwards;
 }
 
-@keyframes splashFadeIn {
+@keyframes splashIn {
   to {
     opacity: 1;
   }
@@ -56,27 +58,30 @@ body {
 }
 
 .login-header {
-  margin-top: 24px;
+  margin-top: 32px;
 }
 
-.login-logo-wrapper {
-  width: 48px;
-  height: 48px;
+/* 🔒 Container anti-quebra */
+.logo-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.login-logo {
-  width: 100%;
-  height: 100%;
+.logo-circle img {
+  width: 34px;
+  height: 34px;
   object-fit: contain;
 }
 
 .login-card {
   width: 100%;
   max-width: 420px;
-  margin-top: 48px;
+  margin-top: 56px;
   padding: 32px;
   border-radius: var(--radius);
 }
@@ -136,7 +141,7 @@ body {
 /* ================= FINAL ================= */
 
 .login-visible {
-  animation: fadeIn 0.6s ease forwards;
+  animation: fadeIn 0.8s ease forwards;
 }
 
 @keyframes fadeIn {
