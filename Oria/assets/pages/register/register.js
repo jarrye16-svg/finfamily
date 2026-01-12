@@ -4,7 +4,7 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   if (!window.supabase) {
-    alert('Erro interno: Supabase não carregado.');
+    alert('Supabase ainda não carregou. Tente novamente em alguns segundos.');
     return;
   }
 
@@ -17,7 +17,7 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { error } = await window.supabase.auth.signUp({
     email,
     password,
     options: {
@@ -30,7 +30,6 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
-  // sem confirmação de e-mail → pode logar direto
   alert('Conta criada com sucesso!');
   window.location.href =
     '/finfamily/Oria/assets/pages/login/login.html';
