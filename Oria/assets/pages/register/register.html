@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Oria — Criar conta</title>
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/finfamily/Oria/assets/pages/register/register.css" />
+</head>
+
+<body>
+
+  <!-- Fundo animado -->
+  <div class="animated-bg"></div>
+
+  <!-- Registro -->
+  <div class="register-container">
+    <header class="register-header">
+      <div class="logo-circle">
+        <img
+          src="/finfamily/Oria/assets/branding/logo/oria-icon.png"
+          alt="Oria"
+        />
+      </div>
+    </header>
+
+    <main class="register-card">
+      <h1>Criar conta</h1>
+      <p>Comece agora no Oria</p>
+
+      <form id="registerForm">
+        <div class="field">
+          <input type="text" id="name" placeholder="Nome completo" required />
+        </div>
+
+        <div class="field">
+          <input type="email" id="email" placeholder="E-mail" required />
+        </div>
+
+        <div class="field">
+          <input type="password" id="password" placeholder="Senha (mín. 6 caracteres)" required />
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Criar conta
+        </button>
+      </form>
+
+      <div class="register-footer">
+        <span>Já tem conta?</span>
+        <a href="/finfamily/Oria/assets/pages/login/login.html">Entrar</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- Supabase -->
+  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
+
+  <!-- JS -->
+  <script src="/finfamily/Oria/assets/pages/register/register.js"></script>
+</body>
+</html>
