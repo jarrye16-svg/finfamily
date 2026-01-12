@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oria — Login</title>
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/finfamily/Oria/assets/pages/login/login.css" />
+</head>
+
+<body>
+  <!-- Splash / Animação -->
+  <div class="splash" id="splash">
+    <img
+      src="/finfamily/Oria/assets/branding/logo/oria-logo.png"
+      alt="Oria"
+      class="splash-logo"
+      id="splashLogo"
+    />
+  </div>
+
+  <!-- Container Login -->
+  <div class="login-container" id="loginContainer">
+    <header class="login-header">
+      <img
+        src="/finfamily/Oria/assets/branding/logo/oria-logo.png"
+        alt="Oria"
+        class="login-logo"
+      />
+    </header>
+
+    <main class="login-card">
+      <h1>Entrar</h1>
+      <p>Bem-vindo ao Oria</p>
+
+      <form>
+        <div class="field">
+          <input type="email" placeholder="E-mail" required />
+        </div>
+
+        <div class="field">
+          <input type="password" placeholder="Senha" required />
+        </div>
+
+        <button type="button" class="btn-primary">
+          Entrar
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <span>Não tem conta?</span>
+        <a href="#">Criar conta</a>
+      </div>
+    </main>
+  </div>
+
+  <!-- JS -->
+  <script src="/finfamily/Oria/assets/pages/login/login.js"></script>
+</body>
+</html>
