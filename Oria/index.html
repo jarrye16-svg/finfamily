@@ -5,76 +5,225 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Oria — Home</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #60a5fa;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Outfit', sans-serif;
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: linear-gradient(
+        135deg,
+        #ffffff,
+        #eef4ff,
+        #dbeafe,
+        #ffffff
+      );
       min-height: 100vh;
     }
 
-    .card {
-      background: #ffffff;
-      padding: 32px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-      text-align: center;
-      max-width: 420px;
-      width: 100%;
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 12px;
     }
 
-    h1 {
-      margin: 0 0 8px;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    p {
-      color: #64748b;
-      margin-bottom: 24px;
-    }
-
-    button {
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      padding: 14px 24px;
+    .logo {
+      width: 44px;
+      height: 44px;
       border-radius: 14px;
-      font-size: 16px;
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo img {
+      width: 24px;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+    }
+
+    /* CONTAINER */
+    .container {
+      padding: 0 20px 32px;
+    }
+
+    /* CARDS DE RESUMO */
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .summary-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    }
+
+    .summary-card span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+    }
+
+    .positive {
+      color: #16a34a;
+    }
+
+    .negative {
+      color: #dc2626;
+    }
+
+    /* AÇÕES */
+    .actions {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .action-btn {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.05);
       font-weight: 600;
       cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .action-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* PLACEHOLDER SEÇÃO */
+    .section {
+      margin-top: 36px;
+    }
+
+    .section h2 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .placeholder {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: var(--muted);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.05);
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="card">
-    <h1>Home Oria</h1>
-    <p>Tela inicial (sem guard de sessão)</p>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
+      </div>
+      <div class="header-title">Visão geral</div>
+    </div>
+    <div class="avatar"></div>
+  </header>
 
-    <button id="logoutBtn">Logout (teste)</button>
-  </div>
+  <!-- CONTEÚDO -->
+  <main class="container">
 
-  <!-- Supabase -->
-  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
+    <!-- RESUMO -->
+    <section class="summary">
+      <div class="summary-card">
+        <span>Saldo do mês</span>
+        <strong class="positive">R$ 0,00</strong>
+      </div>
 
-  <!-- Logout simples (opcional) -->
-  <script>
-    const btn = document.getElementById('logoutBtn');
+      <div class="summary-card">
+        <span>Entradas</span>
+        <strong>R$ 0,00</strong>
+      </div>
 
-    if (btn) {
-      btn.addEventListener('click', async () => {
-        if (window.supabase) {
-          await window.supabase.auth.signOut();
-        }
-        alert('Sessão encerrada');
-      });
-    }
-  </script>
+      <div class="summary-card">
+        <span>Saídas</span>
+        <strong class="negative">R$ 0,00</strong>
+      </div>
+    </section>
+
+    <!-- AÇÕES -->
+    <section class="actions">
+      <div class="action-btn action-primary">
+        + Nova entrada
+      </div>
+      <div class="action-btn">
+        + Novo gasto
+      </div>
+      <div class="action-btn">
+        Histórico
+      </div>
+      <div class="action-btn">
+        Configurações
+      </div>
+    </section>
+
+    <!-- FUTURO -->
+    <section class="section">
+      <h2>Em breve</h2>
+      <div class="placeholder">
+        Gráficos, famílias compartilhadas e metas financeiras
+      </div>
+    </section>
+
+  </main>
 
 </body>
 </html>
