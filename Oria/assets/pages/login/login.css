@@ -32,22 +32,14 @@ body {
 }
 
 .splash-logo {
-  width: 180px;
-  animation: splashIntro 1.2s ease forwards;
+  width: 220px;
+  opacity: 0;
+  animation: splashFadeIn 0.8s ease forwards;
 }
 
-@keyframes splashIntro {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  30% {
+@keyframes splashFadeIn {
+  to {
     opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(0.75);
   }
 }
 
@@ -67,9 +59,17 @@ body {
   margin-top: 24px;
 }
 
-.login-logo {
+.login-logo-wrapper {
   width: 48px;
   height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-logo {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
