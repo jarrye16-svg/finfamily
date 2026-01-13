@@ -5,7 +5,6 @@
   <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -36,10 +35,10 @@
       width: 100%;
       max-width: 480px;
       margin: 0 auto;
-      padding: 32px 16px 48px;
+      padding: 32px 16px 56px;
     }
 
-    /* ===== TOP ===== */
+    /* ===== TOPO ===== */
     .top {
       display: flex;
       align-items: center;
@@ -73,7 +72,7 @@
       color: var(--muted);
     }
 
-    /* ===== MONTH ===== */
+    /* ===== MÊS ===== */
     .month {
       background: var(--card);
       border-radius: var(--radius);
@@ -101,7 +100,7 @@
       font-weight: 600;
     }
 
-    /* ===== STATS ===== */
+    /* ===== RESUMO ===== */
     .stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -131,7 +130,7 @@
     .green { color: var(--green); }
     .red { color: var(--red); }
 
-    /* ===== ACTIONS ===== */
+    /* ===== AÇÕES ===== */
     .actions-title {
       font-size: 16px;
       font-weight: 600;
@@ -145,20 +144,19 @@
     }
 
     .action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: var(--card);
       border-radius: var(--radius);
-      padding: 24px 18px;
-      text-align: center;
+      padding: 26px 18px;
       font-weight: 600;
       font-size: 16px;
       box-shadow: 0 14px 34px rgba(0,0,0,0.08);
       cursor: pointer;
-      transition: transform .15s ease, box-shadow .15s ease;
       text-decoration: none;
       color: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      transition: transform .15s ease, box-shadow .15s ease;
     }
 
     .action.primary {
