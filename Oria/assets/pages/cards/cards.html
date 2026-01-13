@@ -10,7 +10,6 @@
   <style>
     :root {
       --primary: #3b6df6;
-      --bg: #f4f7fd;
       --card: #ffffff;
       --text: #0f172a;
       --muted: #64748b;
@@ -26,24 +25,22 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
       color: var(--text);
     }
 
     .container {
-      width: 100%;
-      max-width: 480px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 32px 16px 60px;
+      padding: 32px 24px 80px;
     }
 
-    /* ===== TOP ===== */
+    /* TOPO */
     .top {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .logo {
@@ -54,17 +51,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 12px 30px rgba(0,0,0,.1);
     }
 
     .logo img {
       width: 30px;
-      height: 30px;
     }
 
     .top-text strong {
       font-size: 18px;
-      font-weight: 600;
     }
 
     .top-text span {
@@ -72,42 +67,55 @@
       color: var(--muted);
     }
 
-    /* ===== SECTION ===== */
-    .section-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
+    /* MÊS */
+    .month {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 14px 34px rgba(0,0,0,.08);
+      margin-bottom: 32px;
     }
 
-    /* ===== CARDS LIST ===== */
+    .month button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #eef2ff;
+      font-size: 20px;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .month strong {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* CARDS */
     .cards {
       display: grid;
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
     }
 
     .card-item {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: 0 14px 34px rgba(0,0,0,0.08);
-      cursor: pointer;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .card-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 18px 42px rgba(0,0,0,0.12);
+      padding: 22px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.08);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .card-name {
-      font-size: 16px;
       font-weight: 600;
     }
 
@@ -116,48 +124,27 @@
       color: var(--muted);
     }
 
-    .card-value {
+    .value.credit {
+      color: var(--red);
       font-size: 22px;
       font-weight: 700;
-      margin-top: 6px;
     }
 
-    .credit {
-      color: var(--red);
-    }
-
-    .balance {
+    .value.balance {
       color: var(--green);
+      font-size: 22px;
+      font-weight: 700;
     }
 
-    /* ===== ADD BUTTON ===== */
-    .add-card {
-      margin-top: 28px;
-      padding: 18px;
-      border-radius: var(--radius);
+    .add {
+      margin-top: 32px;
       background: linear-gradient(135deg, #4f83ff, #3b6df6);
       color: #fff;
+      padding: 18px;
       text-align: center;
+      border-radius: var(--radius);
       font-weight: 600;
-      font-size: 16px;
       cursor: pointer;
-      box-shadow: 0 16px 36px rgba(59,109,246,0.4);
-    }
-
-    .add-card:hover {
-      opacity: .95;
-    }
-
-    /* ===== DESKTOP ===== */
-    @media (min-width: 1024px) {
-      .container {
-        max-width: 1200px;
-        padding: 48px 40px 80px;
-      }
-
-      .cards {
-        grid-template-columns: repeat(3, 1fr);
-      }
     }
   </style>
 </head>
@@ -165,10 +152,10 @@
 <body>
   <div class="container">
 
-    <!-- TOP -->
+    <!-- TOPO -->
     <div class="top">
       <div class="logo">
-        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
+        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png">
       </div>
       <div class="top-text">
         <strong>Cartões</strong>
@@ -176,18 +163,21 @@
       </div>
     </div>
 
-    <!-- LIST -->
-    <div class="section-title">Seus cartões</div>
+    <!-- MÊS -->
+    <div class="month">
+      <button onclick="changeMonth(-1)">‹</button>
+      <strong id="monthLabel"></strong>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
 
+    <!-- LISTA -->
     <div class="cards">
-
-      <!-- Crédito -->
       <div class="card-item">
         <div class="card-header">
           <div class="card-name">Inter • Jarrye</div>
           <div class="card-type">Crédito</div>
         </div>
-        <div class="card-value credit">R$ 1.500,00</div>
+        <div class="value credit">R$ 1.500,00</div>
       </div>
 
       <div class="card-item">
@@ -195,25 +185,51 @@
           <div class="card-name">Nubank • Jarrye</div>
           <div class="card-type">Crédito</div>
         </div>
-        <div class="card-value credit">R$ 507,69</div>
+        <div class="value credit">R$ 507,69</div>
       </div>
 
-      <!-- Saldo -->
       <div class="card-item">
         <div class="card-header">
           <div class="card-name">Flash • Vale alimentação</div>
           <div class="card-type">Saldo</div>
         </div>
-        <div class="card-value balance">R$ 530,00</div>
+        <div class="value balance">R$ 530,00</div>
       </div>
-
     </div>
 
-    <!-- ADD -->
-    <div class="add-card">
-      + Adicionar cartão
-    </div>
-
+    <div class="add">+ Adicionar cartão</div>
   </div>
+
+  <script>
+    const label = document.getElementById('monthLabel');
+
+    function getMonth() {
+      return localStorage.getItem('oria_current_month') || '2026-01';
+    }
+
+    function setMonth(value) {
+      localStorage.setItem('oria_current_month', value);
+    }
+
+    function renderMonth() {
+      const [y, m] = getMonth().split('-').map(Number);
+      const date = new Date(y, m - 1);
+      label.textContent = date.toLocaleDateString('pt-BR', {
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    function changeMonth(diff) {
+      let [y, m] = getMonth().split('-').map(Number);
+      m += diff;
+      if (m < 1) { m = 12; y--; }
+      if (m > 12) { m = 1; y++; }
+      setMonth(`${y}-${String(m).padStart(2, '0')}`);
+      renderMonth();
+    }
+
+    renderMonth();
+  </script>
 </body>
 </html>
