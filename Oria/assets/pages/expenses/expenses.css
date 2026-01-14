@@ -1,3 +1,6 @@
+/* ==============================
+   BASE
+============================== */
 * {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
@@ -12,10 +15,12 @@ body {
 .container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 32px 20px 120px;
+  padding: 32px 20px 140px;
 }
 
-/* HEADER */
+/* ==============================
+   HEADER
+============================== */
 .top {
   display: flex;
   align-items: center;
@@ -51,7 +56,9 @@ body {
   color: #6b7280;
 }
 
-/* MONTH */
+/* ==============================
+   MONTH SELECTOR
+============================== */
 .month-box {
   margin: 28px 0;
   background: #fff;
@@ -78,11 +85,45 @@ body {
   font-weight: 600;
 }
 
-/* LIST */
-section {
-  margin-top: 32px;
+/* ==============================
+   SUMMARY CARDS
+============================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
 }
 
+.card-summary {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+.card-summary span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.card-summary strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 22px;
+}
+
+.card-summary.alert {
+  background: #fdecec;
+}
+
+.card-summary.alert strong {
+  color: #dc2626;
+}
+
+/* ==============================
+   LIST
+============================== */
 section h2 {
   font-size: 14px;
   color: #6b7280;
@@ -102,7 +143,7 @@ section h2 {
   box-shadow: 0 12px 30px rgba(0,0,0,0.08);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  gap: 16px;
 }
 
 .card-info strong {
@@ -111,25 +152,54 @@ section h2 {
 }
 
 .card-info span {
-  font-size: 14px;
+  font-size: 13px;
   color: #6b7280;
 }
 
-.card-actions {
+/* ==============================
+   CARD RIGHT / ACTIONS
+============================== */
+.card-right {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.card-right span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-right span.open {
+  color: #dc2626;
+}
+
+.card-right span.paid {
+  color: #16a34a;
+}
+
+.pay-btn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0;
 }
 
 .edit-btn {
-  border: none;
   background: #eef3ff;
+  border: none;
   border-radius: 10px;
-  padding: 8px 12px;
+  padding: 6px 10px;
+  font-size: 13px;
   cursor: pointer;
 }
 
-/* FAB */
+/* ==============================
+   FAB
+============================== */
 .fab-add {
   position: fixed;
   right: 24px;
@@ -145,7 +215,9 @@ section h2 {
   box-shadow: 0 16px 40px rgba(37,99,235,0.45);
 }
 
-/* MODAL */
+/* ==============================
+   MODAL
+============================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -153,6 +225,7 @@ section h2 {
   display: none;
   align-items: center;
   justify-content: center;
+  z-index: 100;
 }
 
 .modal {
@@ -160,13 +233,18 @@ section h2 {
   border-radius: 20px;
   width: 100%;
   max-width: 420px;
-  padding: 20px;
+  padding: 22px;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
 }
 
 .close-btn {
@@ -176,6 +254,9 @@ section h2 {
   cursor: pointer;
 }
 
+/* ==============================
+   MODAL BODY
+============================== */
 .modal-body label {
   display: flex;
   flex-direction: column;
@@ -183,14 +264,41 @@ section h2 {
   font-size: 14px;
 }
 
-.modal-body input,
-.modal-body select {
+.modal-body input {
   margin-top: 6px;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 12px;
   border: 1px solid #d1d5db;
 }
 
+/* ==============================
+   TYPE TOGGLE
+============================== */
+.type-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.type-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #dbe2ff;
+  background: #f5f7ff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.type-btn.active {
+  background: linear-gradient(135deg, #2563eb, #4f7cff);
+  color: #fff;
+  border: none;
+}
+
+/* ==============================
+   MODAL FOOTER
+============================== */
 .modal-footer {
   margin-top: 24px;
   display: flex;
@@ -214,4 +322,15 @@ section h2 {
 .btn.danger {
   background: #fee2e2;
   color: #dc2626;
+}
+
+/* ==============================
+   CHECKBOX
+============================== */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 14px;
 }
