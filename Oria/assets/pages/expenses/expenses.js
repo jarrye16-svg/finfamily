@@ -1,7 +1,7 @@
-/* ======================================
+/* ==================================================
    Oria • Contas da Casa
-   UI only — Supabase entra depois
-====================================== */
+   UI completa — Supabase entra depois
+================================================== */
 
 const MONTHS = [
   'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -9,13 +9,16 @@ const MONTHS = [
 ];
 
 let currentMonth = new Date();
+let selectedType = 'fixed';
 let editingIndex = null;
 
-let expenses = [
-  { name: 'Aluguel', amount: 1800, type: 'fixed' },
-  { name: 'Internet', amount: 129.9, type: 'fixed' },
-  { name: 'Energia Elétrica', amount: 320, type: 'one' }
-];
+/* mês começa vazio (correto) */
+let expenses = [];
+
+/* utils */
+function formatMonth(date) {
+  return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
+}
 
 function formatBRL(v) {
   return new Intl.NumberFormat('pt-BR', {
@@ -24,9 +27,11 @@ function formatBRL(v) {
   }).format(v);
 }
 
+/* mês */
 function renderMonth() {
-  document.getElementById('monthText').innerText =
-    `${MONTHS[currentMonth.getMonth()]} de ${currentMonth.getFullYear()}`;
+  const label = formatMonth(currentMonth);
+  document.getElementById('monthText').innerText = label;
+  document.getElementById('monthLabel').innerText = label;
 }
 
 function changeMonth(delta) {
@@ -35,52 +40,68 @@ function changeMonth(delta) {
   renderExpenses();
 }
 
+/* render */
 function renderExpenses() {
-  const fixed = document.getElementById('fixedList');
-  const one = document.getElementById('oneTimeList');
-  fixed.innerHTML = '';
-  one.innerHTML = '';
+  const list = document.getElementById('expensesList');
+  list.innerHTML = '';
+
+  let total = 0;
+  let open = 0;
 
   expenses.forEach((e, i) => {
+    total += e.amount;
+    if (!e.paid) open += e.amount;
+
     const card = document.createElement('div');
     card.className = 'card';
 
     card.innerHTML = `
       <div class="card-info">
         <strong>${e.name}</strong>
-        <span>${formatBRL(e.amount)}</span>
+        <span>Vence: ${e.dueDate || '--'}</span>
       </div>
-      <div class="card-actions">
+
+      <div class="card-right">
+        <span class="${e.paid ? 'paid' : 'open'}">
+          ${formatBRL(e.amount)}
+        </span>
+        <button class="pay-btn" onclick="togglePaid(${i})">
+          ${e.paid ? 'Pago' : 'Marcar pago'}
+        </button>
         <button class="edit-btn" onclick="openEdit(${i})">Editar</button>
       </div>
     `;
 
-    (e.type === 'fixed' ? fixed : one).appendChild(card);
+    list.appendChild(card);
   });
+
+  document.getElementById('totalValue').innerText = formatBRL(total);
+  document.getElementById('openValue').innerText = formatBRL(open);
 }
 
-/* MODAL */
+/* modal */
+function openNew() {
+  editingIndex = null;
+  document.getElementById('modalTitle').innerText = 'Nova Conta';
+  document.getElementById('inputName').value = '';
+  document.getElementById('inputAmount').value = '';
+  document.getElementById('inputDueDate').value = '';
+  document.getElementById('replicateNext').checked = false;
+  document.getElementById('deleteBtn').style.display = 'none';
+  openModal();
+}
+
 function openEdit(index) {
   editingIndex = index;
   const e = expenses[index];
 
-  document.getElementById('modalTitle').innerText = 'Editar conta';
+  document.getElementById('modalTitle').innerText = 'Editar Conta';
   document.getElementById('inputName').value = e.name;
   document.getElementById('inputAmount').value = e.amount;
-  document.getElementById('inputType').value = e.type;
+  document.getElementById('inputDueDate').value = e.dueDate;
   document.getElementById('deleteBtn').style.display = 'block';
 
-  openModal();
-}
-
-function openNew() {
-  editingIndex = null;
-  document.getElementById('modalTitle').innerText = 'Nova conta';
-  document.getElementById('inputName').value = '';
-  document.getElementById('inputAmount').value = '';
-  document.getElementById('inputType').value = 'fixed';
-  document.getElementById('deleteBtn').style.display = 'none';
-
+  setType(e.type);
   openModal();
 }
 
@@ -92,32 +113,14 @@ function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-function saveExpense() {
-  const name = document.getElementById('inputName').value;
-  const amount = Number(document.getElementById('inputAmount').value);
-  const type = document.getElementById('inputType').value;
-
-  if (editingIndex === null) {
-    expenses.push({ name, amount, type });
-  } else {
-    expenses[editingIndex] = { name, amount, type };
-  }
-
-  closeModal();
-  renderExpenses();
+/* tipo */
+function setType(type) {
+  selectedType = type;
+  document.querySelectorAll('.type-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.type === type);
+  });
+  document.getElementById('replicateBox').style.display =
+    type === 'fixed' ? 'flex' : 'none';
 }
 
-function deleteExpense() {
-  expenses.splice(editingIndex, 1);
-  closeModal();
-  renderExpenses();
-}
-
-/* EVENTS */
-document.getElementById('addBtn').onclick = openNew;
-document.getElementById('prevMonth').onclick = () => changeMonth(-1);
-document.getElementById('nextMonth').onclick = () => changeMonth(1);
-
-/* INIT */
-renderMonth();
-renderExpenses();
+document.querySelectorAll('.type
