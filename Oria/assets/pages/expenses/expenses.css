@@ -137,4 +137,81 @@ section h2 {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #
+  background: linear-gradient(135deg, #2563eb, #4f7cff);
+  color: #fff;
+  font-size: 34px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 16px 40px rgba(37,99,235,0.45);
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body label {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.modal-body input,
+.modal-body select {
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+}
+
+.modal-footer {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #2563eb, #4f7cff);
+  color: #fff;
+}
+
+.btn.danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
