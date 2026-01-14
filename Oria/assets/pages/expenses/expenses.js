@@ -1,70 +1,93 @@
-/* =========================================
-   Oria • Contas da Casa
-   FASE 1 — MOCK (sem Supabase)
-   ========================================= */
+/* ======================================
+   Oria • Contas da Casa (UI)
+   Month é estado central
+   ====================================== */
 
-const expenses = [
-  {
-    name: "Aluguel",
-    amount: 1800,
-    type: "fixed",
-    paid: true
-  },
-  {
-    name: "Internet",
-    amount: 129.90,
-    type: "fixed",
-    paid: false
-  },
-  {
-    name: "Energia Elétrica",
-    amount: 320,
-    type: "one_time",
-    paid: false
-  }
+const MONTHS = [
+  'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
 ];
 
-function formatBRL(value) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  }).format(value);
+let currentMonth = new Date();
+
+let expenses = [
+  { name: 'Aluguel', amount: 1800, type: 'fixed', paid: true },
+  { name: 'Internet', amount: 129.9, type: 'fixed', paid: false },
+  { name: 'Energia Elétrica', amount: 320, type: 'one', paid: false }
+];
+
+function formatBRL(v) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(v);
 }
 
-function createCard(expense) {
-  const card = document.createElement("div");
-  card.className = "expense-card";
+function renderMonth() {
+  const text = `${MONTHS[currentMonth.getMonth()]} de ${currentMonth.getFullYear()}`;
+  document.getElementById('monthText').innerText = text;
+  document.getElementById('monthLabel').innerText = text;
+}
 
-  card.innerHTML = `
-    <div class="expense-info">
-      <span class="expense-name">${expense.name}</span>
-      <span class="expense-amount">${formatBRL(expense.amount)}</span>
-    </div>
-
-    <div class="expense-actions">
-      <span class="expense-status ${expense.paid ? "paid" : ""}"></span>
-    </div>
-  `;
-
-  return card;
+function changeMonth(delta) {
+  currentMonth.setMonth(currentMonth.getMonth() + delta);
+  renderMonth();
+  renderExpenses();
 }
 
 function renderExpenses() {
-  const fixedList = document.getElementById("fixedList");
-  const oneTimeList = document.getElementById("oneTimeList");
+  const fixed = document.getElementById('fixedList');
+  const one = document.getElementById('oneTimeList');
 
-  fixedList.innerHTML = "";
-  oneTimeList.innerHTML = "";
+  fixed.innerHTML = '';
+  one.innerHTML = '';
 
-  expenses.forEach(expense => {
-    const card = createCard(expense);
+  expenses.forEach((e, index) => {
+    const card = document.createElement('div');
+    card.className = 'card';
 
-    if (expense.type === "fixed") {
-      fixedList.appendChild(card);
-    } else {
-      oneTimeList.appendChild(card);
-    }
+    card.innerHTML = `
+      <div class="card-info">
+        <strong contenteditable="true"
+          onblur="updateName(${index}, this.innerText)">
+          ${e.name}
+        </strong>
+        <span contenteditable="true"
+          onblur="updateAmount(${index}, this.innerText)">
+          ${formatBRL(e.amount)}
+        </span>
+      </div>
+      <div class="status ${e.paid ? 'paid' : ''}"
+        onclick="togglePaid(${index})"></div>
+    `;
+
+    (e.type === 'fixed' ? fixed : one).appendChild(card);
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderExpenses);
+function updateName(i, value) {
+  expenses[i].name = value.trim();
+}
+
+function updateAmount(i, value) {
+  const n = Number(value.replace(/[^\d,]/g,'').replace(',','.'));
+  if (!isNaN(n)) expenses[i].amount = n;
+  renderExpenses();
+}
+
+function togglePaid(i) {
+  expenses[i].paid = !expenses[i].paid;
+  renderExpenses();
+}
+
+document.getElementById('addBtn').onclick = () => {
+  expenses.push({ name: 'Nova conta', amount: 0, type: 'fixed', paid: false });
+  renderExpenses();
+};
+
+document.getElementById('prevMonth').onclick = () => changeMonth(-1);
+document.getElementById('nextMonth').onclick = () => changeMonth(1);
+
+// INIT
+renderMonth();
+renderExpenses();
