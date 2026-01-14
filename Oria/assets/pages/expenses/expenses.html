@@ -2,36 +2,51 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Oria • Contas da Casa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="./expenses.css" />
 </head>
+
 <body>
 
-  <!-- Header -->
-  <header class="page-header">
-    <button class="back-btn" onclick="history.back()">←</button>
-    <h1>Contas da Casa</h1>
-  </header>
+  <div class="container">
 
-  <!-- Listas -->
-  <main class="expenses-container">
+    <!-- HEADER -->
+    <div class="top">
+      <button class="back-btn" onclick="history.back()">‹</button>
+      <div class="title">
+        <h1>Contas da Casa</h1>
+        <span id="monthLabel">—</span>
+      </div>
+    </div>
 
+    <!-- MONTH SELECTOR -->
+    <div class="month-box">
+      <button class="month-btn" id="prevMonth">‹</button>
+      <div class="month-text" id="monthText">—</div>
+      <button class="month-btn" id="nextMonth">›</button>
+    </div>
+
+    <!-- FIXAS -->
     <section>
       <h2>Contas Fixas</h2>
-      <div id="fixedList" class="expense-list"></div>
+      <div id="fixedList" class="list"></div>
     </section>
 
+    <!-- ONE TIME -->
     <section>
       <h2>Somente neste mês</h2>
-      <div id="oneTimeList" class="expense-list"></div>
+      <div id="oneTimeList" class="list"></div>
     </section>
 
-  </main>
+  </div>
 
-  <!-- Botão adicionar -->
-  <button class="fab-add">+</button>
+  <!-- FAB -->
+  <button class="fab-add" id="addBtn">+</button>
 
   <script src="./expenses.js"></script>
 </body>
