@@ -1,7 +1,7 @@
 /* ======================================
-   Oria • Contas da Casa (UI)
-   Month é estado central
-   ====================================== */
+   Oria • Contas da Casa
+   UI only — Supabase entra depois
+====================================== */
 
 const MONTHS = [
   'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -9,11 +9,12 @@ const MONTHS = [
 ];
 
 let currentMonth = new Date();
+let editingIndex = null;
 
 let expenses = [
-  { name: 'Aluguel', amount: 1800, type: 'fixed', paid: true },
-  { name: 'Internet', amount: 129.9, type: 'fixed', paid: false },
-  { name: 'Energia Elétrica', amount: 320, type: 'one', paid: false }
+  { name: 'Aluguel', amount: 1800, type: 'fixed' },
+  { name: 'Internet', amount: 129.9, type: 'fixed' },
+  { name: 'Energia Elétrica', amount: 320, type: 'one' }
 ];
 
 function formatBRL(v) {
@@ -24,9 +25,8 @@ function formatBRL(v) {
 }
 
 function renderMonth() {
-  const text = `${MONTHS[currentMonth.getMonth()]} de ${currentMonth.getFullYear()}`;
-  document.getElementById('monthText').innerText = text;
-  document.getElementById('monthLabel').innerText = text;
+  document.getElementById('monthText').innerText =
+    `${MONTHS[currentMonth.getMonth()]} de ${currentMonth.getFullYear()}`;
 }
 
 function changeMonth(delta) {
@@ -38,56 +38,86 @@ function changeMonth(delta) {
 function renderExpenses() {
   const fixed = document.getElementById('fixedList');
   const one = document.getElementById('oneTimeList');
-
   fixed.innerHTML = '';
   one.innerHTML = '';
 
-  expenses.forEach((e, index) => {
+  expenses.forEach((e, i) => {
     const card = document.createElement('div');
     card.className = 'card';
 
     card.innerHTML = `
       <div class="card-info">
-        <strong contenteditable="true"
-          onblur="updateName(${index}, this.innerText)">
-          ${e.name}
-        </strong>
-        <span contenteditable="true"
-          onblur="updateAmount(${index}, this.innerText)">
-          ${formatBRL(e.amount)}
-        </span>
+        <strong>${e.name}</strong>
+        <span>${formatBRL(e.amount)}</span>
       </div>
-      <div class="status ${e.paid ? 'paid' : ''}"
-        onclick="togglePaid(${index})"></div>
+      <div class="card-actions">
+        <button class="edit-btn" onclick="openEdit(${i})">Editar</button>
+      </div>
     `;
 
     (e.type === 'fixed' ? fixed : one).appendChild(card);
   });
 }
 
-function updateName(i, value) {
-  expenses[i].name = value.trim();
+/* MODAL */
+function openEdit(index) {
+  editingIndex = index;
+  const e = expenses[index];
+
+  document.getElementById('modalTitle').innerText = 'Editar conta';
+  document.getElementById('inputName').value = e.name;
+  document.getElementById('inputAmount').value = e.amount;
+  document.getElementById('inputType').value = e.type;
+  document.getElementById('deleteBtn').style.display = 'block';
+
+  openModal();
 }
 
-function updateAmount(i, value) {
-  const n = Number(value.replace(/[^\d,]/g,'').replace(',','.'));
-  if (!isNaN(n)) expenses[i].amount = n;
+function openNew() {
+  editingIndex = null;
+  document.getElementById('modalTitle').innerText = 'Nova conta';
+  document.getElementById('inputName').value = '';
+  document.getElementById('inputAmount').value = '';
+  document.getElementById('inputType').value = 'fixed';
+  document.getElementById('deleteBtn').style.display = 'none';
+
+  openModal();
+}
+
+function openModal() {
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function saveExpense() {
+  const name = document.getElementById('inputName').value;
+  const amount = Number(document.getElementById('inputAmount').value);
+  const type = document.getElementById('inputType').value;
+
+  if (editingIndex === null) {
+    expenses.push({ name, amount, type });
+  } else {
+    expenses[editingIndex] = { name, amount, type };
+  }
+
+  closeModal();
   renderExpenses();
 }
 
-function togglePaid(i) {
-  expenses[i].paid = !expenses[i].paid;
+function deleteExpense() {
+  expenses.splice(editingIndex, 1);
+  closeModal();
   renderExpenses();
 }
 
-document.getElementById('addBtn').onclick = () => {
-  expenses.push({ name: 'Nova conta', amount: 0, type: 'fixed', paid: false });
-  renderExpenses();
-};
-
+/* EVENTS */
+document.getElementById('addBtn').onclick = openNew;
 document.getElementById('prevMonth').onclick = () => changeMonth(-1);
 document.getElementById('nextMonth').onclick = () => changeMonth(1);
 
-// INIT
+/* INIT */
 renderMonth();
 renderExpenses();
