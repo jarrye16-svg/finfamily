@@ -123,4 +123,54 @@ function setType(type) {
     type === 'fixed' ? 'flex' : 'none';
 }
 
-document.querySelectorAll('.type
+document.querySelectorAll('.type-btn').forEach(btn => {
+  btn.onclick = () => setType(btn.dataset.type);
+});
+
+/* salvar */
+function saveExpense() {
+  const name = document.getElementById('inputName').value.trim();
+  const amount = Number(document.getElementById('inputAmount').value);
+  const dueDate = document.getElementById('inputDueDate').value;
+  const replicate = document.getElementById('replicateNext').checked;
+
+  if (!name || !amount || !dueDate) return;
+
+  const data = {
+    name,
+    amount,
+    dueDate,
+    type: selectedType,
+    paid: false,
+    month: currentMonth
+  };
+
+  if (editingIndex === null) {
+    expenses.push(data);
+  } else {
+    expenses[editingIndex] = { ...expenses[editingIndex], ...data };
+  }
+
+  if (selectedType === 'fixed' && replicate) {
+    console.log('Replicar para próximo mês (Supabase depois)');
+  }
+
+  closeModal();
+  renderExpenses();
+}
+
+function deleteExpense() {
+  expenses.splice(editingIndex, 1);
+  closeModal();
+  renderExpenses();
+}
+
+/* pago */
+function togglePaid(i) {
+  expenses[i].paid = !expenses[i].paid;
+  renderExpenses();
+}
+
+/* init */
+renderMonth();
+renderExpenses();
