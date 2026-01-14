@@ -17,10 +17,12 @@
 
     <!-- HEADER -->
     <div class="top">
-      <button class="back-btn" onclick="history.back()">‹</button>
+      <a href="/finfamily/Oria/assets/pages/app/home/home.html" class="logo">
+        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
+      </a>
       <div class="title">
         <h1>Contas da Casa</h1>
-        <span id="monthLabel">—</span>
+        <span>Controle mensal</span>
       </div>
     </div>
 
@@ -31,9 +33,9 @@
       <button class="month-btn" id="nextMonth">›</button>
     </div>
 
-    <!-- FIXAS -->
+    <!-- FIXED -->
     <section>
-      <h2>Contas Fixas</h2>
+      <h2>Contas fixas</h2>
       <div id="fixedList" class="list"></div>
     </section>
 
@@ -47,6 +49,41 @@
 
   <!-- FAB -->
   <button class="fab-add" id="addBtn">+</button>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Nova conta</h3>
+        <button class="close-btn" onclick="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <label>
+          Nome
+          <input type="text" id="inputName">
+        </label>
+
+        <label>
+          Valor
+          <input type="number" id="inputAmount" step="0.01">
+        </label>
+
+        <label>
+          Tipo
+          <select id="inputType">
+            <option value="fixed">Fixa</option>
+            <option value="one">Somente neste mês</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn primary" onclick="saveExpense()">Salvar</button>
+        <button class="btn danger" id="deleteBtn" onclick="deleteExpense()">Excluir</button>
+      </div>
+    </div>
+  </div>
 
   <script src="./expenses.js"></script>
 </body>
