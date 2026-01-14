@@ -1,1 +1,105 @@
+:root {
+  --bg: #0b1220;
+  --card: #121a2f;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --primary: #3b82f6;
+  --paid: #22c55e;
+}
 
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+/* Content */
+.expenses-container {
+  padding: 16px;
+}
+
+section {
+  margin-bottom: 24px;
+}
+
+section h2 {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* Card */
+.expense-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.expense-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.expense-name {
+  font-weight: 500;
+}
+
+.expense-amount {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.expense-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.expense-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f97316;
+}
+
+.expense-status.paid {
+  background: var(--paid);
+}
+
+/* FAB */
+.fab-add {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 32px;
+  border: none;
+  cursor: pointer;
+}
