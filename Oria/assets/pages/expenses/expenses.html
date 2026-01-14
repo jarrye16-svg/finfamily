@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oria • Contas da Casa</title>
+
+  <link rel="stylesheet" href="./expenses.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="page-header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1>Contas da Casa</h1>
+  </header>
+
+  <!-- Listas -->
+  <main class="expenses-container">
+
+    <section>
+      <h2>Contas Fixas</h2>
+      <div id="fixedList" class="expense-list"></div>
+    </section>
+
+    <section>
+      <h2>Somente neste mês</h2>
+      <div id="oneTimeList" class="expense-list"></div>
+    </section>
+
+  </main>
+
+  <!-- Botão adicionar -->
+  <button class="fab-add">+</button>
+
+  <script src="./expenses.js"></script>
+</body>
+</html>
