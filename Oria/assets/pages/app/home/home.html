@@ -1,321 +1,186 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Oria • Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Fonte -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
-
-  <style>
-    :root{
-      --bg1:#f6f9ff;
-      --bg2:#eef3ff;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#64748b;
-      --blue1:#2563eb;
-      --blue2:#4f7cff;
-      --green:#16a34a;
-      --red:#dc2626;
-      --shadow: 0 14px 36px rgba(15, 23, 42, 0.10);
-      --shadowSoft: 0 10px 28px rgba(15, 23, 42, 0.08);
-      --radius: 22px;
-    }
-
-    *{ box-sizing:border-box; font-family:'Inter', sans-serif; }
-    body{
-      margin:0;
-      min-height:100vh;
-      background: linear-gradient(180deg, var(--bg1), var(--bg2));
-      color:var(--text);
-    }
-
-    .container{
-      max-width:1100px;
-      margin:0 auto;
-      padding:26px 18px 90px;
-    }
-
-    /* TOP */
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:18px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-    .logoBox{
-      width:44px;height:44px;
-      border-radius:14px;
-      background:#fff;
-      box-shadow:var(--shadowSoft);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
-    .logoBox img{ width:26px;height:26px; }
-    .logoFallback{
-      display:none;
-      width:26px;height:26px;
-      border-radius:8px;
-      background:var(--blue1);
-      color:#fff;
-      font-weight:800;
-      align-items:center;
-      justify-content:center;
-      font-size:14px;
-    }
-    .titles .appName{
-      font-size:18px;
-      font-weight:700;
-      margin:0;
-    }
-    .titles .subtitle{
-      font-size:13px;
-      color:var(--muted);
-    }
-    .profileBtn{
-      width:44px;height:44px;
-      border-radius:14px;
-      border:none;
-      background:#fff;
-      box-shadow:var(--shadowSoft);
-      cursor:pointer;
-      font-size:18px;
-    }
-
-    /* MONTH */
-    .monthBox{
-      background:#fff;
-      border-radius:24px;
-      padding:14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      box-shadow:var(--shadow);
-      margin-bottom:20px;
-    }
-    .monthBtn{
-      width:44px;height:44px;
-      border-radius:999px;
-      border:none;
-      background:#eef4ff;
-      font-size:22px;
-      font-weight:800;
-      cursor:pointer;
-    }
-    .monthCenter{
-      text-align:center;
-      flex:1;
-    }
-    .monthLabel{
-      font-size:20px;
-      font-weight:800;
-    }
-    .monthHint{
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    /* CARDS */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:14px;
-    }
-    @media(min-width:900px){
-      .grid{ grid-template-columns:repeat(3,1fr); }
-    }
-    .card{
-      background:#fff;
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:var(--shadow);
-      cursor:pointer;
-    }
-    .card.info{ cursor:default; }
-    .cardLabel{
-      font-size:13px;
-      color:var(--muted);
-      font-weight:600;
-    }
-    .cardValue{
-      font-size:26px;
-      font-weight:800;
-      margin-top:6px;
-    }
-    .green{ color:var(--green); }
-    .red{ color:var(--red); }
-
-    /* ACTIONS */
-    .actions{ margin-top:26px; }
-    .actionsTitle{
-      font-size:16px;
-      font-weight:800;
-      margin-bottom:12px;
-    }
-    .actionsGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
-    }
-    @media(min-width:900px){
-      .actionsGrid{ grid-template-columns:repeat(4,1fr); }
-    }
-    .actionBtn{
-      border:none;
-      border-radius:20px;
-      padding:16px;
-      background:#fff;
-      box-shadow:var(--shadowSoft);
-      font-weight:800;
-      cursor:pointer;
-    }
-    .actionBtn.primary{
-      background:linear-gradient(135deg,var(--blue1),var(--blue2));
-      color:#fff;
-    }
-  </style>
-</head>
-
-<body>
-<div class="container">
-
-  <!-- TOP -->
-  <div class="topbar">
-    <div class="brand">
-      <div class="logoBox">
-        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="logoFallback">O</div>
-      </div>
-      <div class="titles">
-        <p class="appName">Oria</p>
-        <div class="subtitle">Visão geral</div>
-      </div>
-    </div>
-    <button class="profileBtn" onclick="go('/finfamily/Oria/assets/pages/settings/settings.html')">👤</button>
-  </div>
-
-  <!-- MONTH -->
-  <div class="monthBox">
-    <button class="monthBtn" onclick="changeMonth(-1)">‹</button>
-    <div class="monthCenter">
-      <div class="monthLabel" id="monthLabel">—</div>
-      <div class="monthHint">Troque o mês para ver seus dados</div>
-    </div>
-    <button class="monthBtn" onclick="changeMonth(1)">›</button>
-  </div>
-
-  <!-- SUMMARY -->
-  <div class="grid">
-    <div class="card" onclick="go('/finfamily/Oria/assets/pages/income/income.html')">
-      <div class="cardLabel">Entradas do mês</div>
-      <div class="cardValue green" id="incomeValue">R$ 0,00</div>
-    </div>
-
-    <div class="card" onclick="go('/finfamily/Oria/assets/pages/expenses/expenses.html')">
-      <div class="cardLabel">Gastos do mês</div>
-      <div class="cardValue red" id="expenseValue">R$ 0,00</div>
-    </div>
-
-    <div class="card info">
-      <div class="cardLabel">Saldo do mês</div>
-      <div class="cardValue" id="balanceValue">R$ 0,00</div>
-    </div>
-  </div>
-
-  <!-- ACTIONS -->
-  <div class="actions">
-    <div class="actionsTitle">Ações rápidas</div>
-    <div class="actionsGrid">
-      <button class="actionBtn primary" onclick="go('/finfamily/Oria/assets/pages/expenses/expenses.html')">Contas da casa</button>
-      <button class="actionBtn" onclick="go('/finfamily/Oria/assets/pages/income/income.html')">Entradas</button>
-      <button class="actionBtn" onclick="go('/finfamily/Oria/assets/pages/cards/cards.html')">Cartões</button>
-      <button class="actionBtn" onclick="go('/finfamily/Oria/assets/pages/piggy/piggy.html')">Porquinho</button>
-    </div>
-  </div>
-
-</div>
-
 <script>
+  // ==========================================================
+  // CONST
+  // ==========================================================
   const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  let db, user, currentMonth;
 
+  const PATHS = {
+    login: '/finfamily/Oria/assets/pages/login/login.html',
+    income: '/finfamily/Oria/assets/pages/income/income.html',
+    expenses: '/finfamily/Oria/assets/pages/expenses/expenses.html',
+    cards: '/finfamily/Oria/assets/pages/cards/cards.html',
+    piggy: '/finfamily/Oria/assets/pages/piggy/piggy.html',
+    settings: '/finfamily/Oria/assets/pages/settings/settings.html'
+  };
+
+  let db = null;
+  let user = null;
+  let currentMonth = null;
+  let initialized = false;
+
+  // ==========================================================
+  // HELPERS
+  // ==========================================================
   function go(p){ window.location.href = p; }
 
-  function ymLabel(ym){
-    const [y,m]=ym.split('-');
-    return `${MONTHS[m-1]} de ${y}`;
-  }
-
-  function addMonths(ym,d){
-    const [y,m]=ym.split('-').map(Number);
-    const dt=new Date(y,m-1+d,1);
-    return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-  }
-
   function brl(v){
-    return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    return Number(v || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   }
 
-  async function loadMonth(){
-    const { data } = await db.from('user_settings')
+  function nowYYYYMM(){
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  }
+
+  function addMonthsSafe(yyyyMM, delta){
+    if (!yyyyMM) return nowYYYYMM();
+    const [y,m] = yyyyMM.split('-').map(Number);
+    const d = new Date(y, (m-1)+delta, 1);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  }
+
+  function renderMonthLabel(yyyyMM){
+    if (!yyyyMM) return;
+    const [y,m] = yyyyMM.split('-');
+    document.getElementById('monthLabel').textContent =
+      `${MONTHS[m-1]} de ${y}`;
+  }
+
+  // ==========================================================
+  // SUPABASE RESOLVER (ROBUSTO)
+  // ==========================================================
+  function resolveSupabaseClient(){
+    // tenta padrões comuns
+    if (window.supabase && window.supabase.auth && window.supabase.from) return window.supabase;
+    if (window.db && window.db.auth) return window.db;
+    if (window.supabaseClient && window.supabaseClient.auth) return window.supabaseClient;
+    if (window.client && window.client.auth) return window.client;
+    return null;
+  }
+
+  async function waitForSupabase(){
+    return new Promise((resolve, reject) => {
+      const start = Date.now();
+      const timer = setInterval(() => {
+        const c = resolveSupabaseClient();
+        if (c) {
+          clearInterval(timer);
+          resolve(c);
+        }
+        if (Date.now() - start > 4000) {
+          clearInterval(timer);
+          reject('Supabase não encontrado');
+        }
+      }, 50);
+    });
+  }
+
+  // ==========================================================
+  // DATA
+  // ==========================================================
+  async function loadUser(){
+    const { data, error } = await db.auth.getUser();
+    if (error || !data?.user) return null;
+    return data.user;
+  }
+
+  async function resolveMonth(){
+    const { data } = await db
+      .from('user_settings')
       .select('current_month')
-      .eq('user_id',user.id)
+      .eq('user_id', user.id)
       .maybeSingle();
 
-    if(!data){
-      currentMonth = `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}`;
-      await db.from('user_settings').insert([{ user_id:user.id, current_month }]);
-    }else{
-      currentMonth = data.current_month;
+    if (!data || !data.current_month) {
+      const m = nowYYYYMM();
+      await db.from('user_settings').upsert({
+        user_id: user.id,
+        current_month: m
+      });
+      return m;
     }
-    document.getElementById('monthLabel').textContent = ymLabel(currentMonth);
-    loadTotals();
+    return data.current_month;
   }
 
-  async function changeMonth(d){
-    currentMonth = addMonths(currentMonth,d);
-    await db.from('user_settings').update({ current_month }).eq('user_id',user.id);
-    document.getElementById('monthLabel').textContent = ymLabel(currentMonth);
-    loadTotals();
+  async function updateMonth(m){
+    await db
+      .from('user_settings')
+      .update({ current_month: m })
+      .eq('user_id', user.id);
+  }
+
+  async function sum(type, origin){
+    let q = db
+      .from('transactions')
+      .select('amount, origin')
+      .eq('user_id', user.id)
+      .eq('month', currentMonth)
+      .eq('type', type);
+
+    if (origin === 'house') {
+      q = q.or('origin.eq.house,origin.is.null');
+    }
+
+    const { data } = await q;
+    return (data || []).reduce((s,r)=>s+Number(r.amount||0),0);
   }
 
   async function loadTotals(){
-    let inc=0, exp=0;
-    try{
-      const r1 = await db.from('transactions').select('amount').eq('user_id',user.id).eq('month',currentMonth).eq('type','income');
-      r1.data?.forEach(i=>inc+=Number(i.amount));
-      const r2 = await db.from('transactions').select('amount').eq('user_id',user.id).eq('month',currentMonth).eq('type','expense').or('origin.eq.house,origin.is.null');
-      r2.data?.forEach(i=>exp+=Number(i.amount));
-    }catch(e){}
+    const inc = await sum('income');
+    const exp = await sum('expense','house');
+    const bal = inc - exp;
+
     document.getElementById('incomeValue').textContent = brl(inc);
     document.getElementById('expenseValue').textContent = brl(exp);
-    const bal = inc-exp;
-    const el = document.getElementById('balanceValue');
-    el.textContent = brl(bal);
-    el.className = 'cardValue ' + (bal>=0?'green':'red');
+
+    const b = document.getElementById('balanceValue');
+    b.textContent = brl(bal);
+    b.classList.remove('green','red');
+    b.classList.add(bal >= 0 ? 'green' : 'red');
   }
 
-  (async()=>{
-    db = window.supabase;
-    const res = await db.auth.getUser();
-    user = res.data.user;
-    if(!user) return go('/finfamily/Oria/assets/pages/login/login.html');
-    loadMonth();
+  // ==========================================================
+  // MONTH NAV
+  // ==========================================================
+  async function changeMonth(delta){
+    if (!initialized) return;
+    currentMonth = addMonthsSafe(currentMonth, delta);
+    renderMonthLabel(currentMonth);
+    await updateMonth(currentMonth);
+    await loadTotals();
+  }
+
+  // ==========================================================
+  // INIT
+  // ==========================================================
+  (async function init(){
+    try {
+      db = await waitForSupabase();
+    } catch(e){
+      console.error(e);
+      return;
+    }
+
+    user = await loadUser();
+    if (!user) return go(PATHS.login);
+
+    // bind
+    document.getElementById('btnProfile').onclick = () => go(PATHS.settings);
+    document.getElementById('btnIncome').onclick = () => go(PATHS.income);
+    document.getElementById('btnExpenses').onclick = () => go(PATHS.expenses);
+
+    document.getElementById('goHouse').onclick = () => go(PATHS.expenses);
+    document.getElementById('goIncome').onclick = () => go(PATHS.income);
+    document.getElementById('goCards').onclick = () => go(PATHS.cards);
+    document.getElementById('goPiggy').onclick = () => go(PATHS.piggy);
+
+    document.getElementById('prevMonth').onclick = () => changeMonth(-1);
+    document.getElementById('nextMonth').onclick = () => changeMonth(1);
+
+    currentMonth = await resolveMonth();
+    renderMonthLabel(currentMonth);
+    await loadTotals();
+
+    initialized = true;
   })();
 </script>
-</body>
-</html>
