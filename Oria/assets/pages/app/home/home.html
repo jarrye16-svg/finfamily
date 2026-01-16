@@ -1,186 +1,233 @@
-<script>
-  // ==========================================================
-  // CONST
-  // ==========================================================
-  const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Oria • Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  const PATHS = {
-    login: '/finfamily/Oria/assets/pages/login/login.html',
-    income: '/finfamily/Oria/assets/pages/income/income.html',
-    expenses: '/finfamily/Oria/assets/pages/expenses/expenses.html',
-    cards: '/finfamily/Oria/assets/pages/cards/cards.html',
-    piggy: '/finfamily/Oria/assets/pages/piggy/piggy.html',
-    settings: '/finfamily/Oria/assets/pages/settings/settings.html'
-  };
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  let db = null;
-  let user = null;
-  let currentMonth = null;
-  let initialized = false;
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  // ==========================================================
-  // HELPERS
-  // ==========================================================
-  function go(p){ window.location.href = p; }
+  <style>
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-  function brl(v){
-    return Number(v || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-  }
-
-  function nowYYYYMM(){
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-  }
-
-  function addMonthsSafe(yyyyMM, delta){
-    if (!yyyyMM) return nowYYYYMM();
-    const [y,m] = yyyyMM.split('-').map(Number);
-    const d = new Date(y, (m-1)+delta, 1);
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-  }
-
-  function renderMonthLabel(yyyyMM){
-    if (!yyyyMM) return;
-    const [y,m] = yyyyMM.split('-');
-    document.getElementById('monthLabel').textContent =
-      `${MONTHS[m-1]} de ${y}`;
-  }
-
-  // ==========================================================
-  // SUPABASE RESOLVER (ROBUSTO)
-  // ==========================================================
-  function resolveSupabaseClient(){
-    // tenta padrões comuns
-    if (window.supabase && window.supabase.auth && window.supabase.from) return window.supabase;
-    if (window.db && window.db.auth) return window.db;
-    if (window.supabaseClient && window.supabaseClient.auth) return window.supabaseClient;
-    if (window.client && window.client.auth) return window.client;
-    return null;
-  }
-
-  async function waitForSupabase(){
-    return new Promise((resolve, reject) => {
-      const start = Date.now();
-      const timer = setInterval(() => {
-        const c = resolveSupabaseClient();
-        if (c) {
-          clearInterval(timer);
-          resolve(c);
-        }
-        if (Date.now() - start > 4000) {
-          clearInterval(timer);
-          reject('Supabase não encontrado');
-        }
-      }, 50);
-    });
-  }
-
-  // ==========================================================
-  // DATA
-  // ==========================================================
-  async function loadUser(){
-    const { data, error } = await db.auth.getUser();
-    if (error || !data?.user) return null;
-    return data.user;
-  }
-
-  async function resolveMonth(){
-    const { data } = await db
-      .from('user_settings')
-      .select('current_month')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (!data || !data.current_month) {
-      const m = nowYYYYMM();
-      await db.from('user_settings').upsert({
-        user_id: user.id,
-        current_month: m
-      });
-      return m;
-    }
-    return data.current_month;
-  }
-
-  async function updateMonth(m){
-    await db
-      .from('user_settings')
-      .update({ current_month: m })
-      .eq('user_id', user.id);
-  }
-
-  async function sum(type, origin){
-    let q = db
-      .from('transactions')
-      .select('amount, origin')
-      .eq('user_id', user.id)
-      .eq('month', currentMonth)
-      .eq('type', type);
-
-    if (origin === 'house') {
-      q = q.or('origin.eq.house,origin.is.null');
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
+      min-height: 100vh;
+      color: #0f172a;
     }
 
-    const { data } = await q;
-    return (data || []).reduce((s,r)=>s+Number(r.amount||0),0);
-  }
-
-  async function loadTotals(){
-    const inc = await sum('income');
-    const exp = await sum('expense','house');
-    const bal = inc - exp;
-
-    document.getElementById('incomeValue').textContent = brl(inc);
-    document.getElementById('expenseValue').textContent = brl(exp);
-
-    const b = document.getElementById('balanceValue');
-    b.textContent = brl(bal);
-    b.classList.remove('green','red');
-    b.classList.add(bal >= 0 ? 'green' : 'red');
-  }
-
-  // ==========================================================
-  // MONTH NAV
-  // ==========================================================
-  async function changeMonth(delta){
-    if (!initialized) return;
-    currentMonth = addMonthsSafe(currentMonth, delta);
-    renderMonthLabel(currentMonth);
-    await updateMonth(currentMonth);
-    await loadTotals();
-  }
-
-  // ==========================================================
-  // INIT
-  // ==========================================================
-  (async function init(){
-    try {
-      db = await waitForSupabase();
-    } catch(e){
-      console.error(e);
-      return;
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 18px;
     }
 
-    user = await loadUser();
-    if (!user) return go(PATHS.login);
+    /* Topo */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
 
-    // bind
-    document.getElementById('btnProfile').onclick = () => go(PATHS.settings);
-    document.getElementById('btnIncome').onclick = () => go(PATHS.income);
-    document.getElementById('btnExpenses').onclick = () => go(PATHS.expenses);
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-    document.getElementById('goHouse').onclick = () => go(PATHS.expenses);
-    document.getElementById('goIncome').onclick = () => go(PATHS.income);
-    document.getElementById('goCards').onclick = () => go(PATHS.cards);
-    document.getElementById('goPiggy').onclick = () => go(PATHS.piggy);
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
 
-    document.getElementById('prevMonth').onclick = () => changeMonth(-1);
-    document.getElementById('nextMonth').onclick = () => changeMonth(1);
+    .logo img {
+      width: 26px;
+      height: 26px;
+    }
 
-    currentMonth = await resolveMonth();
-    renderMonthLabel(currentMonth);
-    await loadTotals();
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+    }
 
-    initialized = true;
-  })();
-</script>
+    .profile {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: none;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* Mês */
+    .monthBox {
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+    }
+
+    .monthBtn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: #eef4ff;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .monthLabel {
+      font-size: 20px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- TOPO -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+          <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
+        </div>
+        <div class="title">Oria</div>
+      </div>
+
+      <button class="profile" title="Perfil">👤</button>
+    </div>
+
+    <!-- MÊS -->
+    <div class="monthBox">
+      <button class="monthBtn" id="prevMonth">‹</button>
+      <div class="monthLabel" id="monthLabel">—</div>
+      <button class="monthBtn" id="nextMonth">›</button>
+    </div>
+
+  </div>
+
+  <script>
+    // ======================================================
+    // SUPABASE CONFIG (FIXO)
+    // ======================================================
+    const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
+
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ======================================================
+    // CONST
+    // ======================================================
+    const MONTHS = [
+      'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
+    ];
+
+    let user = null;
+    let currentMonth = null; // YYYY-MM
+
+    // ======================================================
+    // HELPERS
+    // ======================================================
+    function formatYYYYMM(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,'0')}`;
+    }
+
+    function addMonths(yyyyMM, delta) {
+      const [y, m] = yyyyMM.split('-').map(Number);
+      const d = new Date(y, (m - 1) + delta, 1);
+      return formatYYYYMM(d);
+    }
+
+    function renderMonth(yyyyMM) {
+      const [y, m] = yyyyMM.split('-');
+      document.getElementById('monthLabel').innerText =
+        `${MONTHS[m - 1]} de ${y}`;
+    }
+
+    // ======================================================
+    // DATA
+    // ======================================================
+    async function loadUser() {
+      const { data } = await db.auth.getUser();
+      return data?.user || null;
+    }
+
+    async function getOrCreateMonth() {
+      const { data } = await db
+        .from('user_settings')
+        .select('current_month')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (!data || !data.current_month) {
+        const month = formatYYYYMM(new Date());
+        await db.from('user_settings').upsert({
+          user_id: user.id,
+          current_month: month
+        });
+        return month;
+      }
+
+      return data.current_month;
+    }
+
+    async function updateMonth(yyyyMM) {
+      await db
+        .from('user_settings')
+        .update({ current_month: yyyyMM })
+        .eq('user_id', user.id);
+    }
+
+    // ======================================================
+    // INIT
+    // ======================================================
+    (async function init() {
+      user = await loadUser();
+
+      if (!user) {
+        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+        return;
+      }
+
+      currentMonth = await getOrCreateMonth();
+      renderMonth(currentMonth);
+
+      document.getElementById('prevMonth').onclick = async () => {
+        currentMonth = addMonths(currentMonth, -1);
+        renderMonth(currentMonth);
+        await updateMonth(currentMonth);
+      };
+
+      document.getElementById('nextMonth').onclick = async () => {
+        currentMonth = addMonths(currentMonth, 1);
+        renderMonth(currentMonth);
+        await updateMonth(currentMonth);
+      };
+    })();
+  </script>
+
+</body>
+</html>
