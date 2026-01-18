@@ -2,198 +2,108 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Oria • Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oria • Visão Geral</title>
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
-
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
-      min-height: 100vh;
-      color: #0f172a;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 18px;
-    }
-
-    /* Topo */
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-
-    .logo img {
-      width: 26px;
-      height: 26px;
-    }
-
-    .title {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .profile {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      border: none;
-      background: #fff;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    /* Mês */
-    .monthBox {
-      margin-top: 20px;
-      background: #fff;
-      border-radius: 22px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
-    }
-
-    .monthBtn {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: none;
-      background: #eef4ff;
-      font-size: 22px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .monthLabel {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    /* Entradas */
-    .incomeCard {
-      margin-top: 24px;
-      background: #fff;
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
-      cursor: pointer;
-    }
-
-    .incomeTop {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .incomeLabel {
-      font-size: 14px;
-      color: #64748b;
-      font-weight: 600;
-    }
-
-    .incomeValue {
-      margin-top: 6px;
-      font-size: 26px;
-      font-weight: 800;
-      color: #16a34a;
-    }
-
-    .incomeIcon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(22,163,74,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
-      color: #15803d;
-    }
-
-    .incomeHint {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #64748b;
-    }
-  </style>
+  <!-- CSS base Oria -->
+  <link rel="stylesheet" href="/assets/css/variables.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/home.css">
 </head>
 
 <body>
-
   <div class="container">
 
-    <!-- TOPO -->
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">
-          <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
-        </div>
-        <div class="title">Oria</div>
-      </div>
-
-      <button class="profile" id="btnProfile" title="Perfil">👤</button>
-    </div>
-
-    <!-- MÊS -->
-    <div class="monthBox">
-      <button class="monthBtn" id="prevMonth">‹</button>
-      <div class="monthLabel" id="monthLabel">—</div>
-      <button class="monthBtn" id="nextMonth">›</button>
-    </div>
-
-    <!-- FASE 2 — ENTRADAS DO MÊS -->
-    <div class="incomeCard" id="cardIncome">
-      <div class="incomeTop">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <img src="/assets/branding/logo/oria-icon.svg" alt="Oria" class="logo-icon">
         <div>
-          <div class="incomeLabel">Entradas do mês</div>
-          <div class="incomeValue" id="incomeValue">R$ 0,00</div>
+          <h1 class="logo-title">Oria</h1>
+          <span class="logo-subtitle">Visão geral</span>
         </div>
-
-        <div class="incomeIcon">↗</div>
       </div>
 
-      <div class="incomeHint">
-        Toque para ver salários, extras e outras entradas
+      <a href="/pages/settings/settings.html" class="profile-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="7" r="4"/>
+          <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- SELETOR DE MÊS -->
+    <section class="month-selector">
+      <button class="month-btn" onclick="navigateMonth(-1)">
+        ‹
+      </button>
+
+      <div class="month-display">
+        <span id="monthName">Janeiro de 2026</span>
       </div>
-    </div>
+
+      <button class="month-btn" onclick="navigateMonth(1)">
+        ›
+      </button>
+    </section>
+
+    <!-- CARDS RESUMO -->
+    <section class="summary-grid">
+
+      <div class="summary-card">
+        <span class="card-label">Total do mês</span>
+        <strong class="card-value positive" id="totalMonth">R$ 0,00</strong>
+      </div>
+
+      <div class="summary-card">
+        <span class="card-label">Em aberto</span>
+        <strong class="card-value negative" id="openAmount">R$ 0,00</strong>
+      </div>
+
+      <div class="summary-card">
+        <span class="card-label">Cartões</span>
+        <strong class="card-value" id="cardsAmount">R$ 0,00</strong>
+      </div>
+
+      <div class="summary-card">
+        <span class="card-label">Saldo final</span>
+        <strong class="card-value" id="finalBalance">R$ 0,00</strong>
+      </div>
+
+    </section>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <section class="quick-actions">
+      <h2>Ações rápidas</h2>
+
+      <div class="actions-grid">
+
+        <a href="/pages/expenses/expenses.html" class="action-btn primary">
+          Contas da casa
+        </a>
+
+        <a href="/pages/income/income.html" class="action-btn">
+          Rendas
+        </a>
+
+        <a href="/pages/cards/cards.html" class="action-btn">
+          Cartões
+        </a>
+
+        <a href="/pages/savings/savings.html" class="action-btn">
+          Porquinho
+        </a>
+
+      </div>
+    </section>
 
   </div>
 
-  <!-- JS DO HOME (SEPARADO) -->
-  <script src="home.js"></script>
-
+  <!-- JS -->
+  <script src="/assets/js/core/supabase.js"></script>
+  <script src="/pages/home/home.js"></script>
 </body>
 </html>
