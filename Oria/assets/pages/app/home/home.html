@@ -100,6 +100,54 @@
       font-size: 20px;
       font-weight: 700;
     }
+
+    /* Entradas */
+    .incomeCard {
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+      cursor: pointer;
+    }
+
+    .incomeTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .incomeLabel {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .incomeValue {
+      margin-top: 6px;
+      font-size: 26px;
+      font-weight: 800;
+      color: #16a34a;
+    }
+
+    .incomeIcon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(22,163,74,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #15803d;
+    }
+
+    .incomeHint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #64748b;
+    }
   </style>
 </head>
 
@@ -116,7 +164,7 @@
         <div class="title">Oria</div>
       </div>
 
-      <button class="profile" title="Perfil">👤</button>
+      <button class="profile" id="btnProfile" title="Perfil">👤</button>
     </div>
 
     <!-- MÊS -->
@@ -126,160 +174,26 @@
       <button class="monthBtn" id="nextMonth">›</button>
     </div>
 
-  </div>
-
-  <script>
-    // ======================================================
-    // SUPABASE CONFIG (FIXO)
-    // ======================================================
-    const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
-
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // ======================================================
-    // CONST
-    // ======================================================
-    const MONTHS = [
-      'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
-    ];
-
-    let user = null;
-    let currentMonth = null; // YYYY-MM
-
-    // ======================================================
-    // HELPERS
-    // ======================================================
-    function formatYYYYMM(date) {
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,'0')}`;
-    }
-
-    function addMonths(yyyyMM, delta) {
-      const [y, m] = yyyyMM.split('-').map(Number);
-      const d = new Date(y, (m - 1) + delta, 1);
-      return formatYYYYMM(d);
-    }
-
-    function renderMonth(yyyyMM) {
-      const [y, m] = yyyyMM.split('-');
-      document.getElementById('monthLabel').innerText =
-        `${MONTHS[m - 1]} de ${y}`;
-    }
-
-    // ======================================================
-    // DATA
-    // ======================================================
-    async function loadUser() {
-      const { data } = await db.auth.getUser();
-      return data?.user || null;
-    }
-
-    async function getOrCreateMonth() {
-      const { data } = await db
-        .from('user_settings')
-        .select('current_month')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (!data || !data.current_month) {
-        const month = formatYYYYMM(new Date());
-        await db.from('user_settings').upsert({
-          user_id: user.id,
-          current_month: month
-        });
-        return month;
-      }
-
-      return data.current_month;
-    }
-
-    async function updateMonth(yyyyMM) {
-      await db
-        .from('user_settings')
-        .update({ current_month: yyyyMM })
-        .eq('user_id', user.id);
-    }
-
-    // ======================================================
-    // INIT
-    // ======================================================
-    (async function init() {
-      user = await loadUser();
-
-      if (!user) {
-        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
-        return;
-      }
-
-      currentMonth = await getOrCreateMonth();
-      renderMonth(currentMonth);
-
-      document.getElementById('prevMonth').onclick = async () => {
-        currentMonth = addMonths(currentMonth, -1);
-        renderMonth(currentMonth);
-        await updateMonth(currentMonth);
-      };
-
-      document.getElementById('nextMonth').onclick = async () => {
-        currentMonth = addMonths(currentMonth, 1);
-        renderMonth(currentMonth);
-        await updateMonth(currentMonth);
-      };
-    })();
-  </script>
-
-  <!-- FASE 2 — ENTRADAS DO MÊS -->
-<div style="margin-top:24px;">
-  <div style="
-    background:#fff;
-    border-radius:22px;
-    padding:18px;
-    box-shadow:0 12px 32px rgba(0,0,0,0.06);
-    cursor:pointer;
-  " id="cardIncome">
-
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    ">
-      <div>
-        <div style="font-size:14px;color:#64748b;font-weight:600;">
-          Entradas do mês
+    <!-- FASE 2 — ENTRADAS DO MÊS -->
+    <div class="incomeCard" id="cardIncome">
+      <div class="incomeTop">
+        <div>
+          <div class="incomeLabel">Entradas do mês</div>
+          <div class="incomeValue" id="incomeValue">R$ 0,00</div>
         </div>
-        <div id="incomeValue" style="
-          margin-top:6px;
-          font-size:26px;
-          font-weight:800;
-          color:#16a34a;
-        ">
-          R$ 0,00
-        </div>
+
+        <div class="incomeIcon">↗</div>
       </div>
 
-      <div style="
-        width:40px;
-        height:40px;
-        border-radius:50%;
-        background:rgba(22,163,74,0.12);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:18px;
-        font-weight:800;
-        color:#15803d;
-      ">
-        ↗
+      <div class="incomeHint">
+        Toque para ver salários, extras e outras entradas
       </div>
     </div>
 
-    <div style="margin-top:10px;font-size:12px;color:#64748b;">
-      Toque para ver salários, extras e outras entradas
-    </div>
-
   </div>
-</div>
+
+  <!-- JS DO HOME (SEPARADO) -->
+  <script src="home.js"></script>
 
 </body>
 </html>
