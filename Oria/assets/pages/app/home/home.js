@@ -1,165 +1,191 @@
-// ======================================================
-// ORIA • HOME.JS
-// FASE 1 — MÊS
-// FASE 2 — ENTRADAS DO MÊS
-// ======================================================
+// ========================================
+// ORIA • HOME
+// Visão Geral - Supabase Only
+// ========================================
 
-// ======================================================
-// SUPABASE CONFIG (FIXO)
-// ======================================================
-const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
+import { supabase } from '/Oria/assets/core/supabase.js';
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ----------------------------------------
+// Estado
+// ----------------------------------------
+let currentMonth = new Date();
+let userId = null;
 
-// ======================================================
-// CONST
-// ======================================================
-const MONTHS = [
-  'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
+// ----------------------------------------
+// Utilitários
+// ----------------------------------------
+const monthNames = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril',
+  'Maio', 'Junho', 'Julho', 'Agosto',
+  'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ];
 
-const PATH_LOGIN = '/finfamily/Oria/assets/pages/login/login.html';
-const PATH_INCOME = '/finfamily/Oria/assets/pages/income/income.html';
-
-// ======================================================
-// STATE
-// ======================================================
-let user = null;
-let currentMonth = null; // YYYY-MM
-
-// ======================================================
-// HELPERS
-// ======================================================
-function formatYYYYMM(date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,'0')}`;
-}
-
-function addMonths(yyyyMM, delta) {
-  const [y, m] = yyyyMM.split('-').map(Number);
-  const d = new Date(y, (m - 1) + delta, 1);
-  return formatYYYYMM(d);
-}
-
-function formatBRL(value) {
-  return Number(value || 0).toLocaleString('pt-BR', {
+function formatCurrency(value = 0) {
+  return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
+  }).format(value);
+}
+
+function getMonthKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+}
+
+function getMonthLabel(date) {
+  return `${monthNames[date.getMonth()]} de ${date.getFullYear()}`;
+}
+
+// ----------------------------------------
+// Autenticação
+// ----------------------------------------
+async function loadUser() {
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error || !data?.user) {
+    // Se quiser trocar o caminho do login, ajuste aqui:
+    window.location.href = '/Oria/pages/login/login.html';
+    return;
+  }
+
+  userId = data.user.id;
+}
+
+// ----------------------------------------
+// Mês (Supabase)
+// ----------------------------------------
+async function loadSavedMonth() {
+  const { data, error } = await supabase
+    .from('user_settings')
+    .select('current_month')
+    .eq('user_id', userId)
+    .single();
+
+  // Se não existir settings ainda, segue com mês atual
+  if (!error && data?.current_month) {
+    const [year, month] = data.current_month.split('-');
+    currentMonth = new Date(Number(year), Number(month) - 1, 1);
+  }
+
+  updateMonthDisplay();
+}
+
+async function saveCurrentMonth() {
+  const monthKey = getMonthKey(currentMonth);
+
+  await supabase
+    .from('user_settings')
+    .upsert({
+      user_id: userId,
+      current_month: monthKey
+    });
+}
+
+// ----------------------------------------
+// Navegação de mês
+// ----------------------------------------
+window.navigateMonth = async function (direction) {
+  const newMonth = new Date(currentMonth);
+  newMonth.setMonth(newMonth.getMonth() + direction);
+
+  // Bloqueia mês futuro
+  const now = new Date();
+  const maxMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  if (newMonth > maxMonth) return;
+
+  currentMonth = newMonth;
+
+  updateMonthDisplay();
+  await saveCurrentMonth();
+  await loadMonthData();
+};
+
+function updateMonthDisplay() {
+  const el = document.getElementById('monthName');
+  if (el) el.textContent = getMonthLabel(currentMonth);
+}
+
+// ----------------------------------------
+// Carregamento de dados
+// ----------------------------------------
+async function loadMonthData() {
+  const monthKey = getMonthKey(currentMonth);
+
+  // ✅ Rendas
+  const { data: incomes } = await supabase
+    .from('income')
+    .select('amount')
+    .eq('user_id', userId)
+    .eq('month', monthKey);
+
+  const totalIncome = incomes?.reduce((sum, i) => sum + (Number(i.amount) || 0), 0) || 0;
+
+  // ✅ Contas da casa
+  const { data: expenses } = await supabase
+    .from('expenses')
+    .select('amount, paid')
+    .eq('user_id', userId)
+    .eq('month', monthKey);
+
+  const totalExpenses = expenses?.reduce((s, e) => s + (Number(e.amount) || 0), 0) || 0;
+  const openExpenses = expenses
+    ?.filter(e => e.paid === false)
+    .reduce((s, e) => s + (Number(e.amount) || 0), 0) || 0;
+
+  // ✅ Cartões
+  const { data: cardExpenses } = await supabase
+    .from('card_expenses')
+    .select('amount, paid')
+    .eq('user_id', userId)
+    .eq('month', monthKey);
+
+  const totalCards = cardExpenses?.reduce((s, c) => s + (Number(c.amount) || 0), 0) || 0;
+  const openCards = cardExpenses
+    ?.filter(c => c.paid === false)
+    .reduce((s, c) => s + (Number(c.amount) || 0), 0) || 0;
+
+  // ✅ Cálculos finais
+  const totalMonth = totalExpenses + totalCards;
+  const openAmount = openExpenses + openCards;
+  const finalBalance = totalIncome - totalMonth;
+
+  updateUI({
+    totalMonth,
+    openAmount,
+    totalCards,
+    finalBalance
   });
 }
 
-function renderMonth(yyyyMM) {
-  const [y, m] = yyyyMM.split('-');
-  const label = `${MONTHS[m - 1]} de ${y}`;
-  document.getElementById('monthLabel').innerText = label;
+// ----------------------------------------
+// UI
+// ----------------------------------------
+function updateUI(data) {
+  setValue('totalMonth', data.totalMonth);
+  setValue('openAmount', data.openAmount);
+  setValue('cardsAmount', data.totalCards);
+  setValue('finalBalance', data.finalBalance);
 }
 
-// ======================================================
-// AUTH
-// ======================================================
-async function loadUser() {
-  const { data, error } = await db.auth.getUser();
+function setValue(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
 
-  if (error || !data?.user) {
-    return null;
+  el.textContent = formatCurrency(value);
+
+  // Só saldo final muda cor
+  if (id === 'finalBalance') {
+    el.classList.remove('positive', 'negative');
+    el.classList.add(value < 0 ? 'negative' : 'positive');
   }
-
-  return data.user;
 }
 
-// ======================================================
-// USER SETTINGS (MONTH)
-// ======================================================
-async function getOrCreateMonth() {
-  const { data, error } = await db
-    .from('user_settings')
-    .select('current_month')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (error || !data || !data.current_month) {
-    const month = formatYYYYMM(new Date());
-
-    await db.from('user_settings').upsert({
-      user_id: user.id,
-      current_month: month
-    });
-
-    return month;
-  }
-
-  return data.current_month;
-}
-
-async function updateMonth(yyyyMM) {
-  await db
-    .from('user_settings')
-    .update({ current_month: yyyyMM })
-    .eq('user_id', user.id);
-}
-
-// ======================================================
-// FASE 2 — ENTRADAS DO MÊS
-// ======================================================
-async function loadIncomeMonth() {
-  const { data, error } = await db
-    .from('transactions')
-    .select('amount')
-    .eq('user_id', user.id)
-    .eq('month', currentMonth)
-    .eq('type', 'income');
-
-  if (error) {
-    console.error('Erro ao carregar entradas:', error);
-    document.getElementById('incomeValue').innerText = 'R$ 0,00';
-    return;
-  }
-
-  const total = (data || []).reduce(
-    (sum, row) => sum + Number(row.amount || 0),
-    0
-  );
-
-  document.getElementById('incomeValue').innerText = formatBRL(total);
-}
-
-// ======================================================
-// INIT
-// ======================================================
-(async function init() {
-  // 1️⃣ Auth
-  user = await loadUser();
-
-  if (!user) {
-    window.location.href = PATH_LOGIN;
-    return;
-  }
-
-  // 2️⃣ Mês
-  currentMonth = await getOrCreateMonth();
-  renderMonth(currentMonth);
-
-  // 3️⃣ Entradas
-  await loadIncomeMonth();
-
-  // 4️⃣ Navegação mês
-  document.getElementById('prevMonth').onclick = async () => {
-    currentMonth = addMonths(currentMonth, -1);
-    renderMonth(currentMonth);
-    await updateMonth(currentMonth);
-    await loadIncomeMonth();
-  };
-
-  document.getElementById('nextMonth').onclick = async () => {
-    currentMonth = addMonths(currentMonth, 1);
-    renderMonth(currentMonth);
-    await updateMonth(currentMonth);
-    await loadIncomeMonth();
-  };
-
-  // 5️⃣ Navegação
-  document.getElementById('cardIncome').onclick = () => {
-    window.location.href = PATH_INCOME;
-  };
-})();
+// ----------------------------------------
+// Inicialização
+// ----------------------------------------
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadUser();
+  await loadSavedMonth();
+  await loadMonthData();
+});
