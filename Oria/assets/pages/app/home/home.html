@@ -3,107 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oria • Visão Geral</title>
+  <title>Oria - Visão Geral</title>
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS base Oria -->
-  <link rel="stylesheet" href="/assets/css/variables.css">
-  <link rel="stylesheet" href="/assets/css/base.css">
-  <link rel="stylesheet" href="/assets/css/home.css">
+  <!-- CSS ISOLADO DO HOME -->
+  <link rel="stylesheet" href="/finfamily/Oria/assets/css/home.css">
 </head>
 
 <body>
-  <div class="container">
+  <main class="home-root">
+    <div class="container">
 
-    <!-- HEADER -->
-    <header class="header">
-      <div class="logo">
-        <img src="/assets/branding/logo/oria-icon.svg" alt="Oria" class="logo-icon">
-        <div>
-          <h1 class="logo-title">Oria</h1>
-          <span class="logo-subtitle">Visão geral</span>
+      <!-- HEADER -->
+      <header class="header">
+        <div class="logo">
+          <div class="logo-icon">O</div>
+          <div class="logo-text">
+            <strong>Oria</strong>
+            <span>Visão geral</span>
+          </div>
         </div>
-      </div>
 
-      <a href="/pages/settings/settings.html" class="profile-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="7" r="4"/>
-          <path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
-        </svg>
-      </a>
-    </header>
-
-    <!-- SELETOR DE MÊS -->
-    <section class="month-selector">
-      <button class="month-btn" onclick="navigateMonth(-1)">
-        ‹
-      </button>
-
-      <div class="month-display">
-        <span id="monthName">Janeiro de 2026</span>
-      </div>
-
-      <button class="month-btn" onclick="navigateMonth(1)">
-        ›
-      </button>
-    </section>
-
-    <!-- CARDS RESUMO -->
-    <section class="summary-grid">
-
-      <div class="summary-card">
-        <span class="card-label">Total do mês</span>
-        <strong class="card-value positive" id="totalMonth">R$ 0,00</strong>
-      </div>
-
-      <div class="summary-card">
-        <span class="card-label">Em aberto</span>
-        <strong class="card-value negative" id="openAmount">R$ 0,00</strong>
-      </div>
-
-      <div class="summary-card">
-        <span class="card-label">Cartões</span>
-        <strong class="card-value" id="cardsAmount">R$ 0,00</strong>
-      </div>
-
-      <div class="summary-card">
-        <span class="card-label">Saldo final</span>
-        <strong class="card-value" id="finalBalance">R$ 0,00</strong>
-      </div>
-
-    </section>
-
-    <!-- AÇÕES RÁPIDAS -->
-    <section class="quick-actions">
-      <h2>Ações rápidas</h2>
-
-      <div class="actions-grid">
-
-        <a href="/pages/expenses/expenses.html" class="action-btn primary">
-          Contas da casa
+        <a href="/finfamily/Oria/assets/pages/settings/settings.html" class="profile-btn" aria-label="Perfil">
+          👤
         </a>
+      </header>
 
-        <a href="/pages/income/income.html" class="action-btn">
-          Rendas
-        </a>
+      <!-- SELETOR DE MÊS -->
+      <section class="month-selector">
+        <button class="month-btn" onclick="navigateMonth(-1)">‹</button>
+        <div class="month-display" id="monthName">Janeiro de 2026</div>
+        <button class="month-btn" onclick="navigateMonth(1)">›</button>
+      </section>
 
-        <a href="/pages/cards/cards.html" class="action-btn">
-          Cartões
-        </a>
+      <!-- RESUMO -->
+      <section class="summary-grid">
+        <div class="summary-card">
+          <span>Total do mês</span>
+          <strong id="totalMonth">R$ 0,00</strong>
+        </div>
 
-        <a href="/pages/savings/savings.html" class="action-btn">
-          Porquinho
-        </a>
+        <div class="summary-card">
+          <span>Em aberto</span>
+          <strong class="negative" id="openAmount">R$ 0,00</strong>
+        </div>
 
-      </div>
-    </section>
+        <div class="summary-card">
+          <span>Cartões</span>
+          <strong id="cardsAmount">R$ 0,00</strong>
+        </div>
 
-  </div>
+        <div class="summary-card">
+          <span>Saldo final</span>
+          <strong id="finalBalance">R$ 0,00</strong>
+        </div>
+      </section>
 
-  <!-- JS -->
-  <script src="/assets/js/core/supabase.js"></script>
-  <script src="/pages/home/home.js"></script>
+      <!-- AÇÕES -->
+      <section class="actions">
+        <h2>Ações rápidas</h2>
+
+        <div class="actions-grid">
+          <a href="/finfamily/Oria/assets/pages/app/expenses/expenses.html">Contas da casa</a>
+          <a href="/finfamily/Oria/assets/pages/app/income/income.html">Rendas</a>
+          <a href="/finfamily/Oria/assets/pages/app/cards/cards.html">Cartões</a>
+          <a href="/finfamily/Oria/assets/pages/app/piggy/piggy.html">Porquinho</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- JS DO HOME -->
+  <script type="module" src="/finfamily/Oria/assets/pages/app/home/home.js"></script>
 </body>
 </html>
