@@ -1,26 +1,45 @@
 /* ================================
-   ORIA HOME - CSS ISOLADO
+   ORIA • HOME
+   CSS ISOLADO
    ================================ */
 
-.home-root {
-  all: initial;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #eef2ff, #e0e7ff, #c7d2fe);
-  min-height: 100vh;
+:root {
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-100: #eef2ff;
+  --blue-200: #e0e7ff;
+
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+
+  --danger: #ef4444;
+  --success: #22c55e;
 }
 
+/* RESET LOCAL */
+.home-root,
 .home-root * {
   box-sizing: border-box;
-  font-family: inherit;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
 }
 
+/* FUNDO */
+.home-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--blue-100), var(--blue-200));
+}
+
+/* CONTAINER */
 .container {
   max-width: 430px;
   margin: 0 auto;
   padding: 16px;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -37,23 +56,25 @@
 .logo-icon {
   width: 44px;
   height: 44px;
-  background: #2563eb;
-  color: #fff;
   border-radius: 14px;
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
   font-weight: 700;
+  font-size: 18px;
 }
 
 .logo-text strong {
   display: block;
   font-size: 18px;
+  color: var(--text-main);
 }
 
 .logo-text span {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .profile-btn {
@@ -65,12 +86,14 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  color: var(--text-muted);
 }
 
-/* MÊS */
+/* ================= MÊS ================= */
+
 .month-selector {
   background: #fff;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 16px;
   display: flex;
   justify-content: space-between;
@@ -79,19 +102,23 @@
 }
 
 .month-btn {
-  border: none;
-  background: #eef2ff;
   width: 40px;
   height: 40px;
   border-radius: 12px;
+  border: none;
+  background: var(--blue-100);
   font-size: 20px;
+  color: var(--blue-600);
+  cursor: pointer;
 }
 
 .month-display {
   font-weight: 600;
+  color: var(--text-main);
 }
 
-/* SUMMARY */
+/* ================= SUMMARY ================= */
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -107,20 +134,29 @@
 
 .summary-card span {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .summary-card strong {
+  display: block;
+  margin-top: 4px;
   font-size: 20px;
+  color: var(--text-main);
 }
 
-.summary-card .negative {
-  color: #ef4444;
+.summary-card strong.negative {
+  color: var(--danger);
 }
 
-/* AÇÕES */
+.summary-card strong.positive {
+  color: var(--success);
+}
+
+/* ================= AÇÕES ================= */
+
 .actions h2 {
   font-size: 16px;
+  color: var(--text-main);
   margin-bottom: 12px;
 }
 
@@ -136,6 +172,6 @@
   padding: 14px;
   text-align: center;
   text-decoration: none;
-  color: #1e293b;
+  color: var(--text-main);
   font-weight: 600;
 }
