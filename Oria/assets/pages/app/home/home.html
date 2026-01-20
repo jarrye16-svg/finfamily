@@ -8,57 +8,62 @@
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS (CAMINHO CORRETO PARA SUA ESTRUTURA) -->
-  <link rel="stylesheet" href="/finamily/Oria/assets/pages/app/home/home.css">
+  <!-- CSS (mesma pasta) -->
+  <link rel="stylesheet" href="home.css">
 </head>
 
 <body>
   <div class="app">
 
+    <!-- TOPO -->
     <header class="topbar">
       <div class="logo">Oria</div>
       <div class="profile">Perfil</div>
     </header>
 
+    <!-- MÊS -->
     <section class="month-selector">
       <button id="prevMonth">‹</button>
       <h2 id="currentMonth">Janeiro</h2>
       <button id="nextMonth">›</button>
     </section>
 
+    <!-- RESUMO -->
     <section class="summary">
-      <div class="card clickable">
-        <span>Entradas</span>
-        <strong>R$ 0,00</strong>
+      <div class="card clickable" id="card-income">
+       a        <span>Entradas</span>
+        <strong id="incomeValue">R$ 0,00</strong>
       </div>
 
-      <div class="card clickable">
+      <div class="card clickable" id="card-expenses">
         <span>Gastos</span>
-        <strong>R$ 0,00</strong>
+        <strong id="expenseValue">R$ 0,00</strong>
       </div>
 
       <div class="card balance">
         <span>Saldo</span>
-        <strong>R$ 0,00</strong>
+        <strong id="balanceValue">R$ 0,00</strong>
       </div>
     </section>
 
+    <!-- AÇÕES -->
     <section class="quick-actions">
-      <button>+ Entrada</button>
-      <button>+ Gasto</button>
+      <button id="addIncome">+ Entrada</button>
+      <button id="addExpense">+ Gasto</button>
     </section>
 
+    <!-- CARTÕES -->
     <section class="cards-section">
       <h3>Cartões</h3>
       <div class="card-box">
         <span>Fatura Atual</span>
-        <strong>R$ 0,00</strong>
+        <strong id="creditBill">R$ 0,00</strong>
       </div>
     </section>
 
   </div>
 
-  <!-- JS -->
-  <script src="/finamily/Oria/assets/pages/app/home/home.js"></script>
+  <!-- JS (mesma pasta) -->
+  <script src="home.js"></script>
 </body>
 </html>
