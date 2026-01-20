@@ -23,10 +23,34 @@ document.getElementById("nextMonth").onclick = () => {
   updateMonth();
 };
 
-// MOCK
-document.getElementById("incomeValue").textContent = "R$ 0Reconnect";
-document.getElementById("expenseValue").textContent = "R$ 0,00";
-document.getElementById("creditBill").textContent = "R$ 0,00";
-document.getElementById("balanceValue").textContent = "R$ 0,00";
+// MOCK — depois substituímos por Supabase
+const income = 0;
+const expense = 0;
+const credit = 0;
+
+const balance = income - expense - credit;
+
+document.getElementById("incomeValue").textContent = income.toLocaleString("pt-BR", {
+  style: "currency",
+  currency: "BRL"
+});
+
+document.getElementById("expenseValue").textContent = expense.toLocaleString("pt-BR", {
+  style: "currency",
+  currency: "BRL"
+});
+
+document.getElementById("creditValue").textContent = credit.toLocaleString("pt-BR", {
+  style: "currency",
+  currency: "BRL"
+});
+
+const balanceEl = document.getElementById("balanceValue");
+balanceEl.textContent = balance.toLocaleString("pt-BR", {
+  style: "currency",
+  currency: "BRL"
+});
+
+balanceEl.style.color = balance >= 0 ? "#16a34a" : "#dc2626";
 
 updateMonth();
