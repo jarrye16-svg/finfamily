@@ -1,4 +1,6 @@
-// 🔴 SUPABASE CONFIG — SUBSTITUIR
+// ===============================
+// SUPABASE (AJUSTAR DEPOIS)
+// ===============================
 const SUPABASE_URL = "https://SUA_URL.supabase.co";
 const SUPABASE_KEY = "SUA_PUBLIC_ANON_KEY";
 
@@ -7,7 +9,9 @@ const supabase = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-// DATA ATUAL
+// ===============================
+// CONTROLE DE MÊS
+// ===============================
 let currentDate = new Date();
 
 const monthNames = [
@@ -21,7 +25,6 @@ function updateMonthLabel() {
   currentMonthEl.textContent = monthNames[currentDate.getMonth()];
 }
 
-// BOTÕES DE MÊS
 document.getElementById("prevMonth").onclick = () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
   updateMonthLabel();
@@ -34,11 +37,11 @@ document.getElementById("nextMonth").onclick = () => {
   loadData();
 };
 
-// CARREGAR DADOS
+// ===============================
+// DADOS (TEMPORÁRIO MOCK)
+// ===============================
 async function loadData() {
-  // 🔴 AQUI ENTRA A LÓGICA REAL COM SUPABASE
-  // Exemplo fake temporário
-
+  // MOCK — depois substituímos por Supabase
   const income = 5200;
   const expenses = 3100;
   const credit = 1550;
@@ -56,7 +59,9 @@ async function loadData() {
     credit.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-// LINKS
+// ===============================
+// NAVEGAÇÃO
+// ===============================
 document.getElementById("card-income").onclick = () => {
   window.location.href = "../income/income.html";
 };
@@ -73,6 +78,8 @@ document.getElementById("addExpense").onclick = () => {
   window.location.href = "../expenses/expenses.html";
 };
 
+// ===============================
 // INIT
+// ===============================
 updateMonthLabel();
 loadData();
