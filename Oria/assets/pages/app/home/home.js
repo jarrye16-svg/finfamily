@@ -1,177 +1,78 @@
-/* ================================
-   ORIA • HOME
-   CSS ISOLADO
-   ================================ */
+// 🔴 SUPABASE CONFIG — SUBSTITUIR
+const SUPABASE_URL = "https://SUA_URL.supabase.co";
+const SUPABASE_KEY = "SUA_PUBLIC_ANON_KEY";
 
-:root {
-  --blue-500: #3b82f6;
-  --blue-600: #2563eb;
-  --blue-100: #eef2ff;
-  --blue-200: #e0e7ff;
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-  --text-main: #1e293b;
-  --text-muted: #64748b;
+// DATA ATUAL
+let currentDate = new Date();
 
-  --danger: #ef4444;
-  --success: #22c55e;
+const monthNames = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+const currentMonthEl = document.getElementById("currentMonth");
+
+function updateMonthLabel() {
+  currentMonthEl.textContent = monthNames[currentDate.getMonth()];
 }
 
-/* RESET LOCAL */
-.home-root,
-.home-root * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
+// BOTÕES DE MÊS
+document.getElementById("prevMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  updateMonthLabel();
+  loadData();
+};
+
+document.getElementById("nextMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  updateMonthLabel();
+  loadData();
+};
+
+// CARREGAR DADOS
+async function loadData() {
+  // 🔴 AQUI ENTRA A LÓGICA REAL COM SUPABASE
+  // Exemplo fake temporário
+
+  const income = 5200;
+  const expenses = 3100;
+  const credit = 1550;
+
+  document.getElementById("incomeValue").textContent =
+    income.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  document.getElementById("expenseValue").textContent =
+    expenses.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  document.getElementById("balanceValue").textContent =
+    (income - expenses).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  document.getElementById("creditBill").textContent =
+    credit.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-/* FUNDO */
-.home-root {
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--blue-100), var(--blue-200));
-}
+// LINKS
+document.getElementById("card-income").onclick = () => {
+  window.location.href = "../income/income.html";
+};
 
-/* CONTAINER */
-.container {
-  max-width: 430px;
-  margin: 0 auto;
-  padding: 16px;
-}
+document.getElementById("card-expenses").onclick = () => {
+  window.location.href = "../expenses/expenses.html";
+};
 
-/* ================= HEADER ================= */
+document.getElementById("addIncome").onclick = () => {
+  window.location.href = "../income/income.html";
+};
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
+document.getElementById("addExpense").onclick = () => {
+  window.location.href = "../expenses/expenses.html";
+};
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.logo-text strong {
-  display: block;
-  font-size: 18px;
-  color: var(--text-main);
-}
-
-.logo-text span {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.profile-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: var(--text-muted);
-}
-
-/* ================= MÊS ================= */
-
-.month-selector {
-  background: #fff;
-  border-radius: 20px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.month-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: none;
-  background: var(--blue-100);
-  font-size: 20px;
-  color: var(--blue-600);
-  cursor: pointer;
-}
-
-.month-display {
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-/* ================= SUMMARY ================= */
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.summary-card {
-  background: #fff;
-  border-radius: 18px;
-  padding: 16px;
-}
-
-.summary-card span {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.summary-card strong {
-  display: block;
-  margin-top: 4px;
-  font-size: 20px;
-  color: var(--text-main);
-}
-
-.summary-card strong.negative {
-  color: var(--danger);
-}
-
-.summary-card strong.positive {
-  color: var(--success);
-}
-
-/* ================= AÇÕES ================= */
-
-.actions h2 {
-  font-size: 16px;
-  color: var(--text-main);
-  margin-bottom: 12px;
-}
-
-.actions-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.actions-grid a {
-  background: #fff;
-  border-radius: 16px;
-  padding: 14px;
-  text-align: center;
-  text-decoration: none;
-  color: var(--text-main);
-  font-weight: 600;
-}
+// INIT
+updateMonthLabel();
+loadData();
