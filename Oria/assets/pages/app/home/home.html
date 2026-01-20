@@ -8,67 +8,57 @@
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS (CAMINHO ABSOLUTO GITHUB PAGES) -->
-  <link rel="stylesheet" href="/finamily/Oria/assets/pages/app/home/home.css" />
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- CSS (CAMINHO CORRETO PARA SUA ESTRUTURA) -->
+  <link rel="stylesheet" href="/finamily/Oria/assets/pages/app/home/home.css">
 </head>
 
 <body>
   <div class="app">
 
-    <!-- TOPO -->
     <header class="topbar">
       <div class="logo">Oria</div>
-      <div class="profile">
-        <img src="/finamily/Oria/assets/branding/avatar-default.png" alt="Perfil">
-      </div>
+      <div class="profile">Perfil</div>
     </header>
 
-    <!-- MÊS -->
     <section class="month-selector">
       <button id="prevMonth">‹</button>
       <h2 id="currentMonth">Janeiro</h2>
       <button id="nextMonth">›</button>
     </section>
 
-    <!-- RESUMO -->
     <section class="summary">
-      <div class="card clickable" id="card-income">
+      <div class="card clickable">
         <span>Entradas</span>
-        <strong id="incomeValue">R$ 0,00</strong>
+        <strong>R$ 0,00</strong>
       </div>
 
-      <div class="card clickable" id="card-expenses">
+      <div class="card clickable">
         <span>Gastos</span>
-        <strong id="expenseValue">R$ 0,00</strong>
+        <strong>R$ 0,00</strong>
       </div>
 
       <div class="card balance">
         <span>Saldo</span>
-        <strong id="balanceValue">R$ 0,00</strong>
+        <strong>R$ 0,00</strong>
       </div>
     </section>
 
-    <!-- AÇÕES -->
     <section class="quick-actions">
-      <button id="addIncome">+ Entrada</button>
-      <button id="addExpense">+ Gasto</button>
+      <button>+ Entrada</button>
+      <button>+ Gasto</button>
     </section>
 
-    <!-- CARTÕES -->
     <section class="cards-section">
       <h3>Cartões</h3>
       <div class="card-box">
         <span>Fatura Atual</span>
-        <strong id="creditBill">R$ 0,00</strong>
+        <strong>R$ 0,00</strong>
       </div>
     </section>
 
   </div>
 
-  <!-- JS (CAMINHO ABSOLUTO GITHUB PAGES) -->
+  <!-- JS -->
   <script src="/finamily/Oria/assets/pages/app/home/home.js"></script>
 </body>
 </html>
