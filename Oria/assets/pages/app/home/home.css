@@ -6,7 +6,7 @@
 }
 
 body {
-  background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
+  background: linear-gradient(180deg, #f4f7ff 0%, #eef3ff 100%);
   min-height: 100vh;
   color: #1e293b;
 }
@@ -17,122 +17,116 @@ body {
   padding: 20px;
 }
 
-/* TOPO */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* HEADER */
+.header {
   margin-bottom: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .logo {
-  font-size: 22px;
-  font-weight: 700;
+  width: 40px;
+  height: 40px;
 }
 
-.profile {
-  font-size: 14px;
-  color: #475569;
+.brand strong {
+  font-size: 16px;
+}
+
+.brand span {
+  font-size: 13px;
+  color: #64748b;
 }
 
 /* MÊS */
-.month-selector {
+.month-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
   margin-bottom: 24px;
 }
 
-.month-selector button {
-  background: none;
+.month-card button {
+  background: #eef2ff;
   border: none;
-  font-size: 22px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 20px;
   cursor: pointer;
 }
 
-.month-selector h2 {
-  font-size: 18px;
+.month-card h2 {
+  font-size: 16px;
   font-weight: 600;
 }
 
-/* CARDS */
-.summary {
+/* STATS */
+.stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-}
-
-.card span {
-  font-size: 13px;
-  color: #64748b;
-}
-
-.card strong {
-  display: block;
-  margin-top: 6px;
-  font-size: 18px;
-}
-
-.card.balance {
-  grid-column: span 2;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-}
-
-.card.balance span {
-  color: #e0e7ff;
-}
-
-.clickable {
-  cursor: pointer;
-}
-
-/* AÇÕES */
-.quick-actions {
-  display: flex;
-  gap: 12px;
+  gap: 14px;
   margin-bottom: 28px;
 }
 
-.quick-actions button {
-  flex: 1;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  background: #4f46e5;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* CARTÕES */
-.cards-section h3 {
-  margin-bottom: 12px;
-}
-
-.card-box {
+.stat-card {
   background: white;
-  border-radius: 14px;
+  border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
 }
 
-.card-box span {
+.stat-card span {
   font-size: 13px;
   color: #64748b;
 }
 
-.card-box strong {
+.stat-card strong {
   display: block;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 18px;
+}
+
+.positive {
+  color: #16a34a;
+}
+
+.negative {
+  color: #dc2626;
+}
+
+/* AÇÕES */
+.actions h3 {
+  margin-bottom: 14px;
+  font-size: 16px;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.action {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  cursor: pointer;
+}
+
+.action.primary {
+  background: #4f46e5;
+  color: white;
 }
