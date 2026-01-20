@@ -2,81 +2,74 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <title>Oria • Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oria - Visão Geral</title>
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS ISOLADO DO HOME -->
-  <link rel="stylesheet" href="/finfamily/Oria/assets/css/home.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../css/home.css" />
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-  <main class="home-root">
-    <div class="container">
+  <div class="app">
 
-      <!-- HEADER -->
-      <header class="header">
-        <div class="logo">
-          <div class="logo-icon">O</div>
-          <div class="logo-text">
-            <strong>Oria</strong>
-            <span>Visão geral</span>
-          </div>
-        </div>
+    <!-- TOPO -->
+    <header class="topbar">
+      <div class="logo">Oria</div>
+      <div class="profile">
+        <img src="../../images/avatar-default.png" alt="Perfil">
+      </div>
+    </header>
 
-        <a href="/finfamily/Oria/assets/pages/settings/settings.html" class="profile-btn" aria-label="Perfil">
-          👤
-        </a>
-      </header>
+    <!-- MÊS -->
+    <section class="month-selector">
+      <button id="prevMonth">‹</button>
+      <h2 id="currentMonth">Janeiro</h2>
+      <button id="nextMonth">›</button>
+    </section>
 
-      <!-- SELETOR DE MÊS -->
-      <section class="month-selector">
-        <button class="month-btn" onclick="navigateMonth(-1)">‹</button>
-        <div class="month-display" id="monthName">Janeiro de 2026</div>
-        <button class="month-btn" onclick="navigateMonth(1)">›</button>
-      </section>
+    <!-- CARDS PRINCIPAIS -->
+    <section class="summary">
+      <div class="card clickable" id="card-income">
+        <span>Entradas</span>
+        <strong id="incomeValue">R$ 0,00</strong>
+      </div>
 
-      <!-- RESUMO -->
-      <section class="summary-grid">
-        <div class="summary-card">
-          <span>Total do mês</span>
-          <strong id="totalMonth">R$ 0,00</strong>
-        </div>
+      <div class="card clickable" id="card-expenses">
+        <span>Gastos</span>
+        <strong id="expenseValue">R$ 0,00</strong>
+      </div>
 
-        <div class="summary-card">
-          <span>Em aberto</span>
-          <strong class="negative" id="openAmount">R$ 0,00</strong>
-        </div>
+      <div class="card balance">
+        <span>Saldo</span>
+        <strong id="balanceValue">R$ 0,00</strong>
+      </div>
+    </section>
 
-        <div class="summary-card">
-          <span>Cartões</span>
-          <strong id="cardsAmount">R$ 0,00</strong>
-        </div>
+    <!-- AÇÕES RÁPIDAS -->
+    <section class="quick-actions">
+      <button id="addIncome">+ Entrada</button>
+      <button id="addExpense">+ Gasto</button>
+    </section>
 
-        <div class="summary-card">
-          <span>Saldo final</span>
-          <strong id="finalBalance">R$ 0,00</strong>
-        </div>
-      </section>
+    <!-- CARTÕES -->
+    <section class="cards-section">
+      <h3>Cartões</h3>
 
-      <!-- AÇÕES -->
-      <section class="actions">
-        <h2>Ações rápidas</h2>
+      <div class="card-box">
+        <span>Fatura Atual</span>
+        <strong id="creditBill">R$ 0,00</strong>
+      </div>
+    </section>
 
-        <div class="actions-grid">
-          <a href="/finfamily/Oria/assets/pages/app/expenses/expenses.html">Contas da casa</a>
-          <a href="/finfamily/Oria/assets/pages/app/income/income.html">Rendas</a>
-          <a href="/finfamily/Oria/assets/pages/app/cards/cards.html">Cartões</a>
-          <a href="/finfamily/Oria/assets/pages/app/piggy/piggy.html">Porquinho</a>
-        </div>
-      </section>
+  </div>
 
-    </div>
-  </main>
-
-  <!-- JS DO HOME -->
-  <script type="module" src="/finfamily/Oria/assets/pages/app/home/home.js"></script>
+  <!-- JS -->
+  <script src="../../js/home.js"></script>
 </body>
 </html>
