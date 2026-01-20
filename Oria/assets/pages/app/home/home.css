@@ -30,10 +30,9 @@ body {
   font-weight: 700;
 }
 
-.profile img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.profile {
+  font-size: 14px;
+  color: #475569;
 }
 
 /* MÊS */
