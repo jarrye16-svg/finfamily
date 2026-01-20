@@ -1,15 +1,4 @@
 // ===============================
-// SUPABASE (AJUSTAR DEPOIS)
-// ===============================
-const SUPABASE_URL = "https://SUA_URL.supabase.co";
-const SUPABASE_KEY = "SUA_PUBLIC_ANON_KEY";
-
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-// ===============================
 // CONTROLE DE MÊS
 // ===============================
 let currentDate = new Date();
@@ -38,10 +27,9 @@ document.getElementById("nextMonth").onclick = () => {
 };
 
 // ===============================
-// DADOS (TEMPORÁRIO MOCK)
+// DADOS (MOCK TEMPORÁRIO)
 // ===============================
-async function loadData() {
-  // MOCK — depois substituímos por Supabase
+function loadData() {
   const income = 5200;
   const expenses = 3100;
   const credit = 1550;
