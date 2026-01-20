@@ -2,68 +2,74 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Oria • Home</title>
+  <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS (mesma pasta) -->
+  <!-- CSS -->
   <link rel="stylesheet" href="home.css">
 </head>
 
 <body>
   <div class="app">
 
-    <!-- TOPO -->
-    <header class="topbar">
-      <div class="logo">Oria</div>
-      <div class="profile">Perfil</div>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">
+        <img src="../../../branding/logo-oria.png" alt="Oria" class="logo">
+        <div>
+          <strong>Oria</strong>
+          <span>Visão geral</span>
+        </div>
+      </div>
     </header>
 
     <!-- MÊS -->
-    <section class="month-selector">
+    <section class="month-card">
       <button id="prevMonth">‹</button>
-      <h2 id="currentMonth">Janeiro</h2>
+      <h2 id="currentMonth">Janeiro de 2026</h2>
       <button id="nextMonth">›</button>
     </section>
 
     <!-- RESUMO -->
-    <section class="summary">
-      <div class="card clickable" id="card-income">
-       a        <span>Entradas</span>
-        <strong id="incomeValue">R$ 0,00</strong>
+    <section class="stats">
+      <div class="stat-card">
+        <span>Total do mês</span>
+        <strong class="positive" id="incomeValue">R$ 0,00</strong>
       </div>
 
-      <div class="card clickable" id="card-expenses">
-        <span>Gastos</span>
-        <strong id="expenseValue">R$ 0,00</strong>
+      <div class="stat-card">
+        <span>Em aberto</span>
+        <strong class="negative" id="expenseValue">R$ 0,00</strong>
       </div>
 
-      <div class="card balance">
-        <span>Saldo</span>
+      <div class="stat-card">
+        <span>Cartões</span>
+        <strong id="creditBill">R$ 0,00</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Saldo final</span>
         <strong id="balanceValue">R$ 0,00</strong>
       </div>
     </section>
 
     <!-- AÇÕES -->
-    <section class="quick-actions">
-      <button id="addIncome">+ Entrada</button>
-      <button id="addExpense">+ Gasto</button>
-    </section>
+    <section class="actions">
+      <h3>Ações rápidas</h3>
 
-    <!-- CARTÕES -->
-    <section class="cards-section">
-      <h3>Cartões</h3>
-      <div class="card-box">
-        <span>Fatura Atual</span>
-        <strong id="creditBill">R$ 0,00</strong>
+      <div class="actions-grid">
+        <button class="action primary">Contas da casa</button>
+        <button class="action">Rendas</button>
+        <button class="action">Cartões</button>
+        <button class="action">Porquinho</button>
       </div>
     </section>
 
   </div>
 
-  <!-- JS (mesma pasta) -->
   <script src="home.js"></script>
 </body>
 </html>
