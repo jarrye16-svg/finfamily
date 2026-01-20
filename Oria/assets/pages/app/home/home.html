@@ -5,10 +5,7 @@
   <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="home.css">
 </head>
 
@@ -18,11 +15,15 @@
     <!-- HEADER -->
     <header class="header">
       <div class="brand">
-        <img src="../../../branding/logo-oria.png" alt="Oria" class="logo">
-        <div>
+        <img src="../../../branding/logo/oria-icon.png" alt="Oria" class="logo">
+        <div class="brand-text">
           <strong>Oria</strong>
           <span>Visão geral</span>
         </div>
+      </div>
+
+      <div class="profile">
+        <div class="avatar"></div>
       </div>
     </header>
 
@@ -36,35 +37,35 @@
     <!-- RESUMO -->
     <section class="stats">
       <div class="stat-card">
-        <span>Total do mês</span>
+        <span>Entrada</span>
         <strong class="positive" id="incomeValue">R$ 0,00</strong>
       </div>
 
       <div class="stat-card">
-        <span>Em aberto</span>
+        <span>Saída</span>
         <strong class="negative" id="expenseValue">R$ 0,00</strong>
       </div>
 
       <div class="stat-card">
         <span>Cartões</span>
-        <strong id="creditBill">R$ 0,00</strong>
+        <strong id="creditValue">R$ 0,00</strong>
       </div>
 
       <div class="stat-card">
-        <span>Saldo final</span>
+        <span>Saldo</span>
         <strong id="balanceValue">R$ 0,00</strong>
       </div>
     </section>
 
-    <!-- AÇÕES -->
+    <!-- ATALHOS -->
     <section class="actions">
-      <h3>Ações rápidas</h3>
+      <h3>Atalhos</h3>
 
       <div class="actions-grid">
         <button class="action primary">Contas da casa</button>
-        <button class="action">Rendas</button>
-        <button class="action">Cartões</button>
+        <button class="action">Renda</button>
         <button class="action">Porquinho</button>
+        <button class="action">Cartões</button>
       </div>
     </section>
 
