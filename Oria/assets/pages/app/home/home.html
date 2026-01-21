@@ -15,7 +15,7 @@
     <!-- HEADER -->
     <header class="header">
       <div class="brand">
-        <img src="../../../branding/logo/oria-icon.png" alt="Oria" class="logo">
+        <img src="../../../branding/logo/oria-icon.png" class="logo">
         <div class="brand-text">
           <strong>Oria</strong>
           <span>Visão geral</span>
@@ -27,48 +27,51 @@
       </div>
     </header>
 
-    <!-- MÊS -->
-    <section class="month-card">
-      <button id="prevMonth">‹</button>
-      <h2 id="currentMonth">Janeiro de 2026</h2>
-      <button id="nextMonth">›</button>
-    </section>
+    <div class="surface">
 
-    <!-- RESUMO -->
-    <section class="stats">
-      <div class="stat-card">
-        <span>Entrada</span>
-        <strong class="positive" id="incomeValue">R$ 0,00</strong>
-      </div>
+      <!-- MÊS -->
+      <section class="month-card">
+        <button id="prevMonth">‹</button>
+        <h2 id="currentMonth">Janeiro de 2026</h2>
+        <button id="nextMonth">›</button>
+      </section>
 
-      <div class="stat-card">
-        <span>Saída</span>
-        <strong class="negative" id="expenseValue">R$ 0,00</strong>
-      </div>
+      <!-- RESUMO -->
+      <section class="stats">
+        <div class="stat-card">
+          <span>Entrada</span>
+          <strong class="positive" id="incomeValue">R$ 0,00</strong>
+        </div>
 
-      <div class="stat-card">
-        <span>Cartões</span>
-        <strong id="creditValue">R$ 0,00</strong>
-      </div>
+        <div class="stat-card">
+          <span>Saída</span>
+          <strong class="negative" id="expenseValue">R$ 0,00</strong>
+        </div>
 
-      <div class="stat-card">
-        <span>Saldo</span>
-        <strong id="balanceValue">R$ 0,00</strong>
-      </div>
-    </section>
+        <div class="stat-card">
+          <span>Cartões</span>
+          <strong id="creditValue">R$ 0,00</strong>
+        </div>
 
-    <!-- ATALHOS -->
-    <section class="actions">
-      <h3>Atalhos</h3>
+        <div class="stat-card">
+          <span>Saldo</span>
+          <strong id="balanceValue">R$ 0,00</strong>
+        </div>
+      </section>
 
-      <div class="actions-grid">
-        <button class="action primary">Contas da casa</button>
-        <button class="action">Renda</button>
-        <button class="action">Porquinho</button>
-        <button class="action">Cartões</button>
-      </div>
-    </section>
+      <!-- ATALHOS -->
+      <section class="actions">
+        <h3>Atalhos</h3>
 
+        <div class="actions-grid">
+          <button class="action primary" id="btnExpenses">Contas da casa</button>
+          <button class="action" id="btnIncome">Renda</button>
+          <button class="action" id="btnPiggy">Porquinho</button>
+          <button class="action" id="btnCards">Cartões</button>
+        </div>
+      </section>
+
+    </div>
   </div>
 
   <script src="home.js"></script>
