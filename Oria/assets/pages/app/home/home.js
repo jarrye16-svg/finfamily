@@ -1,4 +1,6 @@
-// ===== CONTROLE DE MÊS =====
+// ===============================
+// CONTROLE DE MÊS (HOME)
+// ===============================
 let currentDate = new Date();
 
 const monthNames = [
@@ -9,49 +11,86 @@ const monthNames = [
 const currentMonthEl = document.getElementById("currentMonth");
 
 function updateMonth() {
+  if (!currentMonthEl) return;
+
   currentMonthEl.textContent =
     `${monthNames[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
 }
 
-document.getElementById("prevMonth").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() - 1);
-  updateMonth();
-};
+const prevBtn = document.getElementById("prevMonth");
+const nextBtn = document.getElementById("nextMonth");
 
-document.getElementById("nextMonth").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() + 1);
-  updateMonth();
-};
+if (prevBtn) {
+  prevBtn.onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    updateMonth();
+  };
+}
 
-// ===== MOCK DE DADOS =====
+if (nextBtn) {
+  nextBtn.onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    updateMonth();
+  };
+}
+
+// ===============================
+// DADOS MOCK (HOME)
+// ===============================
 const income = 0;
 const expense = 0;
 const credit = 0;
 const balance = income - expense - credit;
 
-document.getElementById("incomeValue").textContent = income.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-document.getElementById("expenseValue").textContent = expense.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-document.getElementById("creditValue").textContent = credit.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const setValue = (id, value, color) => {
+  const el = document.getElementById(id);
+  if (!el) return;
 
-const balanceEl = document.getElementById("balanceValue");
-balanceEl.textContent = balance.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-balanceEl.style.color = balance >= 0 ? "#16a34a" : "#dc2626";
+  el.textContent = value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
 
-// ===== NAVEGAÇÃO =====
-document.getElementById("btnExpenses").onclick = () => {
-  window.location.href = "../expenses/expenses.html";
+  if (color) el.style.color = color;
 };
 
-document.getElementById("btnIncome").onclick = () => {
-  window.location.href = "../income/income.html";
-};
+setValue("incomeValue", income, "#16a34a");
+setValue("expenseValue", expense, "#dc2626");
+setValue("creditValue", credit);
+setValue("balanceValue", balance, balance >= 0 ? "#16a34a" : "#dc2626");
 
-document.getElementById("btnPiggy").onclick = () => {
-  window.location.href = "../piggy/piggy.html";
-};
+// ===============================
+// NAVEGAÇÃO (USANDO TELAS REAIS)
+// ===============================
 
-document.getElementById("btnCards").onclick = () => {
-  window.location.href = "../cards/cards.html";
-};
+const btnExpenses = document.getElementById("btnExpenses");
+const btnIncome = document.getElementById("btnIncome");
+const btnPiggy = document.getElementById("btnPiggy");
+const btnCards = document.getElementById("btnCards");
 
+if (btnExpenses) {
+  btnExpenses.onclick = () => {
+    window.location.href = "../../expenses/expenses.html";
+  };
+}
+
+if (btnIncome) {
+  btnIncome.onclick = () => {
+    window.location.href = "../../income/income.html";
+  };
+}
+
+if (btnPiggy) {
+  btnPiggy.onclick = () => {
+    window.location.href = "../../piggy/piggy.html";
+  };
+}
+
+if (btnCards) {
+  btnCards.onclick = () => {
+    window.location.href = "../../cards/cards.html";
+  };
+}
+
+// ===============================
 updateMonth();
