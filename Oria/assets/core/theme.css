@@ -1,0 +1,225 @@
+/* ==================================================
+   Oria • Tema Global (theme.css)
+   Padrão visual unificado para todas as páginas
+================================================== */
+
+:root {
+  /* Paleta principal */
+  --primary: #4a3aff;
+  --primary-dark: #372ee6;
+  --background: #f6f8ff;
+  --surface: #ffffff;
+  --text: #1c1c1c;
+  --text-light: #666;
+  --positive: #1ecb4f;
+  --negative: #f44336;
+  --border: #e5e8ef;
+  --radius: 14px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  /* Tipografia */
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: var(--background);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* ===== Estrutura base ===== */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.surface {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+/* ===== Cabeçalho ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+}
+
+.brand-text strong {
+  font-size: 1.1rem;
+  display: block;
+  color: var(--primary-dark);
+}
+
+.brand-text span {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* ===== Avatar / Perfil ===== */
+.profile .avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+/* ===== Botões ===== */
+button {
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn,
+.action {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+}
+
+.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.primary:hover {
+  background: var(--primary-dark);
+}
+
+.outline {
+  border: 2px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+}
+
+.outline:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ===== Cards e estatísticas ===== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card span {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.2rem;
+}
+
+.positive {
+  color: var(--positive);
+}
+
+.negative {
+  color: var(--negative);
+}
+
+/* ===== Navegação de mês ===== */
+.month-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.nav-btn {
+  background: var(--primary);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.nav-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* ===== Atalhos ===== */
+.actions {
+  margin-top: 32px;
+}
+
+.actions h3 {
+  margin-bottom: 12px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 768px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
