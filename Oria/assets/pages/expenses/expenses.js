@@ -1,11 +1,9 @@
 /* ==================================================
-   Oria • Contas da Casa (FINAL DEFINITIVO)
+   Oria • Contas da Casa
+   Supabase FINAL — com auto-family
 ================================================== */
 
-/* ===============================
-   ESPERA SUPABASE (LOCAL)
-   NÃO DEPENDE DE OUTRO ARQUIVO
-================================ */
+/* ---------- Espera Supabase ---------- */
 async function waitSupabase() {
   return new Promise(resolve => {
     const check = () => {
@@ -16,9 +14,7 @@ async function waitSupabase() {
   });
 }
 
-/* ===============================
-   Constantes
-================================ */
+/* ---------- Constantes ---------- */
 const MONTHS = [
   'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
   'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
@@ -27,23 +23,19 @@ const MONTHS = [
 let currentDate = new Date();
 let expenses = [];
 
-/* ===============================
-   Utils
-================================ */
+/* ---------- Utils ---------- */
 function formatMonth(date) {
   return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
 }
 
-function formatBRL(value) {
-  return value.toLocaleString('pt-BR', {
+function formatBRL(v) {
+  return v.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   });
 }
 
-/* ===============================
-   Mês
-================================ */
+/* ---------- Mês ---------- */
 function renderMonth() {
   const label = formatMonth(currentDate);
   document.getElementById('monthText').innerText = label;
@@ -56,39 +48,72 @@ function changeMonth(delta) {
   loadExpenses();
 }
 
-/* ===============================
-   Carregar despesas
-================================ */
+/* ==================================================
+   🔥 GARANTE FAMÍLIA (CORREÇÃO DEFINITIVA)
+================================================== */
+async function getOrCreateFamily(userId) {
+  // tenta achar família
+  let { data: member } = await supabase
+    .from('family_members')
+    .select('family_id')
+    .eq('user_id', userId)
+    .single();
+
+  if (member) return member.family_id;
+
+  // cria família
+  const { data: family, error: famErr } = await supabase
+    .from('families')
+    .insert({ name: 'Minha Família' })
+    .select()
+    .single();
+
+  if (famErr) {
+    alert('Erro ao criar família');
+    throw famErr;
+  }
+
+  // vincula usuário
+  await supabase.from('family_members').insert({
+    user_id: userId,
+    family_id: family.id,
+    role: 'owner'
+  });
+
+  return family.id;
+}
+
+/* ---------- Carregar despesas ---------- */
 async function loadExpenses() {
   await waitSupabase();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
 
-  const { data: settings } = await supabase
-    .from('user_settings')
-    .select('current_year, current_month')
-    .eq('user_id', user.id)
-    .single();
+  const familyId = await getOrCreateFamily(user.id);
 
-  if (!settings) return;
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('transactions')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('family_id', familyId)
     .eq('type', 'expense')
-    .eq('year', settings.current_year)
-    .eq('month', settings.current_month)
+    .eq('year', year)
+    .eq('month', month)
     .order('date');
+
+  if (error) {
+    console.error(error);
+    return;
+  }
 
   expenses = data || [];
   renderExpenses();
 }
 
-/* ===============================
-   Render
-================================ */
+/* ---------- Render ---------- */
 function renderExpenses() {
   const list = document.getElementById('expensesList');
   list.innerHTML = '';
@@ -125,82 +150,71 @@ function renderExpenses() {
   document.getElementById('openValue').innerText = formatBRL(open);
 }
 
-/* ===============================
-   Salvar
-================================ */
+/* ---------- Salvar ---------- */
 async function saveExpense() {
   await waitSupabase();
 
-  const title = document.getElementById('inputName').value.trim();
-  const amount = Number(document.getElementById('inputAmount').value);
-  const date = document.getElementById('inputDueDate').value;
+  const title = inputName.value.trim();
+  const amount = Number(inputAmount.value);
+  const date = inputDueDate.value;
 
   if (!title || !amount || !date) {
-    alert('Preencha todos os campos');
+    alert('Preencha tudo');
     return;
   }
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
 
-  const { data: family } = await supabase
-    .from('family_members')
-    .select('family_id')
-    .eq('user_id', user.id)
-    .single();
+  const familyId = await getOrCreateFamily(user.id);
 
-  const { data: settings } = await supabase
-    .from('user_settings')
-    .select('current_year, current_month')
-    .eq('user_id', user.id)
-    .single();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
 
-  await supabase.from('transactions').insert({
+  const { error } = await supabase.from('transactions').insert({
     user_id: user.id,
-    family_id: family.family_id,
+    family_id: familyId,
     type: 'expense',
     title,
     amount,
     date,
-    year: settings.current_year,
-    month: settings.current_month,
+    year,
+    month,
     paid: false
   });
+
+  if (error) {
+    console.error(error);
+    alert('Erro ao salvar');
+    return;
+  }
 
   closeModal();
   loadExpenses();
 }
 
-/* ===============================
-   Pago
-================================ */
+/* ---------- Pago ---------- */
 async function togglePaid(id, paid) {
   await waitSupabase();
-
   await supabase
     .from('transactions')
     .update({ paid: !paid })
     .eq('id', id);
-
   loadExpenses();
 }
 
-/* ===============================
-   Modal
-================================ */
+/* ---------- Modal ---------- */
 function openNew() {
-  document.getElementById('inputName').value = '';
-  document.getElementById('inputAmount').value = '';
-  document.getElementById('inputDueDate').value = '';
-  document.getElementById('modal').style.display = 'flex';
+  inputName.value = '';
+  inputAmount.value = '';
+  inputDueDate.value = '';
+  modal.style.display = 'flex';
 }
 
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
+  modal.style.display = 'none';
 }
 
-/* ===============================
-   Init
-================================ */
+/* ---------- Init ---------- */
 renderMonth();
 loadExpenses();
