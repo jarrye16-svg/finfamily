@@ -8,105 +8,87 @@
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="./expenses.css" />
-</head>
+  <!-- CSS -->
+  <link rel="stylesheet" href="expenses.css" />
 
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
+    }
+  </style>
+</head>
 <body>
 
-  <div class="container">
-
-    <!-- HEADER -->
-    <div class="top">
-      <a href="/finfamily/Oria/assets/pages/app/home/home.html" class="logo">
-        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" alt="Oria">
-      </a>
-      <div class="title">
-        <h1>Contas da Casa</h1>
-        <span id="monthLabel">—</span>
+  <!-- HEADER -->
+  <header class="top-bar">
+    <div class="top-left" onclick="window.location.href='../app/home/home.html'">
+      <img src="../../branding/logo/oria-icon.png" class="logo" />
+      <div>
+        <strong>Contas da Casa</strong>
+        <small id="monthLabel"></small>
       </div>
     </div>
+  </header>
 
-    <!-- MONTH SELECTOR -->
-    <div class="month-box">
-      <button class="month-btn" onclick="changeMonth(-1)">‹</button>
-      <div class="month-text" id="monthText">—</div>
-      <button class="month-btn" onclick="changeMonth(1)">›</button>
+  <!-- MÊS -->
+  <section class="month-box">
+    <button onclick="changeMonth(-1)">‹</button>
+    <span id="monthText"></span>
+    <button onclick="changeMonth(1)">›</button>
+  </section>
+
+  <!-- RESUMO -->
+  <section class="summary">
+    <div class="summary-card">
+      <span>Total</span>
+      <strong id="totalValue">R$ 0,00</strong>
     </div>
 
-    <!-- SUMMARY -->
-    <div class="grid">
-      <div class="card-summary">
-        <span>Total</span>
-        <strong id="totalValue">R$ 0,00</strong>
-      </div>
-      <div class="card-summary alert">
-        <span>Em aberto</span>
-        <strong id="openValue">R$ 0,00</strong>
-      </div>
+    <div class="summary-card alert">
+      <span>Em aberto</span>
+      <strong id="openValue">R$ 0,00</strong>
     </div>
+  </section>
 
-    <!-- LIST -->
-    <section>
-      <h2>Contas</h2>
-      <div id="expensesList" class="list"></div>
-    </section>
-
-  </div>
+  <!-- LISTA -->
+  <section class="list">
+    <h3>Contas</h3>
+    <div id="expensesList"></div>
+  </section>
 
   <!-- FAB -->
-  <button class="fab-add" onclick="openNew()">+</button>
+  <button class="fab" onclick="openNew()">+</button>
 
   <!-- MODAL -->
   <div class="modal-overlay" id="modal">
     <div class="modal">
-
       <div class="modal-header">
-        <h3 id="modalTitle">Nova Conta</h3>
-        <button class="close-btn" onclick="closeModal()">×</button>
+        <h3>Nova Conta</h3>
+        <button onclick="closeModal()">×</button>
       </div>
 
       <div class="modal-body">
+        <label>Descrição</label>
+        <input id="inputName" placeholder="Ex: Luz" />
 
-        <!-- Tipo -->
-        <div class="type-toggle">
-          <button class="type-btn active" data-type="fixed">Conta fixa</button>
-          <button class="type-btn" data-type="one">Somente neste mês</button>
-        </div>
+        <label>Valor</label>
+        <input id="inputAmount" type="number" placeholder="0,00" />
 
-        <!-- Descrição -->
-        <label>
-          Descrição
-          <input type="text" id="inputName" placeholder="Ex: Luz, Aluguel, Carro">
-        </label>
-
-        <!-- Valor -->
-        <label>
-          Valor
-          <input type="number" id="inputAmount" step="0.01" placeholder="0,00">
-        </label>
-
-        <!-- Vencimento -->
-        <label>
-          Vencimento
-          <input type="date" id="inputDueDate">
-        </label>
-
-        <!-- Replicar -->
-        <label class="checkbox" id="replicateBox">
-          <input type="checkbox" id="replicateNext">
-          Replicar para o próximo mês
-        </label>
-
+        <label>Vencimento</label>
+        <input id="inputDueDate" type="date" />
       </div>
 
       <div class="modal-footer">
-        <button class="btn primary" onclick="saveExpense()">Salvar</button>
-        <button class="btn danger" id="deleteBtn" onclick="deleteExpense()">Excluir</button>
+        <button class="primary" onclick="saveExpense()">Salvar</button>
       </div>
-
     </div>
   </div>
 
-  <script src="./expenses.js"></script>
+  <!-- SCRIPTS (ORDEM IMPORTANTE) -->
+  <script src="../../core/supabase.js"></script>
+  <script src="expenses.js"></script>
+
 </body>
 </html>
