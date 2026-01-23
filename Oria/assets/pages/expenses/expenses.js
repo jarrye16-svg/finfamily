@@ -1,130 +1,172 @@
 // =============================================
-// Oria • Página de Despesas
+// Oria • Contas da Casa (Despesas)
+// Conectado ao Supabase real
 // =============================================
 
-// Aguarda Supabase carregar
-async function waitSupabaseReady() {
-  while (!window.supabase) {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("[Oria] Contas da Casa carregada (Supabase real)");
 
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('[Oria] Página de despesas carregada');
+  await window.waitSupabase();
 
-  await waitSupabaseReady();
+  // Elementos
+  const currentMonthEl = document.getElementById("currentMonth");
+  const expensesContainer = document.getElementById("expensesList");
+  const totalValueEl = document.getElementById("totalValue");
+  const form = document.getElementById("expenseForm");
+  const descInput = document.getElementById("desc");
+  const valueInput = document.getElementById("value");
 
-  const currentMonthEl = document.getElementById('currentMonth');
-  const expensesContainer = document.getElementById('expensesContainer');
-  const totalValueEl = document.getElementById('totalValue');
-  const form = document.getElementById('expenseForm');
-  const descInput = document.getElementById('desc');
-  const valueInput = document.getElementById('value');
-
+  // Controle de mês
   const monthNames = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
   let currentDate = new Date();
 
-  // Renderiza o mês atual
+  const formatCurrency = (n) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  const extractMonthYear = (d) => ({
+    month: (d.getMonth() + 1).toString().padStart(2, "0"),
+    year: d.getFullYear().toString(),
+  });
+
+  // ==============================
+  // Renderização do mês atual
+  // ==============================
   function renderMonth() {
     const monthName = monthNames[currentDate.getMonth()];
-    currentMonthEl.innerText = `${monthName} de ${currentDate.getFullYear()}`;
+    const year = currentDate.getFullYear();
+    currentMonthEl.innerText = `${monthName} de ${year}`;
   }
 
   renderMonth();
 
-  // Navegação entre meses
-  document.getElementById('prevMonth').addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderMonth();
-    loadExpenses();
-  });
-
-  document.getElementById('nextMonth').addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderMonth();
-    loadExpenses();
-  });
-
-  // ===========================
-  // Funções principais
-  // ===========================
+  // ==============================
+  // Carrega despesas reais
+  // ==============================
   async function loadExpenses() {
     try {
-      const { data: { user } } = await window.supabase.auth.getUser();
+      const { data: { user }, error: userError } = await window.supabase.auth.getUser();
+      if (userError) throw userError;
+
       if (!user) {
-        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+        console.warn("[Oria] Nenhum usuário logado. Redirecionando...");
+        window.location.href = "/finfamily/Oria/assets/pages/login/login.html";
         return;
       }
 
-      // Aqui você pode substituir pela tabela real
-      // const { data, error } = await window.supabase
-      //   .from('expenses')
-      //   .select('*')
-      //   .eq('user_id', user.id);
+      const { month, year } = extractMonthYear(currentDate);
 
-      // Simulação de dados locais
-      const fakeData = [
-        { desc: 'Energia elétrica', value: 180.0 },
-        { desc: 'Supermercado', value: 340.5 },
-        { desc: 'Internet', value: 120.0 }
-      ];
+      const { data, error } = await window.supabase
+        .from("transactions")
+        .select("id, title, amount, date")
+        .eq("user_id", user.id)
+        .eq("month", month)
+        .eq("year", year)
+        .eq("type", "expense")
+        .order("date", { ascending: false });
 
-      renderExpenses(fakeData);
+      if (error) throw error;
+
+      renderExpenses(data);
     } catch (err) {
-      console.error('[Oria] Erro ao carregar despesas:', err);
+      console.error("[Oria] Erro ao carregar despesas:", err);
+      expensesContainer.innerHTML =
+        '<li class="error">Erro ao carregar despesas.</li>';
+      totalValueEl.innerText = "R$ 0,00";
     }
   }
 
+  // ==============================
+  // Renderiza lista e total
+  // ==============================
   function renderExpenses(data) {
-    expensesContainer.innerHTML = '';
+    expensesContainer.innerHTML = "";
     let total = 0;
 
     if (!data || data.length === 0) {
-      expensesContainer.innerHTML = '<li>Nenhuma despesa registrada.</li>';
-      totalValueEl.innerText = 'R$ 0,00';
+      expensesContainer.innerHTML =
+        '<li class="empty">Nenhuma despesa registrada.</li>';
+      totalValueEl.innerText = "R$ 0,00";
       return;
     }
 
     data.forEach((item) => {
-      const li = document.createElement('li');
+      const li = document.createElement("li");
+      li.classList.add("expense-item");
       li.innerHTML = `
-        <span>${item.desc}</span>
-        <strong>R$ ${item.value.toFixed(2)}</strong>
+        <span>${item.title}</span>
+        <strong>${formatCurrency(item.amount)}</strong>
       `;
       expensesContainer.appendChild(li);
-      total += item.value;
+      total += Number(item.amount) || 0;
     });
 
-    totalValueEl.innerText = `R$ ${total.toFixed(2)}`;
+    totalValueEl.innerText = formatCurrency(total);
   }
 
-  // Adicionar nova despesa
-  form.addEventListener('submit', async (e) => {
+  // ==============================
+  // Adicionar nova despesa real
+  // ==============================
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const desc = descInput.value.trim();
     const value = parseFloat(valueInput.value);
 
     if (!desc || isNaN(value)) {
-      alert('Preencha todos os campos corretamente.');
+      alert("Preencha os campos corretamente.");
       return;
     }
 
-    // Aqui você pode salvar no Supabase
-    // const { error } = await window.supabase
-    //   .from('expenses')
-    //   .insert([{ user_id: user.id, desc, value }]);
+    try {
+      const { data: { user }, error: userError } = await window.supabase.auth.getUser();
+      if (userError) throw userError;
 
-    console.log(`[Oria] Nova despesa adicionada: ${desc} - R$${value}`);
-    descInput.value = '';
-    valueInput.value = '';
+      const { month, year } = extractMonthYear(currentDate);
+      const date = new Date().toISOString();
 
+      const { error } = await window.supabase.from("transactions").insert([
+        {
+          user_id: user.id,
+          type: "expense",
+          title: desc,
+          amount: value,
+          month,
+          year,
+          date,
+        },
+      ]);
+
+      if (error) throw error;
+
+      console.log("[Oria] Nova despesa salva:", desc, value);
+      descInput.value = "";
+      valueInput.value = "";
+      await loadExpenses();
+    } catch (err) {
+      console.error("[Oria] Erro ao adicionar despesa:", err);
+      alert("Erro ao adicionar despesa. Tente novamente.");
+    }
+  });
+
+  // ==============================
+  // Navegação entre meses
+  // ==============================
+  document.getElementById("prevMonth").addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderMonth();
     loadExpenses();
   });
 
+  document.getElementById("nextMonth").addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderMonth();
+    loadExpenses();
+  });
+
+  // Inicializa
   await loadExpenses();
 });
