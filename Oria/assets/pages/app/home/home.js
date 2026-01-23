@@ -1,107 +1,129 @@
-/* ==================================================
-   Oria • Home (Supabase FINAL)
-   Copiar e substituir o arquivo inteiro
-================================================== */
+// =============================================
+// Oria • Home Script
+// =============================================
 
-async function waitSupabase() {
-  return new Promise((resolve) => {
-    const t = setInterval(() => {
-      if (window.supabase) {
-        clearInterval(t);
-        resolve();
-      }
-    }, 50);
-  });
+// Aguarda o Supabase estar disponível
+async function waitSupabaseReady() {
+  while (!window.supabase) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
 }
 
-const MONTHS = [
-  "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
-];
+// Função principal
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('[Oria] Página Home carregada');
 
-let currentDate = new Date();
+  // Espera o Supabase
+  await waitSupabaseReady();
 
-/* ========= utils ========= */
-function formatMonth(date) {
-  return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
-}
+  // Elementos principais
+  const currentMonthEl = document.getElementById('currentMonth');
+  const incomeValue = document.getElementById('incomeValue');
+  const expenseValue = document.getElementById('expenseValue');
+  const creditValue = document.getElementById('creditValue');
+  const balanceValue = document.getElementById('balanceValue');
 
-function formatBRL(v) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  }).format(v || 0);
-}
+  // ===========================
+  // Controle de Mês
+  // ===========================
+  const monthNames = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
 
-/* ========= mês ========= */
-function renderMonth() {
-  document.getElementById("monthLabel").innerText = formatMonth(currentDate);
-}
+  let currentDate = new Date();
 
-document.getElementById("prevMonth").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() - 1);
-  renderMonth();
-  loadSummary();
-};
+  function renderMonth() {
+    if (!currentMonthEl) return console.warn('[Oria] #currentMonth não encontrado.');
 
-document.getElementById("nextMonth").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() + 1);
-  renderMonth();
-  loadSummary();
-};
-
-/* ========= family ========= */
-async function getFamilyId(userId) {
-  const { data, error } = await supabase
-    .from("family_members")
-    .select("family_id")
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  if (error) throw error;
-  if (!data) throw new Error("Família não encontrada");
-
-  return data.family_id;
-}
-
-/* ========= resumo ========= */
-async function loadSummary() {
-  await waitSupabase();
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
-
-  const familyId = await getFamilyId(user.id);
-
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-
-  const { data, error } = await supabase
-    .from("transactions")
-    .select("amount, type")
-    .eq("family_id", familyId)
-    .eq("year", year)
-    .eq("month", month);
-
-  if (error) {
-    console.error(error);
-    return;
+    const monthName = monthNames[currentDate.getMonth()];
+    const year = currentDate.getFullYear();
+    currentMonthEl.innerText = `${monthName} de ${year}`;
   }
 
-  let income = 0;
-  let expense = 0;
+  // Botões de navegação do mês
+  const btnPrev = document.getElementById('prevMonth');
+  const btnNext = document.getElementById('nextMonth');
 
-  data.forEach(t => {
-    if (t.type === "entrada") income += Number(t.amount || 0);
-    if (t.type === "gasto") expense += Number(t.amount || 0);
-  });
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderMonth();
+      loadSummary();
+    });
+  }
 
-  document.getElementById("incomeValue").innerText = formatBRL(income);
-  document.getElementById("expenseValue").innerText = formatBRL(expense);
-  document.getElementById("balanceValue").innerText = formatBRL(income - expense);
-  document.getElementById("cardValue").innerText = formatBRL(0);
-}
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderMonth();
+      loadSummary();
+    });
+  }
 
-/* ========= init ========= */
-renderMonth();
-loadSummary();
+  renderMonth(); // exibe o mês atual logo ao carregar
+
+  // ===========================
+  // Carregar dados do usuário
+  // ===========================
+  async function loadSummary() {
+    try {
+      const { data: { user } } = await window.supabase.auth.getUser();
+      if (!user) {
+        console.warn('[Oria] Nenhum usuário logado. Redirecionando...');
+        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+        return;
+      }
+
+      console.log('[Oria] Usuário logado:', user.email);
+
+      // Aqui você pode buscar dados reais do Supabase:
+      // const { data, error } = await window.supabase
+      //   .from('transactions')
+      //   .select('*')
+      //   .eq('user_id', user.id);
+
+      // Exemplo estático (placeholder):
+      if (incomeValue) incomeValue.innerText = 'R$ 0,00';
+      if (expenseValue) expenseValue.innerText = 'R$ 0,00';
+      if (creditValue) creditValue.innerText = 'R$ 0,00';
+      if (balanceValue) balanceValue.innerText = 'R$ 0,00';
+    } catch (err) {
+      console.error('[Oria] Erro ao carregar resumo:', err);
+    }
+  }
+
+  await loadSummary();
+
+  // ===========================
+  // Atalhos
+  // ===========================
+  const btnExpenses = document.getElementById('btnExpenses');
+  const btnIncome = document.getElementById('btnIncome');
+  const btnPiggy = document.getElementById('btnPiggy');
+  const btnCards = document.getElementById('btnCards');
+
+  if (btnExpenses) {
+    btnExpenses.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/expenses/expenses.html';
+    });
+  }
+
+  if (btnIncome) {
+    btnIncome.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/income/income.html';
+    });
+  }
+
+  if (btnPiggy) {
+    btnPiggy.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/piggy/piggy.html';
+    });
+  }
+
+  if (btnCards) {
+    btnCards.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/cards/cards.html';
+    });
+  }
+});
