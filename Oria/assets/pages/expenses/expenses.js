@@ -1,6 +1,6 @@
 /* ==================================================
-   Oria • Contas da Casa (Supabase FINAL - base com coluna "data")
-   Copiar e substituir o arquivo inteiro
+   Oria • Contas da Casa (Supabase FINAL)
+   BASE VALIDADA COM SEU BANCO
 ================================================== */
 
 /* ========= garantia supabase ========= */
@@ -30,14 +30,15 @@ function formatMonth(date) {
 }
 
 function formatBRL(v) {
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v || 0);
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  }).format(v || 0);
 }
 
 function formatDateBR(iso) {
   if (!iso) return "--";
-  // iso: "2026-01-22"
   const [y, m, d] = iso.split("-");
-  if (!y || !m || !d) return iso;
   return `${d}/${m}/${y}`;
 }
 
@@ -54,9 +55,8 @@ window.changeMonth = (delta) => {
   loadExpenses();
 };
 
-/* ========= family (pega a existente) ========= */
+/* ========= family ========= */
 async function getFamilyId(userId) {
-  // como você já vinculou, deve retornar 1 linha
   const { data, error } = await supabase
     .from("family_members")
     .select("family_id")
@@ -64,46 +64,29 @@ async function getFamilyId(userId) {
     .maybeSingle();
 
   if (error) throw error;
-
   if (data?.family_id) return data.family_id;
 
-  // fallback (se algum usuário novo cair aqui)
-  const { data: fam, error: famErr } = await supabase
-    .from("families")
-    .insert({ name: "Minha Família" })
-    .select("id")
-    .single();
-
-  if (famErr) throw famErr;
-
-  const { error: memErr } = await supabase
-    .from("family_members")
-    .insert({ user_id: userId, family_id: fam.id, role: "owner" });
-
-  if (memErr) throw memErr;
-
-  return fam.id;
+  throw new Error("Usuário sem família vinculada");
 }
 
 /* ========= carregar despesas ========= */
 async function loadExpenses() {
   await waitSupabase();
 
-  const { data: { user }, error: userErr } = await supabase.auth.getUser();
-  if (userErr) console.error(userErr);
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
 
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1; // 1..12
+  const month = currentDate.getMonth() + 1;
 
   const { data, error } = await supabase
     .from("transactions")
-    .select("id, title, amount, data, paid, type, year, month")
+    .select("id, title, amount, date, paid")
     .eq("user_id", user.id)
-    .eq("type", "expense")
+    .eq("type", "gasto")       // ✅ CORRETO
     .eq("year", year)
     .eq("month", month)
-    .order("data", { ascending: true }); // ✅ coluna correta é "data"
+    .order("date", { ascending: true });
 
   if (error) {
     console.error("[loadExpenses]", error);
@@ -131,13 +114,12 @@ function renderExpenses() {
 
     card.innerHTML = `
       <div class="card-info">
-        <strong>${e.title || "-"}</strong>
-        <span>Vence: ${formatDateBR(e.data)}</span>
+        <strong>${e.title}</strong>
+        <span>Vence: ${formatDateBR(e.date)}</span>
       </div>
-
       <div class="card-right">
         <span class="${e.paid ? "paid" : "open"}">${formatBRL(e.amount)}</span>
-        <button class="pay-btn" onclick="togglePaid('${e.id}', ${e.paid ? "true" : "false"})">
+        <button class="pay-btn" onclick="togglePaid('${e.id}', ${e.paid})">
           ${e.paid ? "Pago" : "Marcar pago"}
         </button>
       </div>
@@ -168,72 +150,54 @@ window.saveExpense = async () => {
 
   const title = document.getElementById("inputName").value.trim();
   const amount = Number(document.getElementById("inputAmount").value);
-  const due = document.getElementById("inputDueDate").value; // yyyy-mm-dd
+  const date = document.getElementById("inputDueDate").value;
 
-  if (!title || !amount || !due) {
-    alert("Preencha todos os campos.");
+  if (!title || !amount || !date) {
+    alert("Preencha todos os campos");
     return;
   }
 
-  const { data: { user }, error: userErr } = await supabase.auth.getUser();
-  if (userErr) {
-    console.error(userErr);
-    alert("Erro ao validar usuário.");
-    return;
-  }
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    alert("Você precisa estar logado.");
+    alert("Usuário não autenticado");
     return;
   }
+
+  const familyId = await getFamilyId(user.id);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
 
-  try {
-    const familyId = await getFamilyId(user.id);
+  const { error } = await supabase
+    .from("transactions")
+    .insert({
+      user_id: user.id,
+      family_id: familyId,
+      type: "gasto",        // ✅ AQUI ESTAVA O ERRO
+      title,
+      amount,
+      date,
+      year,
+      month,
+      paid: false
+    });
 
-    const { error } = await supabase
-      .from("transactions")
-      .insert({
-        user_id: user.id,
-        family_id: familyId,
-        type: "expense",
-        title,
-        amount,
-        data: due,      // ✅ coluna correta
-        year,
-        month,
-        paid: false
-      });
-
-    if (error) {
-      console.error("[saveExpense insert]", error);
-      alert(`Erro ao salvar: ${error.message}`);
-      return;
-    }
-
-    closeModal();
-    loadExpenses();
-  } catch (err) {
-    console.error("[saveExpense catch]", err);
-    alert(`Erro ao salvar: ${err.message || "ver console"}`);
+  if (error) {
+    console.error("[saveExpense]", error);
+    alert(error.message);
+    return;
   }
+
+  closeModal();
+  loadExpenses();
 };
 
-/* ========= marcar pago ========= */
+/* ========= pago ========= */
 window.togglePaid = async (id, paid) => {
-  await waitSupabase();
-
-  const { error } = await supabase
+  await supabase
     .from("transactions")
     .update({ paid: !paid })
     .eq("id", id);
-
-  if (error) {
-    console.error("[togglePaid]", error);
-    alert(`Erro ao atualizar: ${error.message}`);
-    return;
-  }
 
   loadExpenses();
 };
