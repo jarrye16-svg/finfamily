@@ -1,160 +1,114 @@
-// ===============================
-// ORIA • HOME (SUPABASE REAL)
-// ===============================
+/* ==================================================
+   Oria • Home (Resumo geral integrado com Supabase)
+================================================== */
 
-// ===== ESPERA SUPABASE =====
+/* ===== aguarda Supabase ===== */
 async function waitSupabase() {
-  while (!window.__SUPABASE_READY__) {
-    await new Promise(r => setTimeout(r, 50));
-  }
+  return new Promise((resolve) => {
+    const i = setInterval(() => {
+      if (window.supabase) {
+        clearInterval(i);
+        resolve();
+      }
+    }, 50);
+  });
 }
 
-// ===== MESES =====
-const monthNames = [
+/* ===== meses ===== */
+const MONTHS = [
   "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
 ];
 
-const currentMonthEl = document.getElementById("currentMonth");
+let currentDate = new Date();
 
-// ===== AUTH =====
-async function getUser() {
-  const { data } = await supabase.auth.getUser();
-  return data.user;
+/* ===== formatadores ===== */
+function formatBRL(v) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  }).format(v || 0);
 }
 
-// ===== FAMILY =====
-async function getFamilyId() {
-  const user = await getUser();
-
-  const { data } = await supabase
-    .from("family_members")
-    .select("family_id")
-    .eq("user_id", user.id)
-    .single();
-
-  return data.family_id;
+function formatMonth(date) {
+  return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
 }
 
-// ===== MÊS ATIVO =====
-async function getCurrentMonth() {
-  const user = await getUser();
+/* ===== renderiza cabeçalho de mês ===== */
+function renderMonth() {
+  const label = formatMonth(currentDate);
+  document.getElementById("currentMonth").innerText = label;
+}
 
-  let { data } = await supabase
-    .from("user_settings")
-    .select("current_year, current_month")
+window.addEventListener("DOMContentLoaded", () => {
+  renderMonth();
+  carregarResumo();
+});
+
+/* ===== navegação de mês ===== */
+document.getElementById("prevMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderMonth();
+  carregarResumo();
+};
+
+document.getElementById("nextMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderMonth();
+  carregarResumo();
+};
+
+/* ===== carregar resumo ===== */
+async function carregarResumo() {
+  await waitSupabase();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
+
+  // === Busca transações do mês atual ===
+  const { data, error } = await supabase
+    .from("transactions")
+    .select("*")
     .eq("user_id", user.id)
-    .single();
+    .eq("year", year)
+    .eq("month", month);
 
-  if (!data) {
-    const now = new Date();
-
-    const { data: created } = await supabase
-      .from("user_settings")
-      .insert({
-        user_id: user.id,
-        current_year: now.getFullYear(),
-        current_month: now.getMonth()
-      })
-      .select()
-      .single();
-
-    return created;
+  if (error) {
+    console.error("[carregarResumo]", error);
+    return;
   }
 
-  return data;
+  // === Separa por tipo ===
+  const gastos = data.filter(i => i.type === "gasto");
+  const rendas = data.filter(i => i.type === "renda"); // caso existam rendas
+  const cartoes = data.filter(i => i.type === "cartao"); // se futuramente usar cartões
+
+  // === Calcula totais ===
+  const totalGastos = gastos.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
+  const totalRendas = rendas.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
+  const totalCartoes = cartoes.reduce((acc, cur) => acc + Number(cur.amount || 0), 0);
+  const saldo = totalRendas - totalGastos;
+
+  // === Atualiza no HTML ===
+  document.getElementById("incomeValue").innerText = formatBRL(totalRendas);
+  document.getElementById("expenseValue").innerText = formatBRL(totalGastos);
+  document.getElementById("creditValue").innerText = formatBRL(totalCartoes);
+  document.getElementById("balanceValue").innerText = formatBRL(saldo);
 }
 
-async function setCurrentMonth(year, month) {
-  const user = await getUser();
-
-  await supabase
-    .from("user_settings")
-    .update({
-      current_year: year,
-      current_month: month
-    })
-    .eq("user_id", user.id);
-}
-
-// ===== ATUALIZA HOME =====
-async function refreshHome() {
-  const familyId = await getFamilyId();
-  const { current_year, current_month } = await getCurrentMonth();
-
-  currentMonthEl.textContent =
-    `${monthNames[current_month]} de ${current_year}`;
-
-  const { data } = await supabase
-    .from("transactions")
-    .select("amount, type")
-    .eq("family_id", familyId)
-    .eq("year", current_year)
-    .eq("month", current_month);
-
-  const sum = (type) =>
-    (data || [])
-      .filter(t => t.type === type)
-      .reduce((s, i) => s + Number(i.amount), 0);
-
-  const income = sum("income");
-  const expense = sum("expense");
-  const cards = sum("card");
-  const balance = income - expense - cards;
-
-  document.getElementById("incomeValue").textContent =
-    income.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-
-  document.getElementById("expenseValue").textContent =
-    expense.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-
-  document.getElementById("creditValue").textContent =
-    cards.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-
-  const balanceEl = document.getElementById("balanceValue");
-  balanceEl.textContent =
-    balance.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-  balanceEl.style.color = balance >= 0 ? "#16a34a" : "#dc2626";
-}
-
-// ===== TROCA DE MÊS =====
-async function changeMonth(direction) {
-  const { current_year, current_month } = await getCurrentMonth();
-
-  const newDate = new Date(current_year, current_month + direction);
-
-  await setCurrentMonth(
-    newDate.getFullYear(),
-    newDate.getMonth()
-  );
-
-  refreshHome();
-}
-
-// ===== NAVEGAÇÃO =====
+/* ===== atalhos de navegação ===== */
 document.getElementById("btnExpenses").onclick = () => {
-  window.location.href = "../../expenses/expenses.html";
+  window.location.href = "../../../assets/pages/expenses/expenses.html";
 };
-
 document.getElementById("btnIncome").onclick = () => {
-  window.location.href = "../../income/income.html";
+  alert("Página de renda ainda não configurada.");
 };
-
 document.getElementById("btnPiggy").onclick = () => {
-  window.location.href = "../../piggy/piggy.html";
+  alert("Página do porquinho ainda não configurada.");
 };
-
 document.getElementById("btnCards").onclick = () => {
-  window.location.href = "../../cards/cards.html";
+  alert("Página de cartões ainda não configurada.");
 };
-
-// ===== INIT =====
-async function initHome() {
-  await waitSupabase();
-  await refreshHome();
-
-  document.getElementById("prevMonth").onclick = () => changeMonth(-1);
-  document.getElementById("nextMonth").onclick = () => changeMonth(1);
-}
-
-initHome();
