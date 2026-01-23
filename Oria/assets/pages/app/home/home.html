@@ -2,145 +2,75 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Oria • Visão Geral</title>
+  <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS base -->
-  <link rel="stylesheet" href="../../../../assets/css/app.css">
+  <!-- CSS correto -->
+  <link rel="stylesheet" href="../../../css/app.css">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
-    }
-
-    .container {
-      max-width: 430px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .month-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      border-radius: 16px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 16px;
-    }
-
-    .card small {
-      color: #64748b;
-      font-weight: 500;
-    }
-
-    .card strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 18px;
-    }
-
-    .green { color: #16a34a; }
-    .red { color: #dc2626; }
-
-    .shortcuts {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .shortcut {
-      background: #fff;
-      border-radius: 16px;
-      padding: 18px;
-      text-align: center;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .shortcut.primary {
-      background: #4f46e5;
-      color: #fff;
-    }
-  </style>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../js/supabase.js"></script>
 </head>
+
 <body>
+  <div class="app">
 
-<div class="container">
-  <div class="header">
-    <strong>Oria</strong>
-    <span style="color:#64748b">Visão geral</span>
+    <!-- TOPO -->
+    <header class="top">
+      <div class="logo">
+        <img src="../../../img/logo-oria.png" alt="Oria">
+        <span>Oria</span>
+      </div>
+      <div class="avatar"></div>
+    </header>
+
+    <!-- MÊS -->
+    <div class="month-nav">
+      <button id="prevMonth">‹</button>
+      <span id="monthLabel">—</span>
+      <button id="nextMonth">›</button>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="cards-grid">
+      <div class="card">
+        <span>Entrada</span>
+        <strong class="green" id="incomeValue">R$ 0,00</strong>
+      </div>
+
+      <div class="card">
+        <span>Saída</span>
+        <strong class="red" id="expenseValue">R$ 0,00</strong>
+      </div>
+
+      <div class="card">
+        <span>Cartões</span>
+        <strong id="cardValue">R$ 0,00</strong>
+      </div>
+
+      <div class="card">
+        <span>Saldo</span>
+        <strong id="balanceValue">R$ 0,00</strong>
+      </div>
+    </div>
+
+    <!-- ATALHOS -->
+    <h3 class="section-title">Atalhos</h3>
+
+    <div class="shortcuts">
+      <a class="shortcut active" href="../expenses/expenses.html">Contas da casa</a>
+      <a class="shortcut" href="../income/income.html">Renda</a>
+      <a class="shortcut" href="../piggy/piggy.html">Porquinho</a>
+      <a class="shortcut" href="../cards/cards.html">Cartões</a>
+    </div>
+
   </div>
 
-  <div class="month-nav">
-    <button onclick="changeMonth(-1)">◀</button>
-    <span id="monthLabel">—</span>
-    <button onclick="changeMonth(1)">▶</button>
-  </div>
-
-  <div class="cards">
-    <div class="card">
-      <small>Entrada</small>
-      <strong class="green" id="incomeValue">R$ 0,00</strong>
-    </div>
-
-    <div class="card">
-      <small>Saída</small>
-      <strong class="red" id="expenseValue">R$ 0,00</strong>
-    </div>
-
-    <div class="card">
-      <small>Cartões</small>
-      <strong id="cardValue">R$ 0,00</strong>
-    </div>
-
-    <div class="card">
-      <small>Saldo</small>
-      <strong id="balanceValue">R$ 0,00</strong>
-    </div>
-  </div>
-
-  <h4>Atalhos</h4>
-
-  <div class="shortcuts">
-    <div class="shortcut primary" onclick="location.href='../../expenses/expenses.html'">
-      Contas da casa
-    </div>
-    <div class="shortcut">Renda</div>
-    <div class="shortcut">Porquinho</div>
-    <div class="shortcut">Cartões</div>
-  </div>
-</div>
-
-<!-- SCRIPTS (ORDEM CERTA) -->
-<script src="../../core/supabase.js"></script>
-<script src="home.js"></script>
-
+  <!-- JS -->
+  <script src="home.js"></script>
 </body>
 </html>
