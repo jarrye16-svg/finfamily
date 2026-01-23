@@ -1,5 +1,5 @@
 // =============================================
-// Oria • Home Script
+// Oria • Página Home
 // =============================================
 
 // Aguarda o Supabase estar disponível
@@ -9,11 +9,10 @@ async function waitSupabaseReady() {
   }
 }
 
-// Função principal
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('[Oria] Página Home carregada');
 
-  // Espera o Supabase
+  // Espera Supabase
   await waitSupabaseReady();
 
   // Elementos principais
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentMonthEl.innerText = `${monthName} de ${year}`;
   }
 
-  // Botões de navegação do mês
   const btnPrev = document.getElementById('prevMonth');
   const btnNext = document.getElementById('nextMonth');
 
@@ -61,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  renderMonth(); // exibe o mês atual logo ao carregar
+  renderMonth();
 
   // ===========================
   // Carregar dados do usuário
@@ -77,17 +75,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       console.log('[Oria] Usuário logado:', user.email);
 
-      // Aqui você pode buscar dados reais do Supabase:
-      // const { data, error } = await window.supabase
-      //   .from('transactions')
-      //   .select('*')
-      //   .eq('user_id', user.id);
-
-      // Exemplo estático (placeholder):
-      if (incomeValue) incomeValue.innerText = 'R$ 0,00';
-      if (expenseValue) expenseValue.innerText = 'R$ 0,00';
-      if (creditValue) creditValue.innerText = 'R$ 0,00';
-      if (balanceValue) balanceValue.innerText = 'R$ 0,00';
+      // Exemplo estático (pode integrar com Supabase futuramente)
+      if (incomeValue) incomeValue.innerText = 'R$ 5.000,00';
+      if (expenseValue) expenseValue.innerText = 'R$ 2.350,00';
+      if (creditValue) creditValue.innerText = 'R$ 800,00';
+      if (balanceValue) balanceValue.innerText = 'R$ 2.650,00';
     } catch (err) {
       console.error('[Oria] Erro ao carregar resumo:', err);
     }
@@ -96,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadSummary();
 
   // ===========================
-  // Atalhos
+  // Atalhos de Navegação
   // ===========================
   const btnExpenses = document.getElementById('btnExpenses');
   const btnIncome = document.getElementById('btnIncome');
@@ -105,25 +97,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (btnExpenses) {
     btnExpenses.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/app/expenses/expenses.html';
+      window.location.href = '/finfamily/Oria/assets/pages/expenses/expenses.html';
     });
   }
 
   if (btnIncome) {
     btnIncome.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/app/income/income.html';
+      window.location.href = '/finfamily/Oria/assets/pages/income/income.html';
     });
   }
 
   if (btnPiggy) {
     btnPiggy.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/app/piggy/piggy.html';
+      window.location.href = '/finfamily/Oria/assets/pages/piggy/piggy.html';
     });
   }
 
   if (btnCards) {
     btnCards.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/app/cards/cards.html';
+      window.location.href = '/finfamily/Oria/assets/pages/cards/cards.html';
     });
   }
 });
