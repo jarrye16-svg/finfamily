@@ -1,23 +1,31 @@
 /* ==================================================
    Oria • Contas da Casa
-   UI completa — Supabase entra depois
+   UI + Supabase REAL
 ================================================== */
 
+// ===== ESPERA SUPABASE =====
+async function waitSupabase() {
+  while (!window.__SUPABASE_READY__) {
+    await new Promise(r => setTimeout(r, 50));
+  }
+}
+
+// ===== MESES =====
 const MONTHS = [
   'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
   'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
 ];
 
-let currentMonth = new Date();
-let selectedType = 'fixed';
-let editingIndex = null;
-
-/* mês começa vazio (correto) */
+let currentYear;
+let currentMonth;
+let familyId;
 let expenses = [];
+let editingId = null;
+let selectedType = 'fixed';
 
-/* utils */
-function formatMonth(date) {
-  return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
+// ===== UTILS =====
+function formatMonth(year, month) {
+  return `${MONTHS[month]} de ${year}`;
 }
 
 function formatBRL(v) {
@@ -27,20 +35,80 @@ function formatBRL(v) {
   }).format(v);
 }
 
-/* mês */
-function renderMonth() {
-  const label = formatMonth(currentMonth);
+// ===== AUTH / FAMILY / MÊS =====
+async function getUser() {
+  const { data } = await supabase.auth.getUser();
+  return data.user;
+}
+
+async function getFamilyId() {
+  const user = await getUser();
+
+  const { data } = await supabase
+    .from("family_members")
+    .select("family_id")
+    .eq("user_id", user.id)
+    .single();
+
+  return data.family_id;
+}
+
+async function getCurrentMonth() {
+  const user = await getUser();
+
+  const { data } = await supabase
+    .from("user_settings")
+    .select("current_year, current_month")
+    .eq("user_id", user.id)
+    .single();
+
+  return data;
+}
+
+async function setCurrentMonth(year, month) {
+  const user = await getUser();
+
+  await supabase
+    .from("user_settings")
+    .update({ current_year: year, current_month: month })
+    .eq("user_id", user.id);
+}
+
+// ===== MÊS =====
+async function renderMonth() {
+  const label = formatMonth(currentYear, currentMonth);
   document.getElementById('monthText').innerText = label;
   document.getElementById('monthLabel').innerText = label;
 }
 
-function changeMonth(delta) {
-  currentMonth.setMonth(currentMonth.getMonth() + delta);
-  renderMonth();
-  renderExpenses();
+async function changeMonth(delta) {
+  const newDate = new Date(currentYear, currentMonth + delta);
+
+  await setCurrentMonth(newDate.getFullYear(), newDate.getMonth());
+
+  currentYear = newDate.getFullYear();
+  currentMonth = newDate.getMonth();
+
+  await loadExpenses();
 }
 
-/* render */
+// ===== CARREGAR DESPESAS =====
+async function loadExpenses() {
+  const { data } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("family_id", familyId)
+    .eq("type", "expense")
+    .eq("year", currentYear)
+    .eq("month", currentMonth)
+    .order("date", { ascending: true });
+
+  expenses = data || [];
+  renderExpenses();
+  renderMonth();
+}
+
+// ===== RENDER =====
 function renderExpenses() {
   const list = document.getElementById('expensesList');
   list.innerHTML = '';
@@ -48,7 +116,7 @@ function renderExpenses() {
   let total = 0;
   let open = 0;
 
-  expenses.forEach((e, i) => {
+  expenses.forEach((e) => {
     total += e.amount;
     if (!e.paid) open += e.amount;
 
@@ -57,18 +125,18 @@ function renderExpenses() {
 
     card.innerHTML = `
       <div class="card-info">
-        <strong>${e.name}</strong>
-        <span>Vence: ${e.dueDate || '--'}</span>
+        <strong>${e.title}</strong>
+        <span>Vence: ${e.date || '--'}</span>
       </div>
 
       <div class="card-right">
         <span class="${e.paid ? 'paid' : 'open'}">
           ${formatBRL(e.amount)}
         </span>
-        <button class="pay-btn" onclick="togglePaid(${i})">
+        <button class="pay-btn" onclick="togglePaid('${e.id}')">
           ${e.paid ? 'Pago' : 'Marcar pago'}
         </button>
-        <button class="edit-btn" onclick="openEdit(${i})">Editar</button>
+        <button class="edit-btn" onclick="openEdit('${e.id}')">Editar</button>
       </div>
     `;
 
@@ -79,29 +147,30 @@ function renderExpenses() {
   document.getElementById('openValue').innerText = formatBRL(open);
 }
 
-/* modal */
+// ===== MODAL =====
 function openNew() {
-  editingIndex = null;
+  editingId = null;
   document.getElementById('modalTitle').innerText = 'Nova Conta';
   document.getElementById('inputName').value = '';
   document.getElementById('inputAmount').value = '';
   document.getElementById('inputDueDate').value = '';
   document.getElementById('replicateNext').checked = false;
   document.getElementById('deleteBtn').style.display = 'none';
+  setType('fixed');
   openModal();
 }
 
-function openEdit(index) {
-  editingIndex = index;
-  const e = expenses[index];
+function openEdit(id) {
+  editingId = id;
+  const e = expenses.find(x => x.id === id);
 
   document.getElementById('modalTitle').innerText = 'Editar Conta';
-  document.getElementById('inputName').value = e.name;
+  document.getElementById('inputName').value = e.title;
   document.getElementById('inputAmount').value = e.amount;
-  document.getElementById('inputDueDate').value = e.dueDate;
+  document.getElementById('inputDueDate').value = e.date;
   document.getElementById('deleteBtn').style.display = 'block';
 
-  setType(e.type);
+  setType(e.type || 'fixed');
   openModal();
 }
 
@@ -113,7 +182,7 @@ function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-/* tipo */
+// ===== TIPO =====
 function setType(type) {
   selectedType = type;
   document.querySelectorAll('.type-btn').forEach(b => {
@@ -123,54 +192,84 @@ function setType(type) {
     type === 'fixed' ? 'flex' : 'none';
 }
 
-document.querySelectorAll('.type-btn').forEach(btn => {
-  btn.onclick = () => setType(btn.dataset.type);
-});
-
-/* salvar */
-function saveExpense() {
-  const name = document.getElementById('inputName').value.trim();
+// ===== SALVAR =====
+async function saveExpense() {
+  const title = document.getElementById('inputName').value.trim();
   const amount = Number(document.getElementById('inputAmount').value);
-  const dueDate = document.getElementById('inputDueDate').value;
-  const replicate = document.getElementById('replicateNext').checked;
+  const date = document.getElementById('inputDueDate').value;
 
-  if (!name || !amount || !dueDate) return;
+  if (!title || !amount || !date) return;
 
-  const data = {
-    name,
+  const user = await getUser();
+
+  const payload = {
+    user_id: user.id,
+    family_id: familyId,
+    type: "expense",
+    title,
     amount,
-    dueDate,
-    type: selectedType,
-    paid: false,
-    month: currentMonth
+    date,
+    year: currentYear,
+    month: currentMonth,
+    paid: false
   };
 
-  if (editingIndex === null) {
-    expenses.push(data);
+  if (editingId) {
+    await supabase
+      .from("transactions")
+      .update(payload)
+      .eq("id", editingId);
   } else {
-    expenses[editingIndex] = { ...expenses[editingIndex], ...data };
-  }
-
-  if (selectedType === 'fixed' && replicate) {
-    console.log('Replicar para próximo mês (Supabase depois)');
+    await supabase
+      .from("transactions")
+      .insert(payload);
   }
 
   closeModal();
-  renderExpenses();
+  await loadExpenses();
 }
 
-function deleteExpense() {
-  expenses.splice(editingIndex, 1);
+// ===== DELETAR =====
+async function deleteExpense() {
+  await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", editingId);
+
   closeModal();
-  renderExpenses();
+  await loadExpenses();
 }
 
-/* pago */
-function togglePaid(i) {
-  expenses[i].paid = !expenses[i].paid;
-  renderExpenses();
+// ===== PAGO =====
+async function togglePaid(id) {
+  const e = expenses.find(x => x.id === id);
+
+  await supabase
+    .from("transactions")
+    .update({ paid: !e.paid })
+    .eq("id", id);
+
+  await loadExpenses();
 }
 
-/* init */
-renderMonth();
-renderExpenses();
+// ===== INIT =====
+async function initExpenses() {
+  await waitSupabase();
+
+  familyId = await getFamilyId();
+  const settings = await getCurrentMonth();
+
+  currentYear = settings.current_year;
+  currentMonth = settings.current_month;
+
+  document.getElementById("prevMonth").onclick = () => changeMonth(-1);
+  document.getElementById("nextMonth").onclick = () => changeMonth(1);
+
+  document.getElementById("goHome").onclick = () => {
+    window.location.href = "../home/home.html";
+  };
+
+  await loadExpenses();
+}
+
+initExpenses();
