@@ -1,3 +1,17 @@
+/* ===============================
+   Garantia global Supabase
+   (anti-bug definitivo)
+================================ */
+async function waitSupabase() {
+  return new Promise(resolve => {
+    const check = () => {
+      if (window.supabase) return resolve();
+      setTimeout(check, 50);
+    };
+    check();
+  });
+}
+
 /* ==================================================
    Oria • Contas da Casa (FINAL • Supabase)
    Copiar e substituir o arquivo inteiro
