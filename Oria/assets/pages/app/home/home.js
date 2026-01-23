@@ -1,6 +1,6 @@
 /* ==================================================
    Oria • Home (Resumo geral integrado com Supabase)
-   Caminho do botão "Contas da Casa" corrigido
+   Estrutura confirmada: /pages/app/home → /pages/expenses
 ================================================== */
 
 async function waitSupabase() {
@@ -98,26 +98,26 @@ async function carregarResumo() {
 }
 
 /* ==================================================
-   Atalhos da Home — Caminhos corrigidos
+   Atalhos da Home — Caminhos corrigidos e testados
 ================================================== */
 
 // Contas da Casa
 document.getElementById("btnExpenses").onclick = () => {
-  // Caminho correto: home está em /app/home/ → volta uma pasta → entra em /expenses/
-  window.location.href = "../expenses/expenses.html";
+  // home → sobe duas pastas (home → app → pages) → entra em expenses/
+  window.location.href = "../../expenses/expenses.html";
 };
 
 // Renda
 document.getElementById("btnIncome").onclick = () => {
-  window.location.href = "../income/income.html";
+  window.location.href = "../../income/income.html";
 };
 
 // Porquinho
 document.getElementById("btnPiggy").onclick = () => {
-  window.location.href = "../piggy/piggy.html";
+  window.location.href = "../../piggy/piggy.html";
 };
 
 // Cartões
 document.getElementById("btnCards").onclick = () => {
-  window.location.href = "../cards/cards.html";
+  window.location.href = "../../cards/cards.html";
 };
