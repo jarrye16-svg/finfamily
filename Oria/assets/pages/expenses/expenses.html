@@ -10,21 +10,13 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="expenses.css" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
-    }
-  </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="top-bar">
     <div class="top-left" onclick="window.location.href='../app/home/home.html'">
-      <img src="../../branding/logo/oria-icon.png" class="logo" />
+      <img src="../../branding/logo/oria-icon.png" class="logo" alt="Oria">
       <div>
         <strong>Contas da Casa</strong>
         <small id="monthLabel"></small>
@@ -86,7 +78,7 @@
     </div>
   </div>
 
-  <!-- SCRIPTS (ORDEM IMPORTANTE) -->
+  <!-- SCRIPTS (ORDEM OBRIGATÓRIA) -->
   <script src="../../core/supabase.js"></script>
   <script src="expenses.js"></script>
 
