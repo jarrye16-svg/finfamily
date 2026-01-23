@@ -1,87 +1,129 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Oria • Visão geral</title>
+// =============================================
+// Oria • Home Script
+// =============================================
 
-  <!-- Fonte principal -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+// Aguarda o Supabase estar disponível
+async function waitSupabaseReady() {
+  while (!window.supabase) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+}
 
-  <!-- Caminho do CSS -->
-  <link rel="stylesheet" href="/finfamily/Oria/assets/pages/app/home/home.css">
-</head>
+// Função principal
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('[Oria] Página Home carregada');
 
-<body>
-  <div class="app">
+  // Espera o Supabase
+  await waitSupabaseReady();
 
-    <!-- TOPO -->
-    <header class="header">
-      <div class="brand">
-        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" class="logo" alt="Oria">
-        <div class="brand-text">
-          <strong>Oria</strong>
-          <span>Visão geral</span>
-        </div>
-      </div>
+  // Elementos principais
+  const currentMonthEl = document.getElementById('currentMonth');
+  const incomeValue = document.getElementById('incomeValue');
+  const expenseValue = document.getElementById('expenseValue');
+  const creditValue = document.getElementById('creditValue');
+  const balanceValue = document.getElementById('balanceValue');
 
-      <div class="profile">
-        <div class="avatar"></div>
-      </div>
-    </header>
+  // ===========================
+  // Controle de Mês
+  // ===========================
+  const monthNames = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
 
-    <!-- CONTEÚDO -->
-    <main class="content">
-      <div class="surface">
+  let currentDate = new Date();
 
-        <!-- MÊS -->
-        <section class="month-card">
-          <button id="prevMonth">‹</button>
-          <h2 id="currentMonth">Janeiro de 2026</h2>
-          <button id="nextMonth">›</button>
-        </section>
+  function renderMonth() {
+    if (!currentMonthEl) return console.warn('[Oria] #currentMonth não encontrado.');
 
-        <!-- RESUMO -->
-        <section class="stats">
-          <div class="stat-card">
-            <span>Entrada</span>
-            <strong class="positive" id="incomeValue">R$ 0,00</strong>
-          </div>
+    const monthName = monthNames[currentDate.getMonth()];
+    const year = currentDate.getFullYear();
+    currentMonthEl.innerText = `${monthName} de ${year}`;
+  }
 
-          <div class="stat-card">
-            <span>Saída</span>
-            <strong class="negative" id="expenseValue">R$ 0,00</strong>
-          </div>
+  // Botões de navegação do mês
+  const btnPrev = document.getElementById('prevMonth');
+  const btnNext = document.getElementById('nextMonth');
 
-          <div class="stat-card">
-            <span>Cartões</span>
-            <strong id="creditValue">R$ 0,00</strong>
-          </div>
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderMonth();
+      loadSummary();
+    });
+  }
 
-          <div class="stat-card">
-            <span>Saldo</span>
-            <strong id="balanceValue">R$ 0,00</strong>
-          </div>
-        </section>
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderMonth();
+      loadSummary();
+    });
+  }
 
-        <!-- ATALHOS -->
-        <section class="actions">
-          <h3>Atalhos</h3>
+  renderMonth(); // exibe o mês atual logo ao carregar
 
-          <div class="actions-grid">
-            <button class="action primary" id="btnExpenses">Contas da casa</button>
-            <button class="action" id="btnIncome">Renda</button>
-            <button class="action" id="btnPiggy">Porquinho</button>
-            <button class="action" id="btnCards">Cartões</button>
-          </div>
-        </section>
+  // ===========================
+  // Carregar dados do usuário
+  // ===========================
+  async function loadSummary() {
+    try {
+      const { data: { user } } = await window.supabase.auth.getUser();
+      if (!user) {
+        console.warn('[Oria] Nenhum usuário logado. Redirecionando...');
+        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+        return;
+      }
 
-      </div>
-    </main>
-  </div>
+      console.log('[Oria] Usuário logado:', user.email);
 
-  <!-- Scripts principais (caminhos absolutos) -->
-  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
-  <script src="/finfamily/Oria/assets/pages/app/home/home.js"></script>
-</body>
-</html>
+      // Aqui você pode buscar dados reais do Supabase:
+      // const { data, error } = await window.supabase
+      //   .from('transactions')
+      //   .select('*')
+      //   .eq('user_id', user.id);
+
+      // Exemplo estático (placeholder):
+      if (incomeValue) incomeValue.innerText = 'R$ 0,00';
+      if (expenseValue) expenseValue.innerText = 'R$ 0,00';
+      if (creditValue) creditValue.innerText = 'R$ 0,00';
+      if (balanceValue) balanceValue.innerText = 'R$ 0,00';
+    } catch (err) {
+      console.error('[Oria] Erro ao carregar resumo:', err);
+    }
+  }
+
+  await loadSummary();
+
+  // ===========================
+  // Atalhos
+  // ===========================
+  const btnExpenses = document.getElementById('btnExpenses');
+  const btnIncome = document.getElementById('btnIncome');
+  const btnPiggy = document.getElementById('btnPiggy');
+  const btnCards = document.getElementById('btnCards');
+
+  if (btnExpenses) {
+    btnExpenses.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/expenses/expenses.html';
+    });
+  }
+
+  if (btnIncome) {
+    btnIncome.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/income/income.html';
+    });
+  }
+
+  if (btnPiggy) {
+    btnPiggy.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/piggy/piggy.html';
+    });
+  }
+
+  if (btnCards) {
+    btnCards.addEventListener('click', () => {
+      window.location.href = '/finfamily/Oria/assets/pages/app/cards/cards.html';
+    });
+  }
+});
