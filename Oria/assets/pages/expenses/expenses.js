@@ -1,21 +1,20 @@
 /* ==================================================
-   Oria • Contas da Casa (Supabase FINAL)
-   BASE VALIDADA COM SEU BANCO
+   Oria • Contas da Casa (SUPABASE FINAL CORRETO)
 ================================================== */
 
-/* ========= garantia supabase ========= */
+/* ===== garante que o supabase carregou ===== */
 async function waitSupabase() {
   return new Promise((resolve) => {
-    const t = setInterval(() => {
+    const i = setInterval(() => {
       if (window.supabase) {
-        clearInterval(t);
+        clearInterval(i);
         resolve();
       }
     }, 50);
   });
 }
 
-/* ========= constantes ========= */
+/* ===== constantes ===== */
 const MONTHS = [
   "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
@@ -24,7 +23,7 @@ const MONTHS = [
 let currentDate = new Date();
 let expenses = [];
 
-/* ========= utils ========= */
+/* ===== utils ===== */
 function formatMonth(date) {
   return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
 }
@@ -42,7 +41,7 @@ function formatDateBR(iso) {
   return `${d}/${m}/${y}`;
 }
 
-/* ========= mês ========= */
+/* ===== mês ===== */
 function renderMonth() {
   const label = formatMonth(currentDate);
   document.getElementById("monthText").innerText = label;
@@ -55,21 +54,19 @@ window.changeMonth = (delta) => {
   loadExpenses();
 };
 
-/* ========= family ========= */
+/* ===== family ===== */
 async function getFamilyId(userId) {
   const { data, error } = await supabase
     .from("family_members")
     .select("family_id")
     .eq("user_id", userId)
-    .maybeSingle();
+    .single();
 
   if (error) throw error;
-  if (data?.family_id) return data.family_id;
-
-  throw new Error("Usuário sem família vinculada");
+  return data.family_id;
 }
 
-/* ========= carregar despesas ========= */
+/* ===== carregar despesas ===== */
 async function loadExpenses() {
   await waitSupabase();
 
@@ -81,12 +78,12 @@ async function loadExpenses() {
 
   const { data, error } = await supabase
     .from("transactions")
-    .select("id, title, amount, date, paid")
+    .select("*")
     .eq("user_id", user.id)
-    .eq("type", "gasto")       // ✅ CORRETO
+    .eq("type", "gasto")        // ✅ correto
     .eq("year", year)
     .eq("month", month)
-    .order("date", { ascending: true });
+    .order("date", { ascending: true }); // ✅ correto
 
   if (error) {
     console.error("[loadExpenses]", error);
@@ -97,7 +94,7 @@ async function loadExpenses() {
   renderExpenses();
 }
 
-/* ========= render ========= */
+/* ===== render ===== */
 function renderExpenses() {
   const list = document.getElementById("expensesList");
   list.innerHTML = "";
@@ -106,8 +103,8 @@ function renderExpenses() {
   let open = 0;
 
   expenses.forEach((e) => {
-    total += Number(e.amount || 0);
-    if (!e.paid) open += Number(e.amount || 0);
+    total += Number(e.amount);
+    if (!e.paid) open += Number(e.amount);
 
     const card = document.createElement("div");
     card.className = "card";
@@ -117,9 +114,13 @@ function renderExpenses() {
         <strong>${e.title}</strong>
         <span>Vence: ${formatDateBR(e.date)}</span>
       </div>
+
       <div class="card-right">
-        <span class="${e.paid ? "paid" : "open"}">${formatBRL(e.amount)}</span>
-        <button class="pay-btn" onclick="togglePaid('${e.id}', ${e.paid})">
+        <span class="${e.paid ? "paid" : "open"}">
+          ${formatBRL(e.amount)}
+        </span>
+        <button class="pay-btn"
+          onclick="togglePaid('${e.id}', ${e.paid})">
           ${e.paid ? "Pago" : "Marcar pago"}
         </button>
       </div>
@@ -132,25 +133,25 @@ function renderExpenses() {
   document.getElementById("openValue").innerText = formatBRL(open);
 }
 
-/* ========= modal ========= */
+/* ===== modal ===== */
 window.openNew = () => {
-  document.getElementById("inputName").value = "";
-  document.getElementById("inputAmount").value = "";
-  document.getElementById("inputDueDate").value = "";
-  document.getElementById("modal").style.display = "flex";
+  inputName.value = "";
+  inputAmount.value = "";
+  inputDueDate.value = "";
+  modal.style.display = "flex";
 };
 
 window.closeModal = () => {
-  document.getElementById("modal").style.display = "none";
+  modal.style.display = "none";
 };
 
-/* ========= salvar ========= */
+/* ===== salvar ===== */
 window.saveExpense = async () => {
   await waitSupabase();
 
-  const title = document.getElementById("inputName").value.trim();
-  const amount = Number(document.getElementById("inputAmount").value);
-  const date = document.getElementById("inputDueDate").value;
+  const title = inputName.value.trim();
+  const amount = Number(inputAmount.value);
+  const date = inputDueDate.value;
 
   if (!title || !amount || !date) {
     alert("Preencha todos os campos");
@@ -163,45 +164,50 @@ window.saveExpense = async () => {
     return;
   }
 
-  const familyId = await getFamilyId(user.id);
+  try {
+    const familyId = await getFamilyId(user.id);
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
+    const { error } = await supabase
+      .from("transactions")
+      .insert({
+        user_id: user.id,
+        family_id: familyId,
+        type: "gasto",     // ✅ OBRIGATÓRIO
+        title,
+        amount,
+        date,              // ✅ coluna correta
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth() + 1,
+        paid: false
+      });
 
-  const { error } = await supabase
-    .from("transactions")
-    .insert({
-      user_id: user.id,
-      family_id: familyId,
-      type: "gasto",        // ✅ AQUI ESTAVA O ERRO
-      title,
-      amount,
-      date,
-      year,
-      month,
-      paid: false
-    });
+    if (error) throw error;
 
-  if (error) {
-    console.error("[saveExpense]", error);
-    alert(error.message);
-    return;
+    closeModal();
+    loadExpenses();
+  } catch (err) {
+    console.error("[saveExpense]", err);
+    alert(err.message);
   }
-
-  closeModal();
-  loadExpenses();
 };
 
-/* ========= pago ========= */
+/* ===== pago ===== */
 window.togglePaid = async (id, paid) => {
-  await supabase
+  await waitSupabase();
+
+  const { error } = await supabase
     .from("transactions")
     .update({ paid: !paid })
     .eq("id", id);
 
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
   loadExpenses();
 };
 
-/* ========= init ========= */
+/* ===== init ===== */
 renderMonth();
 loadExpenses();
