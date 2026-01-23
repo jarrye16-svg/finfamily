@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Oria • Cartões</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #3b6df6;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --green: #16a34a;
+      --red: #dc2626;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* TOPO */
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 30px rgba(0,0,0,.1);
+    }
+
+    .logo img {
+      width: 30px;
+    }
+
+    .top-text strong {
+      font-size: 18px;
+    }
+
+    .top-text span {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* MÊS */
+    .month {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 14px 34px rgba(0,0,0,.08);
+      margin-bottom: 32px;
+    }
+
+    .month button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #eef2ff;
+      font-size: 20px;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .month strong {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card-item {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.08);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .card-name {
+      font-weight: 600;
+    }
+
+    .card-type {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .value.credit {
+      color: var(--red);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .value.balance {
+      color: var(--green);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .add {
+      margin-top: 32px;
+      background: linear-gradient(135deg, #4f83ff, #3b6df6);
+      color: #fff;
+      padding: 18px;
+      text-align: center;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- TOPO -->
+    <div class="top">
+      <div class="logo">
+        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png">
+      </div>
+      <div class="top-text">
+        <strong>Cartões</strong>
+        <span>Controle mensal</span>
+      </div>
+    </div>
+
+    <!-- MÊS -->
+    <div class="month">
+      <button onclick="changeMonth(-1)">‹</button>
+      <strong id="monthLabel"></strong>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+
+    <!-- LISTA -->
+    <div class="cards">
+      <div class="card-item">
+        <div class="card-header">
+          <div class="card-name">Inter • Jarrye</div>
+          <div class="card-type">Crédito</div>
+        </div>
+        <div class="value credit">R$ 1.500,00</div>
+      </div>
+
+      <div class="card-item">
+        <div class="card-header">
+          <div class="card-name">Nubank • Jarrye</div>
+          <div class="card-type">Crédito</div>
+        </div>
+        <div class="value credit">R$ 507,69</div>
+      </div>
+
+      <div class="card-item">
+        <div class="card-header">
+          <div class="card-name">Flash • Vale alimentação</div>
+          <div class="card-type">Saldo</div>
+        </div>
+        <div class="value balance">R$ 530,00</div>
+      </div>
+    </div>
+
+    <div class="add">+ Adicionar cartão</div>
+  </div>
+
+  <script>
+    const label = document.getElementById('monthLabel');
+
+    function getMonth() {
+      return localStorage.getItem('oria_current_month') || '2026-01';
+    }
+
+    function setMonth(value) {
+      localStorage.setItem('oria_current_month', value);
+    }
+
+    function renderMonth() {
+      const [y, m] = getMonth().split('-').map(Number);
+      const date = new Date(y, m - 1);
+      label.textContent = date.toLocaleDateString('pt-BR', {
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    function changeMonth(diff) {
+      let [y, m] = getMonth().split('-').map(Number);
+      m += diff;
+      if (m < 1) { m = 12; y--; }
+      if (m > 12) { m = 1; y++; }
+      setMonth(`${y}-${String(m).padStart(2, '0')}`);
+      renderMonth();
+    }
+
+    renderMonth();
+  </script>
+</body>
+</html>

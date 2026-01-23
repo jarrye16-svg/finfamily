@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Oria • Contas da Casa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="expenses.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="top-bar">
+    <div class="top-left" onclick="window.location.href='../app/home/home.html'">
+      <img src="../../branding/logo/oria-icon.png" class="logo" alt="Oria">
+      <div>
+        <strong>Contas da Casa</strong>
+        <small id="monthLabel"></small>
+      </div>
+    </div>
+  </header>
+
+  <!-- MÊS -->
+  <section class="month-box">
+    <button onclick="changeMonth(-1)">‹</button>
+    <span id="monthText"></span>
+    <button onclick="changeMonth(1)">›</button>
+  </section>
+
+  <!-- RESUMO -->
+  <section class="summary">
+    <div class="summary-card">
+      <span>Total</span>
+      <strong id="totalValue">R$ 0,00</strong>
+    </div>
+
+    <div class="summary-card alert">
+      <span>Em aberto</span>
+      <strong id="openValue">R$ 0,00</strong>
+    </div>
+  </section>
+
+  <!-- LISTA -->
+  <section class="list">
+    <h3>Contas</h3>
+    <div id="expensesList"></div>
+  </section>
+
+  <!-- FAB -->
+  <button class="fab" onclick="openNew()">+</button>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Nova Conta</h3>
+        <button onclick="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <label>Descrição</label>
+        <input id="inputName" placeholder="Ex: Luz" />
+
+        <label>Valor</label>
+        <input id="inputAmount" type="number" placeholder="0,00" />
+
+        <label>Vencimento</label>
+        <input id="inputDueDate" type="date" />
+      </div>
+
+      <div class="modal-footer">
+        <button class="primary" onclick="saveExpense()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS (ORDEM OBRIGATÓRIA) -->
+  <script src="../../core/supabase.js"></script>
+  <script src="expenses.js"></script>
+
+</body>
+</html>
