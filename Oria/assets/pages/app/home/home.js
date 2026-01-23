@@ -1,121 +1,133 @@
 // =============================================
-// Oria • Página Home
+// Oria • Home (Visão Geral)
+// Integração real com Supabase
 // =============================================
 
-// Aguarda o Supabase estar disponível
-async function waitSupabaseReady() {
-  while (!window.supabase) {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("[Oria] Home carregada");
 
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('[Oria] Página Home carregada');
+  // Aguarda o Supabase estar pronto
+  await window.waitSupabase();
 
-  // Espera Supabase
-  await waitSupabaseReady();
+  // Seletores principais
+  const incomeValue = document.getElementById("incomeValue");
+  const expenseValue = document.getElementById("expenseValue");
+  const creditValue = document.getElementById("creditValue");
+  const balanceValue = document.getElementById("balanceValue");
+  const currentMonthEl = document.getElementById("currentMonth");
 
-  // Elementos principais
-  const currentMonthEl = document.getElementById('currentMonth');
-  const incomeValue = document.getElementById('incomeValue');
-  const expenseValue = document.getElementById('expenseValue');
-  const creditValue = document.getElementById('creditValue');
-  const balanceValue = document.getElementById('balanceValue');
-
-  // ===========================
-  // Controle de Mês
-  // ===========================
+  // Controle de mês
   const monthNames = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
-
   let currentDate = new Date();
 
+  // ==============================
+  // Renderização do mês atual
+  // ==============================
   function renderMonth() {
-    if (!currentMonthEl) return console.warn('[Oria] #currentMonth não encontrado.');
-
     const monthName = monthNames[currentDate.getMonth()];
     const year = currentDate.getFullYear();
     currentMonthEl.innerText = `${monthName} de ${year}`;
   }
 
-  const btnPrev = document.getElementById('prevMonth');
-  const btnNext = document.getElementById('nextMonth');
-
-  if (btnPrev) {
-    btnPrev.addEventListener('click', () => {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      renderMonth();
-      loadSummary();
-    });
+  // ==============================
+  // Helpers
+  // ==============================
+  function toCurrency(value) {
+    return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   }
 
-  if (btnNext) {
-    btnNext.addEventListener('click', () => {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      renderMonth();
-      loadSummary();
-    });
+  function extractMonthYear(date) {
+    return {
+      month: (date.getMonth() + 1).toString().padStart(2, "0"),
+      year: date.getFullYear().toString()
+    };
   }
 
-  renderMonth();
-
-  // ===========================
-  // Carregar dados do usuário
-  // ===========================
+  // ==============================
+  // Carrega resumo do mês
+  // ==============================
   async function loadSummary() {
     try {
       const { data: { user } } = await window.supabase.auth.getUser();
       if (!user) {
-        console.warn('[Oria] Nenhum usuário logado. Redirecionando...');
-        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+        console.warn("[Oria] Nenhum usuário logado. Redirecionando...");
+        window.location.href = "/finfamily/Oria/assets/pages/login/login.html";
         return;
       }
 
-      console.log('[Oria] Usuário logado:', user.email);
+      const { month, year } = extractMonthYear(currentDate);
+      console.log(`[Oria] Carregando dados de ${month}/${year} para ${user.email}`);
 
-      // Exemplo estático (pode integrar com Supabase futuramente)
-      if (incomeValue) incomeValue.innerText = 'R$ 5.000,00';
-      if (expenseValue) expenseValue.innerText = 'R$ 2.350,00';
-      if (creditValue) creditValue.innerText = 'R$ 800,00';
-      if (balanceValue) balanceValue.innerText = 'R$ 2.650,00';
+      // Consulta na tabela "transactions"
+      const { data, error } = await window.supabase
+        .from("transactions")
+        .select("type, amount")
+        .eq("user_id", user.id)
+        .eq("month", month)
+        .eq("year", year);
+
+      if (error) throw error;
+
+      // Calcula totais
+      let totalIncome = 0;
+      let totalExpense = 0;
+      let totalCards = 0;
+
+      (data || []).forEach(tx => {
+        const val = Number(tx.amount) || 0;
+        if (tx.type === "income") totalIncome += val;
+        else if (tx.type === "expense") totalExpense += val;
+        else if (tx.type === "card") totalCards += val;
+      });
+
+      const balance = totalIncome - totalExpense - totalCards;
+
+      // Atualiza na tela
+      incomeValue.innerText = toCurrency(totalIncome);
+      expenseValue.innerText = toCurrency(totalExpense);
+      creditValue.innerText = toCurrency(totalCards);
+      balanceValue.innerText = toCurrency(balance);
+
     } catch (err) {
-      console.error('[Oria] Erro ao carregar resumo:', err);
+      console.error("[Oria] Erro ao carregar resumo:", err);
+      incomeValue.innerText = "R$ 0,00";
+      expenseValue.innerText = "R$ 0,00";
+      creditValue.innerText = "R$ 0,00";
+      balanceValue.innerText = "R$ 0,00";
     }
   }
 
+  // ==============================
+  // Navegação de mês
+  // ==============================
+  document.getElementById("prevMonth").addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderMonth();
+    loadSummary();
+  });
+
+  document.getElementById("nextMonth").addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderMonth();
+    loadSummary();
+  });
+
+  // ==============================
+  // Inicialização
+  // ==============================
+  renderMonth();
   await loadSummary();
 
-  // ===========================
-  // Atalhos de Navegação
-  // ===========================
-  const btnExpenses = document.getElementById('btnExpenses');
-  const btnIncome = document.getElementById('btnIncome');
-  const btnPiggy = document.getElementById('btnPiggy');
-  const btnCards = document.getElementById('btnCards');
+  // ==============================
+  // Atalhos
+  // ==============================
+  const go = (path) => (window.location.href = `/finfamily/Oria/assets/pages/${path}/${path}.html`);
 
-  if (btnExpenses) {
-    btnExpenses.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/expenses/expenses.html';
-    });
-  }
-
-  if (btnIncome) {
-    btnIncome.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/income/income.html';
-    });
-  }
-
-  if (btnPiggy) {
-    btnPiggy.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/piggy/piggy.html';
-    });
-  }
-
-  if (btnCards) {
-    btnCards.addEventListener('click', () => {
-      window.location.href = '/finfamily/Oria/assets/pages/cards/cards.html';
-    });
-  }
+  document.getElementById("btnExpenses").addEventListener("click", () => go("expenses"));
+  document.getElementById("btnIncome").addEventListener("click", () => go("income"));
+  document.getElementById("btnPiggy").addEventListener("click", () => go("piggy"));
+  document.getElementById("btnCards").addEventListener("click", () => go("cards"));
 });
