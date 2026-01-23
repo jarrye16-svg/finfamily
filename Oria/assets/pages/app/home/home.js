@@ -1,9 +1,8 @@
 /* ==================================================
-   Oria • Home / Visão Geral (Supabase FINAL)
+   Oria • Home (Supabase FINAL)
    Copiar e substituir o arquivo inteiro
 ================================================== */
 
-/* ========= garantia supabase ========= */
 async function waitSupabase() {
   return new Promise((resolve) => {
     const t = setInterval(() => {
@@ -15,7 +14,6 @@ async function waitSupabase() {
   });
 }
 
-/* ========= constantes ========= */
 const MONTHS = [
   "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
   "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
@@ -40,8 +38,14 @@ function renderMonth() {
   document.getElementById("monthLabel").innerText = formatMonth(currentDate);
 }
 
-window.changeMonth = (delta) => {
-  currentDate.setMonth(currentDate.getMonth() + delta);
+document.getElementById("prevMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderMonth();
+  loadSummary();
+};
+
+document.getElementById("nextMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
   renderMonth();
   loadSummary();
 };
@@ -55,22 +59,22 @@ async function getFamilyId(userId) {
     .maybeSingle();
 
   if (error) throw error;
-  if (data?.family_id) return data.family_id;
+  if (!data) throw new Error("Família não encontrada");
 
-  throw new Error("Família não encontrada");
+  return data.family_id;
 }
 
-/* ========= carregar resumo ========= */
+/* ========= resumo ========= */
 async function loadSummary() {
   await waitSupabase();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
 
+  const familyId = await getFamilyId(user.id);
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
-
-  const familyId = await getFamilyId(user.id);
 
   const { data, error } = await supabase
     .from("transactions")
@@ -80,23 +84,21 @@ async function loadSummary() {
     .eq("month", month);
 
   if (error) {
-    console.error("[home loadSummary]", error);
+    console.error(error);
     return;
   }
 
   let income = 0;
   let expense = 0;
 
-  data.forEach((t) => {
+  data.forEach(t => {
     if (t.type === "entrada") income += Number(t.amount || 0);
     if (t.type === "gasto") expense += Number(t.amount || 0);
   });
 
-  const balance = income - expense;
-
   document.getElementById("incomeValue").innerText = formatBRL(income);
   document.getElementById("expenseValue").innerText = formatBRL(expense);
-  document.getElementById("balanceValue").innerText = formatBRL(balance);
+  document.getElementById("balanceValue").innerText = formatBRL(income - expense);
   document.getElementById("cardValue").innerText = formatBRL(0);
 }
 
