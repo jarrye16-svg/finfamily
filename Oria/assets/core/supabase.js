@@ -1,33 +1,18 @@
-<!-- ==================================================
-     Oria • Supabase Client (OFICIAL)
-     NÃO MODIFICAR SEM AVISAR
-================================================== -->
-<script>
+/* ==================================================
+   Oria • Supabase Client (OFICIAL)
+   ================================================== */
+
 const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
 
-/* Aguarda o Supabase estar disponível */
-function waitSupabase() {
-  return new Promise(resolve => {
-    const check = () => {
-      if (window.supabase) return resolve();
-      setTimeout(check, 50);
-    };
-    check();
-  });
-}
-
-/* Carrega SDK e cria client */
+// Carrega o SDK do Supabase dinamicamente
 (function () {
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
   script.defer = true;
 
   script.onload = () => {
-    window.supabase = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     console.log('[Oria] Supabase conectado');
   };
 
@@ -37,4 +22,3 @@ function waitSupabase() {
 
   document.head.appendChild(script);
 })();
-</script>
