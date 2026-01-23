@@ -1,6 +1,10 @@
+/* ==================================================
+   Oria • Contas da Casa (FINAL DEFINITIVO)
+================================================== */
+
 /* ===============================
-   Garantia global Supabase
-   (anti-bug definitivo)
+   ESPERA SUPABASE (LOCAL)
+   NÃO DEPENDE DE OUTRO ARQUIVO
 ================================ */
 async function waitSupabase() {
   return new Promise(resolve => {
@@ -11,11 +15,6 @@ async function waitSupabase() {
     check();
   });
 }
-
-/* ==================================================
-   Oria • Contas da Casa (FINAL • Supabase)
-   Copiar e substituir o arquivo inteiro
-================================================== */
 
 /* ===============================
    Constantes
@@ -58,41 +57,30 @@ function changeMonth(delta) {
 }
 
 /* ===============================
-   Carregar despesas (Supabase)
+   Carregar despesas
 ================================ */
 async function loadExpenses() {
   await waitSupabase();
 
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    console.warn('[Oria] Usuário não autenticado');
-    return;
-  }
+  if (!user) return;
 
-  const { data: settings, error: settingsErr } = await supabase
+  const { data: settings } = await supabase
     .from('user_settings')
     .select('current_year, current_month')
     .eq('user_id', user.id)
     .single();
 
-  if (settingsErr || !settings) {
-    console.error('[Oria] user_settings não encontrado', settingsErr);
-    return;
-  }
+  if (!settings) return;
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('transactions')
     .select('*')
     .eq('user_id', user.id)
     .eq('type', 'expense')
     .eq('year', settings.current_year)
     .eq('month', settings.current_month)
-    .order('date', { ascending: true });
-
-  if (error) {
-    console.error('[Oria] Erro ao carregar despesas', error);
-    return;
-  }
+    .order('date');
 
   expenses = data || [];
   renderExpenses();
@@ -120,7 +108,6 @@ function renderExpenses() {
         <strong>${e.title}</strong>
         <span>Vence: ${e.date}</span>
       </div>
-
       <div class="card-right">
         <span class="${e.paid ? 'paid' : 'open'}">
           ${formatBRL(e.amount)}
@@ -139,7 +126,7 @@ function renderExpenses() {
 }
 
 /* ===============================
-   Salvar nova conta
+   Salvar
 ================================ */
 async function saveExpense() {
   await waitSupabase();
@@ -154,74 +141,46 @@ async function saveExpense() {
   }
 
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    alert('Usuário não autenticado');
-    return;
-  }
+  if (!user) return;
 
-  const { data: family, error: famErr } = await supabase
+  const { data: family } = await supabase
     .from('family_members')
     .select('family_id')
     .eq('user_id', user.id)
     .single();
 
-  if (famErr || !family) {
-    alert('Família não encontrada');
-    console.error(famErr);
-    return;
-  }
-
-  const { data: settings, error: setErr } = await supabase
+  const { data: settings } = await supabase
     .from('user_settings')
     .select('current_year, current_month')
     .eq('user_id', user.id)
     .single();
 
-  if (setErr || !settings) {
-    alert('Configuração de mês não encontrada');
-    console.error(setErr);
-    return;
-  }
-
-  const { error } = await supabase
-    .from('transactions')
-    .insert({
-      user_id: user.id,
-      family_id: family.family_id,
-      type: 'expense',
-      title,
-      amount,
-      date,
-      year: settings.current_year,
-      month: settings.current_month,
-      paid: false
-    });
-
-  if (error) {
-    console.error('[Oria] Erro ao salvar', error);
-    alert('Erro ao salvar conta');
-    return;
-  }
+  await supabase.from('transactions').insert({
+    user_id: user.id,
+    family_id: family.family_id,
+    type: 'expense',
+    title,
+    amount,
+    date,
+    year: settings.current_year,
+    month: settings.current_month,
+    paid: false
+  });
 
   closeModal();
   loadExpenses();
 }
 
 /* ===============================
-   Marcar pago
+   Pago
 ================================ */
 async function togglePaid(id, paid) {
   await waitSupabase();
 
-  const { error } = await supabase
+  await supabase
     .from('transactions')
     .update({ paid: !paid })
     .eq('id', id);
-
-  if (error) {
-    console.error('[Oria] Erro ao atualizar pagamento', error);
-    return;
-  }
 
   loadExpenses();
 }
