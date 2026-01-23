@@ -1,111 +1,112 @@
 /* ==================================================
-   Oria • Contas da Casa
-   Supabase FINAL — com auto-family
+   Oria • Contas da Casa (Supabase FINAL - base com coluna "data")
+   Copiar e substituir o arquivo inteiro
 ================================================== */
 
-/* ---------- Espera Supabase ---------- */
+/* ========= garantia supabase ========= */
 async function waitSupabase() {
-  return new Promise(resolve => {
-    const check = () => {
-      if (window.supabase) return resolve();
-      setTimeout(check, 50);
-    };
-    check();
+  return new Promise((resolve) => {
+    const t = setInterval(() => {
+      if (window.supabase) {
+        clearInterval(t);
+        resolve();
+      }
+    }, 50);
   });
 }
 
-/* ---------- Constantes ---------- */
+/* ========= constantes ========= */
 const MONTHS = [
-  'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
+  "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
 ];
 
 let currentDate = new Date();
 let expenses = [];
 
-/* ---------- Utils ---------- */
+/* ========= utils ========= */
 function formatMonth(date) {
   return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
 }
 
 function formatBRL(v) {
-  return v.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  });
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v || 0);
 }
 
-/* ---------- Mês ---------- */
+function formatDateBR(iso) {
+  if (!iso) return "--";
+  // iso: "2026-01-22"
+  const [y, m, d] = iso.split("-");
+  if (!y || !m || !d) return iso;
+  return `${d}/${m}/${y}`;
+}
+
+/* ========= mês ========= */
 function renderMonth() {
   const label = formatMonth(currentDate);
-  document.getElementById('monthText').innerText = label;
-  document.getElementById('monthLabel').innerText = label;
+  document.getElementById("monthText").innerText = label;
+  document.getElementById("monthLabel").innerText = label;
 }
 
-function changeMonth(delta) {
+window.changeMonth = (delta) => {
   currentDate.setMonth(currentDate.getMonth() + delta);
   renderMonth();
   loadExpenses();
-}
+};
 
-/* ==================================================
-   🔥 GARANTE FAMÍLIA (CORREÇÃO DEFINITIVA)
-================================================== */
-async function getOrCreateFamily(userId) {
-  // tenta achar família
-  let { data: member } = await supabase
-    .from('family_members')
-    .select('family_id')
-    .eq('user_id', userId)
+/* ========= family (pega a existente) ========= */
+async function getFamilyId(userId) {
+  // como você já vinculou, deve retornar 1 linha
+  const { data, error } = await supabase
+    .from("family_members")
+    .select("family_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  if (data?.family_id) return data.family_id;
+
+  // fallback (se algum usuário novo cair aqui)
+  const { data: fam, error: famErr } = await supabase
+    .from("families")
+    .insert({ name: "Minha Família" })
+    .select("id")
     .single();
 
-  if (member) return member.family_id;
+  if (famErr) throw famErr;
 
-  // cria família
-  const { data: family, error: famErr } = await supabase
-    .from('families')
-    .insert({ name: 'Minha Família' })
-    .select()
-    .single();
+  const { error: memErr } = await supabase
+    .from("family_members")
+    .insert({ user_id: userId, family_id: fam.id, role: "owner" });
 
-  if (famErr) {
-    alert('Erro ao criar família');
-    throw famErr;
-  }
+  if (memErr) throw memErr;
 
-  // vincula usuário
-  await supabase.from('family_members').insert({
-    user_id: userId,
-    family_id: family.id,
-    role: 'owner'
-  });
-
-  return family.id;
+  return fam.id;
 }
 
-/* ---------- Carregar despesas ---------- */
+/* ========= carregar despesas ========= */
 async function loadExpenses() {
   await waitSupabase();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: userErr } = await supabase.auth.getUser();
+  if (userErr) console.error(userErr);
   if (!user) return;
 
-  const familyId = await getOrCreateFamily(user.id);
-
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
+  const month = currentDate.getMonth() + 1; // 1..12
 
   const { data, error } = await supabase
-    .from('transactions')
-    .select('*')
-    .eq('family_id', familyId)
-    .eq('type', 'expense')
-    .eq('year', year)
-    .eq('month', month)
-    .order('date');
+    .from("transactions")
+    .select("id, title, amount, data, paid, type, year, month")
+    .eq("user_id", user.id)
+    .eq("type", "expense")
+    .eq("year", year)
+    .eq("month", month)
+    .order("data", { ascending: true }); // ✅ coluna correta é "data"
 
   if (error) {
-    console.error(error);
+    console.error("[loadExpenses]", error);
     return;
   }
 
@@ -113,32 +114,31 @@ async function loadExpenses() {
   renderExpenses();
 }
 
-/* ---------- Render ---------- */
+/* ========= render ========= */
 function renderExpenses() {
-  const list = document.getElementById('expensesList');
-  list.innerHTML = '';
+  const list = document.getElementById("expensesList");
+  list.innerHTML = "";
 
   let total = 0;
   let open = 0;
 
-  expenses.forEach(e => {
-    total += e.amount;
-    if (!e.paid) open += e.amount;
+  expenses.forEach((e) => {
+    total += Number(e.amount || 0);
+    if (!e.paid) open += Number(e.amount || 0);
 
-    const card = document.createElement('div');
-    card.className = 'card';
+    const card = document.createElement("div");
+    card.className = "card";
 
     card.innerHTML = `
       <div class="card-info">
-        <strong>${e.title}</strong>
-        <span>Vence: ${e.date}</span>
+        <strong>${e.title || "-"}</strong>
+        <span>Vence: ${formatDateBR(e.data)}</span>
       </div>
+
       <div class="card-right">
-        <span class="${e.paid ? 'paid' : 'open'}">
-          ${formatBRL(e.amount)}
-        </span>
-        <button onclick="togglePaid('${e.id}', ${e.paid})">
-          ${e.paid ? 'Pago' : 'Marcar pago'}
+        <span class="${e.paid ? "paid" : "open"}">${formatBRL(e.amount)}</span>
+        <button class="pay-btn" onclick="togglePaid('${e.id}', ${e.paid ? "true" : "false"})">
+          ${e.paid ? "Pago" : "Marcar pago"}
         </button>
       </div>
     `;
@@ -146,75 +146,98 @@ function renderExpenses() {
     list.appendChild(card);
   });
 
-  document.getElementById('totalValue').innerText = formatBRL(total);
-  document.getElementById('openValue').innerText = formatBRL(open);
+  document.getElementById("totalValue").innerText = formatBRL(total);
+  document.getElementById("openValue").innerText = formatBRL(open);
 }
 
-/* ---------- Salvar ---------- */
-async function saveExpense() {
+/* ========= modal ========= */
+window.openNew = () => {
+  document.getElementById("inputName").value = "";
+  document.getElementById("inputAmount").value = "";
+  document.getElementById("inputDueDate").value = "";
+  document.getElementById("modal").style.display = "flex";
+};
+
+window.closeModal = () => {
+  document.getElementById("modal").style.display = "none";
+};
+
+/* ========= salvar ========= */
+window.saveExpense = async () => {
   await waitSupabase();
 
-  const title = inputName.value.trim();
-  const amount = Number(inputAmount.value);
-  const date = inputDueDate.value;
+  const title = document.getElementById("inputName").value.trim();
+  const amount = Number(document.getElementById("inputAmount").value);
+  const due = document.getElementById("inputDueDate").value; // yyyy-mm-dd
 
-  if (!title || !amount || !date) {
-    alert('Preencha tudo');
+  if (!title || !amount || !due) {
+    alert("Preencha todos os campos.");
     return;
   }
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
-
-  const familyId = await getOrCreateFamily(user.id);
+  const { data: { user }, error: userErr } = await supabase.auth.getUser();
+  if (userErr) {
+    console.error(userErr);
+    alert("Erro ao validar usuário.");
+    return;
+  }
+  if (!user) {
+    alert("Você precisa estar logado.");
+    return;
+  }
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
 
-  const { error } = await supabase.from('transactions').insert({
-    user_id: user.id,
-    family_id: familyId,
-    type: 'expense',
-    title,
-    amount,
-    date,
-    year,
-    month,
-    paid: false
-  });
+  try {
+    const familyId = await getFamilyId(user.id);
+
+    const { error } = await supabase
+      .from("transactions")
+      .insert({
+        user_id: user.id,
+        family_id: familyId,
+        type: "expense",
+        title,
+        amount,
+        data: due,      // ✅ coluna correta
+        year,
+        month,
+        paid: false
+      });
+
+    if (error) {
+      console.error("[saveExpense insert]", error);
+      alert(`Erro ao salvar: ${error.message}`);
+      return;
+    }
+
+    closeModal();
+    loadExpenses();
+  } catch (err) {
+    console.error("[saveExpense catch]", err);
+    alert(`Erro ao salvar: ${err.message || "ver console"}`);
+  }
+};
+
+/* ========= marcar pago ========= */
+window.togglePaid = async (id, paid) => {
+  await waitSupabase();
+
+  const { error } = await supabase
+    .from("transactions")
+    .update({ paid: !paid })
+    .eq("id", id);
 
   if (error) {
-    console.error(error);
-    alert('Erro ao salvar');
+    console.error("[togglePaid]", error);
+    alert(`Erro ao atualizar: ${error.message}`);
     return;
   }
 
-  closeModal();
   loadExpenses();
-}
+};
 
-/* ---------- Pago ---------- */
-async function togglePaid(id, paid) {
-  await waitSupabase();
-  await supabase
-    .from('transactions')
-    .update({ paid: !paid })
-    .eq('id', id);
-  loadExpenses();
-}
-
-/* ---------- Modal ---------- */
-function openNew() {
-  inputName.value = '';
-  inputAmount.value = '';
-  inputDueDate.value = '';
-  modal.style.display = 'flex';
-}
-
-function closeModal() {
-  modal.style.display = 'none';
-}
-
-/* ---------- Init ---------- */
+/* ========= init ========= */
 renderMonth();
 loadExpenses();
