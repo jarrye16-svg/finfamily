@@ -1,32 +1,40 @@
-// ======================================
-// Oria - Supabase Client (OFICIAL)
-// ======================================
+<!-- ==================================================
+     Oria • Supabase Client (OFICIAL)
+     NÃO MODIFICAR SEM AVISAR
+================================================== -->
+<script>
+const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
 
-// 🔑 Credenciais reais do projeto Oria
-const SUPABASE_URL = "https://gelhizmssqlexlxkvufc.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb";
+/* Aguarda o Supabase estar disponível */
+function waitSupabase() {
+  return new Promise(resolve => {
+    const check = () => {
+      if (window.supabase) return resolve();
+      setTimeout(check, 50);
+    };
+    check();
+  });
+}
 
-// Carrega o SDK do Supabase (v2)
+/* Carrega SDK e cria client */
 (function () {
-  const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
   script.defer = true;
 
   script.onload = () => {
-    window.supabase = window.supabase.createClient(
+    window.supabase = supabase.createClient(
       SUPABASE_URL,
       SUPABASE_ANON_KEY
     );
-
-    // Flag global (IMPORTANTE)
-    window.__SUPABASE_READY__ = true;
-
-    console.log("[Supabase] Client carregado com sucesso");
+    console.log('[Oria] Supabase conectado');
   };
 
   script.onerror = () => {
-    console.error("[Supabase] Erro ao carregar SDK do Supabase");
+    console.error('[Oria] Erro ao carregar Supabase');
   };
 
   document.head.appendChild(script);
 })();
+</script>
