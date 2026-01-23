@@ -1,11 +1,8 @@
-/* ==================================================
-   Oria • Supabase Client (OFICIAL)
-   ================================================== */
-
+// Oria • Supabase Client
 const SUPABASE_URL = 'https://gelhizmssqlexlxkvufc.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_AstKmfIU-pBBXXfPDlw9HA_hQYfLqcb';
 
-// Carrega o SDK do Supabase dinamicamente
+// Carrega a biblioteca Supabase dinamicamente
 (function () {
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
