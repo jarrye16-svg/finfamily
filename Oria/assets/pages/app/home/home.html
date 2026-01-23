@@ -5,7 +5,13 @@
   <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilo global (padrão Oria) -->
+  <link rel="stylesheet" href="../../core/theme.css">
+
+  <!-- Estilo específico da Home -->
   <link rel="stylesheet" href="home.css">
 </head>
 
@@ -15,7 +21,7 @@
     <!-- TOPO -->
     <header class="header">
       <div class="brand">
-        <img src="../../../branding/logo/oria-icon.png" class="logo">
+        <img src="../../../branding/logo/oria-icon.png" class="logo" alt="Oria logo">
         <div class="brand-text">
           <strong>Oria</strong>
           <span>Visão geral</span>
@@ -33,9 +39,9 @@
 
         <!-- MÊS -->
         <section class="month-card">
-          <button id="prevMonth">‹</button>
+          <button class="nav-btn" id="prevMonth">‹</button>
           <h2 id="currentMonth">Janeiro de 2026</h2>
-          <button id="nextMonth">›</button>
+          <button class="nav-btn" id="nextMonth">›</button>
         </section>
 
         <!-- RESUMO -->
@@ -64,20 +70,20 @@
         <!-- ATALHOS -->
         <section class="actions">
           <h3>Atalhos</h3>
-
           <div class="actions-grid">
-            <button class="action primary" id="btnExpenses">Contas da casa</button>
-            <button class="action" id="btnIncome">Renda</button>
-            <button class="action" id="btnPiggy">Porquinho</button>
-            <button class="action" id="btnCards">Cartões</button>
+            <button class="btn primary" id="btnExpenses">Contas da casa</button>
+            <button class="btn outline" id="btnIncome">Renda</button>
+            <button class="btn outline" id="btnPiggy">Porquinho</button>
+            <button class="btn outline" id="btnCards">Cartões</button>
           </div>
         </section>
 
       </div>
     </main>
-
   </div>
 
+  <!-- Scripts -->
+  <script src="../../core/supabase.js"></script>
   <script src="home.js"></script>
 </body>
 </html>
