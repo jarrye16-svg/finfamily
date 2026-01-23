@@ -2,75 +2,86 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Oria • Visão geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oria • Visão geral</title>
 
-  <!-- Fonte -->
+  <!-- Fonte principal -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../../css/app.css">
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../../js/supabase.js"></script>
+  <!-- Estilo da página -->
+  <link rel="stylesheet" href="/finfamily/Oria/assets/pages/app/home/home.css">
 </head>
 
 <body>
   <div class="app">
 
     <!-- TOPO -->
-    <header class="top">
-      <div class="logo">
-        <img src="../../../img/logo-oria.png" alt="Oria">
-        <span>Oria</span>
+    <header class="header">
+      <div class="brand">
+        <img src="/finfamily/Oria/assets/branding/logo/oria-icon.png" class="logo" alt="Oria">
+        <div class="brand-text">
+          <strong>Oria</strong>
+          <span>Visão geral</span>
+        </div>
       </div>
-      <div class="avatar"></div>
+
+      <div class="profile">
+        <div class="avatar"></div>
+      </div>
     </header>
 
-    <!-- MÊS -->
-    <div class="month-nav">
-      <button id="prevMonth" type="button">‹</button>
-      <span id="monthLabel">—</span>
-      <button id="nextMonth" type="button">›</button>
-    </div>
+    <!-- CONTEÚDO -->
+    <main class="content">
+      <div class="surface">
 
-    <!-- RESUMO -->
-    <div class="cards-grid">
-      <div class="card">
-        <span>Entrada</span>
-        <strong class="green" id="incomeValue">R$ 0,00</strong>
+        <!-- MÊS -->
+        <section class="month-card">
+          <button id="prevMonth">‹</button>
+          <h2 id="currentMonth">Janeiro de 2026</h2>
+          <button id="nextMonth">›</button>
+        </section>
+
+        <!-- RESUMO -->
+        <section class="stats">
+          <div class="stat-card">
+            <span>Entrada</span>
+            <strong class="positive" id="incomeValue">R$ 0,00</strong>
+          </div>
+
+          <div class="stat-card">
+            <span>Saída</span>
+            <strong class="negative" id="expenseValue">R$ 0,00</strong>
+          </div>
+
+          <div class="stat-card">
+            <span>Cartões</span>
+            <strong id="creditValue">R$ 0,00</strong>
+          </div>
+
+          <div class="stat-card">
+            <span>Saldo</span>
+            <strong id="balanceValue">R$ 0,00</strong>
+          </div>
+        </section>
+
+        <!-- ATALHOS -->
+        <section class="actions">
+          <h3>Atalhos</h3>
+
+          <div class="actions-grid">
+            <button class="action primary" id="btnExpenses">Contas da casa</button>
+            <button class="action" id="btnIncome">Renda</button>
+            <button class="action" id="btnPiggy">Porquinho</button>
+            <button class="action" id="btnCards">Cartões</button>
+          </div>
+        </section>
+
       </div>
-
-      <div class="card">
-        <span>Saída</span>
-        <strong class="red" id="expenseValue">R$ 0,00</strong>
-      </div>
-
-      <div class="card">
-        <span>Cartões</span>
-        <strong id="cardValue">R$ 0,00</strong>
-      </div>
-
-      <div class="card">
-        <span>Saldo</span>
-        <strong id="balanceValue">R$ 0,00</strong>
-      </div>
-    </div>
-
-    <!-- ATALHOS -->
-    <h3 class="section-title">Atalhos</h3>
-
-    <div class="shortcuts">
-      <a class="shortcut" href="../expenses/expenses.html">Contas da casa</a>
-      <a class="shortcut" href="../income/income.html">Renda</a>
-      <a class="shortcut" href="../piggy/piggy.html">Porquinho</a>
-      <a class="shortcut" href="../cards/cards.html">Cartões</a>
-    </div>
-
+    </main>
   </div>
 
-  <!-- JS -->
-  <script src="home.js"></script>
+  <!-- Scripts principais -->
+  <script src="/finfamily/Oria/assets/core/supabase.js"></script>
+  <script src="/finfamily/Oria/assets/pages/app/home/home.js"></script>
 </body>
 </html>
