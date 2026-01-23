@@ -1,5 +1,5 @@
 /* ==================================================
-   Oria • Home (Supabase FINAL)
+   Oria • Home / Visão Geral (Supabase FINAL)
    Copiar e substituir o arquivo inteiro
 ================================================== */
 
@@ -37,79 +37,69 @@ function formatBRL(v) {
 
 /* ========= mês ========= */
 function renderMonth() {
-  document.getElementById("currentMonth").innerText =
-    formatMonth(currentDate);
+  document.getElementById("monthLabel").innerText = formatMonth(currentDate);
 }
 
 window.changeMonth = (delta) => {
   currentDate.setMonth(currentDate.getMonth() + delta);
   renderMonth();
-  loadHomeData();
+  loadSummary();
 };
 
-/* ========= carregar dados ========= */
-async function loadHomeData() {
+/* ========= family ========= */
+async function getFamilyId(userId) {
+  const { data, error } = await supabase
+    .from("family_members")
+    .select("family_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (data?.family_id) return data.family_id;
+
+  throw new Error("Família não encontrada");
+}
+
+/* ========= carregar resumo ========= */
+async function loadSummary() {
   await waitSupabase();
 
-  const { data: { user }, error: userErr } = await supabase.auth.getUser();
-  if (userErr || !user) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
 
+  const familyId = await getFamilyId(user.id);
+
   const { data, error } = await supabase
     .from("transactions")
-    .select("type, amount, paid")
-    .eq("user_id", user.id)
+    .select("amount, type")
+    .eq("family_id", familyId)
     .eq("year", year)
     .eq("month", month);
 
   if (error) {
-    console.error("[home load]", error);
+    console.error("[home loadSummary]", error);
     return;
   }
 
-  let entrada = 0;
-  let saida = 0;
-  let cartoes = 0;
+  let income = 0;
+  let expense = 0;
 
-  data.forEach(t => {
-    const value = Number(t.amount || 0);
-
-    if (t.type === "entrada") entrada += value;
-    if (t.type === "gasto") saida += value;
-    if (t.type === "cartao") cartoes += value;
+  data.forEach((t) => {
+    if (t.type === "entrada") income += Number(t.amount || 0);
+    if (t.type === "gasto") expense += Number(t.amount || 0);
   });
 
-  const saldo = entrada - saida - cartoes;
+  const balance = income - expense;
 
-  /* ========= UI ========= */
-  document.getElementById("incomeValue").innerText = formatBRL(entrada);
-  document.getElementById("expenseValue").innerText = formatBRL(saida);
-  document.getElementById("creditValue").innerText = formatBRL(cartoes);
-
-  const balanceEl = document.getElementById("balanceValue");
-  balanceEl.innerText = formatBRL(saldo);
-  balanceEl.style.color = saldo >= 0 ? "#16a34a" : "#dc2626";
+  document.getElementById("incomeValue").innerText = formatBRL(income);
+  document.getElementById("expenseValue").innerText = formatBRL(expense);
+  document.getElementById("balanceValue").innerText = formatBRL(balance);
+  document.getElementById("cardValue").innerText = formatBRL(0);
 }
-
-/* ========= navegação ========= */
-document.getElementById("btnExpenses").onclick = () => {
-  window.location.href = "../../expenses/expenses.html";
-};
-
-document.getElementById("btnIncome").onclick = () => {
-  window.location.href = "../../income/income.html";
-};
-
-document.getElementById("btnPiggy").onclick = () => {
-  window.location.href = "../../piggy/piggy.html";
-};
-
-document.getElementById("btnCards").onclick = () => {
-  window.location.href = "../../cards/cards.html";
-};
 
 /* ========= init ========= */
 renderMonth();
-loadHomeData();
+loadSummary();
