@@ -1,6 +1,6 @@
 /* ==================================================
    Oria • Home (Resumo geral integrado com Supabase)
-   Atualizado: Janeiro/2026
+   Atualizado: Janeiro/2026 — Caminhos corrigidos
 ================================================== */
 
 /* ===== Aguarda Supabase carregar ===== */
@@ -110,20 +110,26 @@ async function carregarResumo() {
 }
 
 /* ==================================================
-   Atalhos da Home
+   Atalhos da Home (caminhos corrigidos)
 ================================================== */
+
+// Contas da Casa
 document.getElementById("btnExpenses").onclick = () => {
-  window.location.href = "../../../assets/pages/expenses/expenses.html";
+  // Caminho corrigido — sobe duas pastas até "pages/expenses"
+  window.location.href = "../../pages/expenses/expenses.html";
 };
 
+// Renda
 document.getElementById("btnIncome").onclick = () => {
-  alert("Página de Renda ainda não configurada.");
+  window.location.href = "../../pages/income/income.html";
 };
 
+// Porquinho
 document.getElementById("btnPiggy").onclick = () => {
-  alert("Página do Porquinho ainda não configurada.");
+  window.location.href = "../../pages/piggy/piggy.html";
 };
 
+// Cartões
 document.getElementById("btnCards").onclick = () => {
-  alert("Página de Cartões ainda não configurada.");
+  window.location.href = "../../pages/cards/cards.html";
 };
