@@ -8,50 +8,63 @@
   <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
+  <!-- Tema global -->
+  <link rel="stylesheet" href="../../core/theme.css">
+
+  <!-- CSS específico -->
   <link rel="stylesheet" href="expenses.css" />
 </head>
 <body>
+  <div class="app">
 
-  <!-- HEADER -->
-  <header class="top-bar">
-    <div class="top-left" onclick="window.location.href='../app/home/home.html'">
-      <img src="../../branding/logo/oria-icon.png" class="logo" alt="Oria">
-      <div>
-        <strong>Contas da Casa</strong>
-        <small id="monthLabel"></small>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand" onclick="window.location.href='../app/home/home.html'">
+        <img src="../../branding/logo/oria-icon.png" class="logo" alt="Oria logo">
+        <div class="brand-text">
+          <strong>Contas da Casa</strong>
+          <span id="monthLabel">Janeiro de 2026</span>
+        </div>
       </div>
-    </div>
-  </header>
+      <div class="profile">
+        <div class="avatar"></div>
+      </div>
+    </header>
 
-  <!-- MÊS -->
-  <section class="month-box">
-    <button onclick="changeMonth(-1)">‹</button>
-    <span id="monthText"></span>
-    <button onclick="changeMonth(1)">›</button>
-  </section>
+    <!-- CONTEÚDO -->
+    <main class="content">
+      <div class="surface">
 
-  <!-- RESUMO -->
-  <section class="summary">
-    <div class="summary-card">
-      <span>Total</span>
-      <strong id="totalValue">R$ 0,00</strong>
-    </div>
+        <!-- MÊS -->
+        <section class="month-card">
+          <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+          <h2 id="monthText">Janeiro de 2026</h2>
+          <button class="nav-btn" onclick="changeMonth(1)">›</button>
+        </section>
 
-    <div class="summary-card alert">
-      <span>Em aberto</span>
-      <strong id="openValue">R$ 0,00</strong>
-    </div>
-  </section>
+        <!-- RESUMO -->
+        <section class="stats">
+          <div class="stat-card">
+            <span>Total</span>
+            <strong id="totalValue">R$ 0,00</strong>
+          </div>
+          <div class="stat-card">
+            <span>Em aberto</span>
+            <strong class="negative" id="openValue">R$ 0,00</strong>
+          </div>
+        </section>
 
-  <!-- LISTA -->
-  <section class="list">
-    <h3>Contas</h3>
-    <div id="expensesList"></div>
-  </section>
+        <!-- LISTA DE CONTAS -->
+        <section class="list">
+          <h3>Contas</h3>
+          <div id="expensesList" class="expenses-list"></div>
+        </section>
 
-  <!-- FAB -->
-  <button class="fab" onclick="openNew()">+</button>
+        <!-- BOTÃO FLUTUANTE -->
+        <button class="fab" onclick="openNew()">+</button>
+      </div>
+    </main>
+  </div>
 
   <!-- MODAL -->
   <div class="modal-overlay" id="modal">
@@ -73,14 +86,13 @@
       </div>
 
       <div class="modal-footer">
-        <button class="primary" onclick="saveExpense()">Salvar</button>
+        <button class="btn primary" onclick="saveExpense()">Salvar</button>
       </div>
     </div>
   </div>
 
-  <!-- SCRIPTS (ORDEM OBRIGATÓRIA) -->
+  <!-- SCRIPTS -->
   <script src="../../core/supabase.js"></script>
   <script src="expenses.js"></script>
-
 </body>
 </html>
