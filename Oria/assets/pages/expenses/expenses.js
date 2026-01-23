@@ -1,8 +1,11 @@
 /* ==================================================
-   Oria • Contas da Casa (Supabase FINAL)
+   Oria • Contas da Casa (FINAL • Supabase)
    Copiar e substituir o arquivo inteiro
 ================================================== */
 
+/* ===============================
+   Constantes
+================================ */
 const MONTHS = [
   'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
   'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
@@ -41,22 +44,25 @@ function changeMonth(delta) {
 }
 
 /* ===============================
-   Supabase - Carregar contas
+   Carregar despesas (Supabase)
 ================================ */
 async function loadExpenses() {
   await waitSupabase();
 
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) {
+    console.warn('[Oria] Usuário não autenticado');
+    return;
+  }
 
-  const { data: settings, error: setErr } = await supabase
+  const { data: settings, error: settingsErr } = await supabase
     .from('user_settings')
     .select('current_year, current_month')
     .eq('user_id', user.id)
     .single();
 
-  if (setErr || !settings) {
-    console.error('Configuração de mês não encontrada');
+  if (settingsErr || !settings) {
+    console.error('[Oria] user_settings não encontrado', settingsErr);
     return;
   }
 
@@ -70,7 +76,7 @@ async function loadExpenses() {
     .order('date', { ascending: true });
 
   if (error) {
-    console.error(error);
+    console.error('[Oria] Erro ao carregar despesas', error);
     return;
   }
 
@@ -139,17 +145,29 @@ async function saveExpense() {
     return;
   }
 
-  const { data: family } = await supabase
+  const { data: family, error: famErr } = await supabase
     .from('family_members')
     .select('family_id')
     .eq('user_id', user.id)
     .single();
 
-  const { data: settings } = await supabase
+  if (famErr || !family) {
+    alert('Família não encontrada');
+    console.error(famErr);
+    return;
+  }
+
+  const { data: settings, error: setErr } = await supabase
     .from('user_settings')
     .select('current_year, current_month')
     .eq('user_id', user.id)
     .single();
+
+  if (setErr || !settings) {
+    alert('Configuração de mês não encontrada');
+    console.error(setErr);
+    return;
+  }
 
   const { error } = await supabase
     .from('transactions')
@@ -166,7 +184,7 @@ async function saveExpense() {
     });
 
   if (error) {
-    console.error(error);
+    console.error('[Oria] Erro ao salvar', error);
     alert('Erro ao salvar conta');
     return;
   }
@@ -181,10 +199,15 @@ async function saveExpense() {
 async function togglePaid(id, paid) {
   await waitSupabase();
 
-  await supabase
+  const { error } = await supabase
     .from('transactions')
     .update({ paid: !paid })
     .eq('id', id);
+
+  if (error) {
+    console.error('[Oria] Erro ao atualizar pagamento', error);
+    return;
+  }
 
   loadExpenses();
 }
