@@ -1,242 +1,131 @@
-/* ==============================
-   BASE
-============================== */
-* {
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
+/* ==========================================
+   Oria • Página de Despesas
+   ========================================== */
 
 body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f7fb;
+  color: #333;
   margin: 0;
-  background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
-  min-height: 100vh;
+  padding: 0;
 }
 
-/* ==============================
-   HEADER
-============================== */
-.top-bar {
-  display: flex;
-  align-items: center;
-  padding: 24px;
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.top-left {
+.header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 
-.logo {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: #fff;
-  padding: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-}
-
-.top-left strong {
-  display: block;
-  font-size: 18px;
-}
-
-.top-left small {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-/* ==============================
-   MONTH
-============================== */
-.month-box {
-  margin: 20px;
-  background: #fff;
-  border-radius: 18px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.06);
-}
-
-.month-box button {
+.brand img.logo {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: #eef2ff;
-  font-size: 18px;
-  cursor: pointer;
+  margin-right: 10px;
 }
 
-.month-box span {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* ==============================
-   SUMMARY
-============================== */
-.summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin: 24px;
-}
-
-.summary-card {
-  background: #fff;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-}
-
-.summary-card span {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.summary-card strong {
+.brand-text strong {
   display: block;
-  margin-top: 6px;
-  font-size: 22px;
+  font-size: 1.2rem;
 }
 
-.summary-card.alert {
-  background: #fdecec;
+.brand-text span {
+  font-size: 0.9rem;
+  color: #777;
 }
 
-.summary-card.alert strong {
-  color: #dc2626;
-}
-
-/* ==============================
-   LIST
-============================== */
-.list {
-  margin: 24px;
-}
-
-.list h3 {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 12px;
-}
-
-.card {
-  background: #fff;
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 14px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+.month-card {
   display: flex;
-  justify-content: space-between;
-}
-
-.card-info strong {
-  display: block;
-  font-size: 16px;
-}
-
-.card-info span {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.card-right {
-  text-align: right;
-}
-
-.card-right span.open {
-  color: #dc2626;
-  font-weight: 600;
-}
-
-.card-right span.paid {
-  color: #16a34a;
-  font-weight: 600;
-}
-
-.card-right button {
-  background: none;
-  border: none;
-  color: #2563eb;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-/* ==============================
-   FAB
-============================== */
-.fab {
-  position: fixed;
-  right: 24px;
-  bottom: 28px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #4f7cff);
-  color: #fff;
-  font-size: 34px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 16px 40px rgba(37,99,235,0.45);
-}
-
-/* ==============================
-   MODAL
-============================== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  display: none;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  background: white;
+  border-radius: 12px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
-.modal {
-  background: #fff;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 420px;
-  padding: 22px;
+.month-card button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
 }
 
-.modal-header {
+.summary {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.modal-body label {
-  display: block;
-  margin-top: 16px;
-  font-size: 14px;
+.summary strong {
+  font-size: 1.4rem;
+  color: #1a73e8;
 }
 
-.modal-body input {
-  width: 100%;
-  margin-top: 6px;
-  padding: 12px;
+.expenses-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.expenses-list li {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.form-section {
+  background: white;
+  padding: 20px;
   border-radius: 12px;
-  border: 1px solid #d1d5db;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
-.modal-footer {
-  margin-top: 24px;
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.modal-footer .primary {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-primary {
+  background: #6c63ff;
+  color: white;
   border: none;
-  background: linear-gradient(135deg, #2563eb, #4f7cff);
-  color: #fff;
-  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px;
   cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: #5a54d1;
 }
