@@ -1,213 +1,130 @@
-/* ==================================================
-   Oria • Contas da Casa (SUPABASE FINAL CORRETO)
-================================================== */
+// =============================================
+// Oria • Página de Despesas
+// =============================================
 
-/* ===== garante que o supabase carregou ===== */
-async function waitSupabase() {
-  return new Promise((resolve) => {
-    const i = setInterval(() => {
-      if (window.supabase) {
-        clearInterval(i);
-        resolve();
-      }
-    }, 50);
-  });
+// Aguarda Supabase carregar
+async function waitSupabaseReady() {
+  while (!window.supabase) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
 }
 
-/* ===== constantes ===== */
-const MONTHS = [
-  "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
-];
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('[Oria] Página de despesas carregada');
 
-let currentDate = new Date();
-let expenses = [];
+  await waitSupabaseReady();
 
-/* ===== utils ===== */
-function formatMonth(date) {
-  return `${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
-}
+  const currentMonthEl = document.getElementById('currentMonth');
+  const expensesContainer = document.getElementById('expensesContainer');
+  const totalValueEl = document.getElementById('totalValue');
+  const form = document.getElementById('expenseForm');
+  const descInput = document.getElementById('desc');
+  const valueInput = document.getElementById('value');
 
-function formatBRL(v) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  }).format(v || 0);
-}
+  const monthNames = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
 
-function formatDateBR(iso) {
-  if (!iso) return "--";
-  const [y, m, d] = iso.split("-");
-  return `${d}/${m}/${y}`;
-}
+  let currentDate = new Date();
 
-/* ===== mês ===== */
-function renderMonth() {
-  const label = formatMonth(currentDate);
-  document.getElementById("monthText").innerText = label;
-  document.getElementById("monthLabel").innerText = label;
-}
+  // Renderiza o mês atual
+  function renderMonth() {
+    const monthName = monthNames[currentDate.getMonth()];
+    currentMonthEl.innerText = `${monthName} de ${currentDate.getFullYear()}`;
+  }
 
-window.changeMonth = (delta) => {
-  currentDate.setMonth(currentDate.getMonth() + delta);
   renderMonth();
-  loadExpenses();
-};
 
-/* ===== family ===== */
-async function getFamilyId(userId) {
-  const { data, error } = await supabase
-    .from("family_members")
-    .select("family_id")
-    .eq("user_id", userId)
-    .single();
-
-  if (error) throw error;
-  return data.family_id;
-}
-
-/* ===== carregar despesas ===== */
-async function loadExpenses() {
-  await waitSupabase();
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
-
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-
-  const { data, error } = await supabase
-    .from("transactions")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("type", "gasto")        // ✅ correto
-    .eq("year", year)
-    .eq("month", month)
-    .order("date", { ascending: true }); // ✅ correto
-
-  if (error) {
-    console.error("[loadExpenses]", error);
-    return;
-  }
-
-  expenses = data || [];
-  renderExpenses();
-}
-
-/* ===== render ===== */
-function renderExpenses() {
-  const list = document.getElementById("expensesList");
-  list.innerHTML = "";
-
-  let total = 0;
-  let open = 0;
-
-  expenses.forEach((e) => {
-    total += Number(e.amount);
-    if (!e.paid) open += Number(e.amount);
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <div class="card-info">
-        <strong>${e.title}</strong>
-        <span>Vence: ${formatDateBR(e.date)}</span>
-      </div>
-
-      <div class="card-right">
-        <span class="${e.paid ? "paid" : "open"}">
-          ${formatBRL(e.amount)}
-        </span>
-        <button class="pay-btn"
-          onclick="togglePaid('${e.id}', ${e.paid})">
-          ${e.paid ? "Pago" : "Marcar pago"}
-        </button>
-      </div>
-    `;
-
-    list.appendChild(card);
+  // Navegação entre meses
+  document.getElementById('prevMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderMonth();
+    loadExpenses();
   });
 
-  document.getElementById("totalValue").innerText = formatBRL(total);
-  document.getElementById("openValue").innerText = formatBRL(open);
-}
-
-/* ===== modal ===== */
-window.openNew = () => {
-  inputName.value = "";
-  inputAmount.value = "";
-  inputDueDate.value = "";
-  modal.style.display = "flex";
-};
-
-window.closeModal = () => {
-  modal.style.display = "none";
-};
-
-/* ===== salvar ===== */
-window.saveExpense = async () => {
-  await waitSupabase();
-
-  const title = inputName.value.trim();
-  const amount = Number(inputAmount.value);
-  const date = inputDueDate.value;
-
-  if (!title || !amount || !date) {
-    alert("Preencha todos os campos");
-    return;
-  }
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    alert("Usuário não autenticado");
-    return;
-  }
-
-  try {
-    const familyId = await getFamilyId(user.id);
-
-    const { error } = await supabase
-      .from("transactions")
-      .insert({
-        user_id: user.id,
-        family_id: familyId,
-        type: "gasto",     // ✅ OBRIGATÓRIO
-        title,
-        amount,
-        date,              // ✅ coluna correta
-        year: currentDate.getFullYear(),
-        month: currentDate.getMonth() + 1,
-        paid: false
-      });
-
-    if (error) throw error;
-
-    closeModal();
+  document.getElementById('nextMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderMonth();
     loadExpenses();
-  } catch (err) {
-    console.error("[saveExpense]", err);
-    alert(err.message);
+  });
+
+  // ===========================
+  // Funções principais
+  // ===========================
+  async function loadExpenses() {
+    try {
+      const { data: { user } } = await window.supabase.auth.getUser();
+      if (!user) {
+        window.location.href = '/finfamily/Oria/assets/pages/login/login.html';
+        return;
+      }
+
+      // Aqui você pode substituir pela tabela real
+      // const { data, error } = await window.supabase
+      //   .from('expenses')
+      //   .select('*')
+      //   .eq('user_id', user.id);
+
+      // Simulação de dados locais
+      const fakeData = [
+        { desc: 'Energia elétrica', value: 180.0 },
+        { desc: 'Supermercado', value: 340.5 },
+        { desc: 'Internet', value: 120.0 }
+      ];
+
+      renderExpenses(fakeData);
+    } catch (err) {
+      console.error('[Oria] Erro ao carregar despesas:', err);
+    }
   }
-};
 
-/* ===== pago ===== */
-window.togglePaid = async (id, paid) => {
-  await waitSupabase();
+  function renderExpenses(data) {
+    expensesContainer.innerHTML = '';
+    let total = 0;
 
-  const { error } = await supabase
-    .from("transactions")
-    .update({ paid: !paid })
-    .eq("id", id);
+    if (!data || data.length === 0) {
+      expensesContainer.innerHTML = '<li>Nenhuma despesa registrada.</li>';
+      totalValueEl.innerText = 'R$ 0,00';
+      return;
+    }
 
-  if (error) {
-    alert(error.message);
-    return;
+    data.forEach((item) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span>${item.desc}</span>
+        <strong>R$ ${item.value.toFixed(2)}</strong>
+      `;
+      expensesContainer.appendChild(li);
+      total += item.value;
+    });
+
+    totalValueEl.innerText = `R$ ${total.toFixed(2)}`;
   }
 
-  loadExpenses();
-};
+  // Adicionar nova despesa
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-/* ===== init ===== */
-renderMonth();
-loadExpenses();
+    const desc = descInput.value.trim();
+    const value = parseFloat(valueInput.value);
+
+    if (!desc || isNaN(value)) {
+      alert('Preencha todos os campos corretamente.');
+      return;
+    }
+
+    // Aqui você pode salvar no Supabase
+    // const { error } = await window.supabase
+    //   .from('expenses')
+    //   .insert([{ user_id: user.id, desc, value }]);
+
+    console.log(`[Oria] Nova despesa adicionada: ${desc} - R$${value}`);
+    descInput.value = '';
+    valueInput.value = '';
+
+    loadExpenses();
+  });
+
+  await loadExpenses();
+});
