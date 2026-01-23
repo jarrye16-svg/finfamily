@@ -1,15 +1,15 @@
 // =============================================
 // Oria • Home (Visão Geral)
-// Integração real com Supabase
+// Conectado ao Supabase real
 // =============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("[Oria] Home carregada");
+  console.log("[Oria] Home carregada (modo Supabase real)");
 
-  // Aguarda o Supabase estar pronto
+  // Aguarda o Supabase
   await window.waitSupabase();
 
-  // Seletores principais
+  // Elementos principais
   const incomeValue = document.getElementById("incomeValue");
   const expenseValue = document.getElementById("expenseValue");
   const creditValue = document.getElementById("creditValue");
@@ -21,37 +21,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
+
   let currentDate = new Date();
 
-  // ==============================
-  // Renderização do mês atual
-  // ==============================
+  const formatCurrency = (n) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  const extractMonthYear = (d) => ({
+    month: (d.getMonth() + 1).toString().padStart(2, "0"),
+    year: d.getFullYear().toString(),
+  });
+
+  // Atualiza o título do mês
   function renderMonth() {
     const monthName = monthNames[currentDate.getMonth()];
     const year = currentDate.getFullYear();
     currentMonthEl.innerText = `${monthName} de ${year}`;
   }
 
-  // ==============================
-  // Helpers
-  // ==============================
-  function toCurrency(value) {
-    return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  }
-
-  function extractMonthYear(date) {
-    return {
-      month: (date.getMonth() + 1).toString().padStart(2, "0"),
-      year: date.getFullYear().toString()
-    };
-  }
+  renderMonth();
 
   // ==============================
-  // Carrega resumo do mês
+  // Carrega resumo real
   // ==============================
   async function loadSummary() {
     try {
-      const { data: { user } } = await window.supabase.auth.getUser();
+      const { data: { user }, error: userError } = await window.supabase.auth.getUser();
+      if (userError) throw userError;
+
       if (!user) {
         console.warn("[Oria] Nenhum usuário logado. Redirecionando...");
         window.location.href = "/finfamily/Oria/assets/pages/login/login.html";
@@ -59,9 +56,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const { month, year } = extractMonthYear(currentDate);
-      console.log(`[Oria] Carregando dados de ${month}/${year} para ${user.email}`);
 
-      // Consulta na tabela "transactions"
+      // Consulta transações reais
       const { data, error } = await window.supabase
         .from("transactions")
         .select("type, amount")
@@ -71,38 +67,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (error) throw error;
 
-      // Calcula totais
+      console.log(`[Oria] ${data?.length || 0} transações encontradas.`);
+
       let totalIncome = 0;
       let totalExpense = 0;
       let totalCards = 0;
 
-      (data || []).forEach(tx => {
+      (data || []).forEach((tx) => {
         const val = Number(tx.amount) || 0;
-        if (tx.type === "income") totalIncome += val;
-        else if (tx.type === "expense") totalExpense += val;
-        else if (tx.type === "card") totalCards += val;
+        switch (tx.type) {
+          case "income":
+            totalIncome += val;
+            break;
+          case "expense":
+            totalExpense += val;
+            break;
+          case "card":
+            totalCards += val;
+            break;
+        }
       });
 
       const balance = totalIncome - totalExpense - totalCards;
 
-      // Atualiza na tela
-      incomeValue.innerText = toCurrency(totalIncome);
-      expenseValue.innerText = toCurrency(totalExpense);
-      creditValue.innerText = toCurrency(totalCards);
-      balanceValue.innerText = toCurrency(balance);
-
+      incomeValue.textContent = formatCurrency(totalIncome);
+      expenseValue.textContent = formatCurrency(totalExpense);
+      creditValue.textContent = formatCurrency(totalCards);
+      balanceValue.textContent = formatCurrency(balance);
     } catch (err) {
       console.error("[Oria] Erro ao carregar resumo:", err);
-      incomeValue.innerText = "R$ 0,00";
-      expenseValue.innerText = "R$ 0,00";
-      creditValue.innerText = "R$ 0,00";
-      balanceValue.innerText = "R$ 0,00";
+      incomeValue.textContent = "R$ 0,00";
+      expenseValue.textContent = "R$ 0,00";
+      creditValue.textContent = "R$ 0,00";
+      balanceValue.textContent = "R$ 0,00";
     }
   }
 
-  // ==============================
-  // Navegação de mês
-  // ==============================
+  // Navegação entre meses
   document.getElementById("prevMonth").addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderMonth();
@@ -115,16 +116,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadSummary();
   });
 
-  // ==============================
-  // Inicialização
-  // ==============================
-  renderMonth();
+  // Inicializa
   await loadSummary();
 
   // ==============================
   // Atalhos
   // ==============================
-  const go = (path) => (window.location.href = `/finfamily/Oria/assets/pages/${path}/${path}.html`);
+  const go = (path) =>
+    (window.location.href = `/finfamily/Oria/assets/pages/${path}/${path}.html`);
 
   document.getElementById("btnExpenses").addEventListener("click", () => go("expenses"));
   document.getElementById("btnIncome").addEventListener("click", () => go("income"));
