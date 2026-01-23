@@ -2,82 +2,145 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Oria • Visão geral</title>
+  <title>Oria • Visão Geral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="home.css">
+
+  <!-- CSS base -->
+  <link rel="stylesheet" href="../../../../assets/css/app.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
+    }
+
+    .container {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .card small {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .card strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 18px;
+    }
+
+    .green { color: #16a34a; }
+    .red { color: #dc2626; }
+
+    .shortcuts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .shortcut {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .shortcut.primary {
+      background: #4f46e5;
+      color: #fff;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="app">
 
-    <!-- TOPO -->
-    <header class="header">
-      <div class="brand">
-        <img src="../../../branding/logo/oria-icon.png" class="logo">
-        <div class="brand-text">
-          <strong>Oria</strong>
-          <span>Visão geral</span>
-        </div>
-      </div>
-
-      <div class="profile">
-        <div class="avatar"></div>
-      </div>
-    </header>
-
-    <!-- CONTEÚDO -->
-    <main class="content">
-      <div class="surface">
-
-        <!-- MÊS -->
-        <section class="month-card">
-          <button id="prevMonth">‹</button>
-          <h2 id="currentMonth">Janeiro de 2026</h2>
-          <button id="nextMonth">›</button>
-        </section>
-
-        <!-- RESUMO -->
-        <section class="stats">
-          <div class="stat-card">
-            <span>Entrada</span>
-            <strong class="positive" id="incomeValue">R$ 0,00</strong>
-          </div>
-
-          <div class="stat-card">
-            <span>Saída</span>
-            <strong class="negative" id="expenseValue">R$ 0,00</strong>
-          </div>
-
-          <div class="stat-card">
-            <span>Cartões</span>
-            <strong id="creditValue">R$ 0,00</strong>
-          </div>
-
-          <div class="stat-card">
-            <span>Saldo</span>
-            <strong id="balanceValue">R$ 0,00</strong>
-          </div>
-        </section>
-
-        <!-- ATALHOS -->
-        <section class="actions">
-          <h3>Atalhos</h3>
-
-          <div class="actions-grid">
-            <button class="action primary" id="btnExpenses">Contas da casa</button>
-            <button class="action" id="btnIncome">Renda</button>
-            <button class="action" id="btnPiggy">Porquinho</button>
-            <button class="action" id="btnCards">Cartões</button>
-          </div>
-        </section>
-
-      </div>
-    </main>
-
+<div class="container">
+  <div class="header">
+    <strong>Oria</strong>
+    <span style="color:#64748b">Visão geral</span>
   </div>
 
-  <script src="home.js"></script>
+  <div class="month-nav">
+    <button onclick="changeMonth(-1)">◀</button>
+    <span id="monthLabel">—</span>
+    <button onclick="changeMonth(1)">▶</button>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <small>Entrada</small>
+      <strong class="green" id="incomeValue">R$ 0,00</strong>
+    </div>
+
+    <div class="card">
+      <small>Saída</small>
+      <strong class="red" id="expenseValue">R$ 0,00</strong>
+    </div>
+
+    <div class="card">
+      <small>Cartões</small>
+      <strong id="cardValue">R$ 0,00</strong>
+    </div>
+
+    <div class="card">
+      <small>Saldo</small>
+      <strong id="balanceValue">R$ 0,00</strong>
+    </div>
+  </div>
+
+  <h4>Atalhos</h4>
+
+  <div class="shortcuts">
+    <div class="shortcut primary" onclick="location.href='../../expenses/expenses.html'">
+      Contas da casa
+    </div>
+    <div class="shortcut">Renda</div>
+    <div class="shortcut">Porquinho</div>
+    <div class="shortcut">Cartões</div>
+  </div>
+</div>
+
+<!-- SCRIPTS (ORDEM CERTA) -->
+<script src="../../core/supabase.js"></script>
+<script src="home.js"></script>
+
 </body>
 </html>
